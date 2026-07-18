@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Larkwell — websites for local businesses">
+  <!-- Social share card. NOTE: social platforms need a PNG/JPG, not SVG.
+       Export this to og-image.png at 1200x630, then uncomment the og:image /
+       twitter:image tags in index.html <head>. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123B2A"/>
+      <stop offset="1" stop-color="#0F2E20"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.82" cy="0.22" r="0.6">
+      <stop offset="0" stop-color="#E2C27A" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#E2C27A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <!-- symbol (reversed variant for dark bg) -->
+  <g transform="translate(96,232) scale(1.6)">
+    <path d="M34,32 L50,18 L50,66 L68,66 L68,82 L34,82 Z" fill="#FDFBF7"/>
+    <circle cx="74" cy="74" r="15" fill="#E2C27A"/>
+  </g>
+  <text x="300" y="300" font-family="Archivo, Inter, system-ui, sans-serif" font-weight="800" font-size="96" letter-spacing="-3" fill="#FDFBF7">Larkwell</text>
+  <text x="303" y="372" font-family="Inter, system-ui, sans-serif" font-weight="600" font-size="38" fill="#E2C27A">Websites for local businesses</text>
+  <text x="303" y="426" font-family="Inter, system-ui, sans-serif" font-weight="400" font-size="30" fill="#EBF0DE" opacity="0.85">Live within 3 days. Yours to keep. From $489.</text>
+</svg>

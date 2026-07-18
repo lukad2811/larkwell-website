@@ -1,0 +1,9 @@
+{
+  "name": "larkwell-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Larkwell static site plus Netlify serverless functions.",
+  "dependencies": {
+    "stripe": "^22.3.0"
+  }
+}

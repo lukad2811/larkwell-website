@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service · Larkwell</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F2E20">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bone:#FDFBF7; --bone-2:#F3EDE0; --ink:#1C1917; --ink-soft:#6B6259;
+  --coral:#B45309; --coral-deep:#92400E; --night:#0F2E20; --night-2:#17402D; --gold:#E2C27A;
+  --line:rgba(28,25,23,.14); --line-soft:rgba(28,25,23,.08);
+  /* same two faces as the main page: Archivo for display, Inter for body */
+  --serif:'Archivo','Inter',system-ui,-apple-system,sans-serif; --body:'Inter',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:var(--body);background:var(--bone);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{width:min(780px,92vw);margin-inline:auto}
+
+/* top bar */
+.bar{background:linear-gradient(155deg,var(--night),var(--night-2));color:var(--bone);padding:16px 0;position:sticky;top:0;z-index:20;box-shadow:0 8px 24px -18px rgba(0,0,0,.5)}
+.bar .wrap{display:flex;align-items:center;gap:12px}
+.bar svg{width:28px;height:28px;flex:0 0 auto}
+.bar .name{font-family:'Archivo',system-ui,sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-.028em}
+.bar a{color:var(--gold);text-decoration:none;font-weight:600;font-size:.88rem;margin-left:auto}
+.bar a:hover{text-decoration:underline}
+
+/* document header */
+.doc-head{padding:56px 0 0}
+.doc-eyebrow{font-family:var(--body);font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--coral-deep);margin-bottom:14px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(2rem,5vw,2.7rem);letter-spacing:-.02em;margin-bottom:.25em}
+.doc-meta{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--ink-soft);font-size:.86rem;margin-bottom:22px}
+.doc-meta b{color:var(--ink);font-weight:700}
+
+/* draft warning, kept exactly as prominent as before */
+.draft{display:flex;gap:14px;align-items:flex-start;background:#FBE7D6;border:1.5px solid var(--coral);border-radius:14px;padding:18px 20px;margin:22px 0 34px;font-size:.94rem;line-height:1.6}
+.draft-icon{flex:0 0 auto;width:22px;height:22px;color:var(--coral-deep);margin-top:2px}
+.draft strong{color:var(--coral-deep)}
+
+/* parties block: formal recitals */
+.parties{background:var(--bone-2);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:34px}
+.parties h2{margin-top:0 !important}
+.parties dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:.92rem;margin-top:10px}
+.parties dt{font-weight:700;color:var(--ink-soft);white-space:nowrap}
+.parties dd{color:var(--ink)}
+
+/* table of contents */
+.toc{border:1px solid var(--line);border-radius:14px;padding:20px 24px;margin-bottom:38px;background:#fff}
+.toc-title{font-family:var(--body);font-weight:700;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:12px}
+.toc ol{list-style:none;columns:2;column-gap:24px}
+.toc li{margin-bottom:6px;break-inside:avoid}
+.toc a{color:var(--ink);text-decoration:none;font-size:.9rem;display:flex;gap:.5em}
+.toc a:hover{color:var(--coral-deep)}
+.toc a .n{color:var(--coral-deep);font-family:var(--body);font-weight:700;min-width:1.4em}
+
+/* clause structure */
+main{padding-bottom:80px}
+h2{font-family:var(--serif);font-weight:700;font-size:1.4rem;margin:44px 0 6px;letter-spacing:-.01em;scroll-margin-top:90px;display:flex;align-items:baseline;gap:.5em}
+h2 .num{font-family:var(--body);font-weight:700;font-size:1rem;color:var(--coral-deep)}
+.clause-intro{color:var(--ink-soft);margin-bottom:14px}
+ol.clauses{list-style:none;counter-reset:clause}
+ol.clauses > li{counter-increment:clause;position:relative;padding-left:2.4em;margin-bottom:12px;color:var(--ink-soft)}
+ol.clauses > li::before{content:counter(clause) ".";position:absolute;left:0;font-family:var(--body);font-weight:700;color:var(--coral-deep)}
+p{color:var(--ink-soft);margin-bottom:14px}
+ul{padding-left:22px;margin-bottom:16px;color:var(--ink-soft)}
+li{margin-bottom:7px}
+strong{color:var(--ink);font-weight:700}
+a{color:var(--coral-deep)}
+code{font-family:var(--body);background:var(--bone-2);padding:.15em .4em;border-radius:5px;font-size:.9em}
+.term{font-weight:700;color:var(--ink)}
+
+/* definitions table */
+.defs{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.defs .row{display:grid;grid-template-columns:180px 1fr;gap:16px;padding:13px 18px;border-bottom:1px solid var(--line-soft)}
+.defs .row:last-child{border-bottom:0}
+.defs .row:nth-child(even){background:var(--bone-2)}
+.defs dt{font-weight:800;color:var(--ink);font-size:.9rem}
+.defs dd{color:var(--ink-soft);font-size:.9rem}
+
+/* signature / acceptance block */
+.accept{background:linear-gradient(155deg,var(--night),var(--night-2));color:var(--bone);border-radius:18px;padding:26px 28px;margin:44px 0}
+.accept h2{color:#fff;margin-top:0 !important}
+.accept h2 .num{color:var(--gold)}
+.accept p{color:rgba(253,251,247,.82)}
+
+/* document footer */
+.doc-foot{margin-top:50px;padding-top:24px;border-top:1px solid var(--line)}
+.doc-foot p{font-size:.85rem;color:var(--ink-soft)}
+.doc-foot .lawyer-list{background:var(--bone-2);border-radius:14px;padding:18px 22px;margin-top:16px}
+.doc-foot .lawyer-list h3{font-family:var(--serif);font-size:1rem;margin-bottom:8px;color:var(--ink)}
+.doc-foot .lawyer-list ul{margin-bottom:0}
+.back-top{display:inline-flex;align-items:center;gap:.4em;margin-top:26px;color:var(--coral-deep);font-weight:600;font-size:.88rem;text-decoration:none}
+.back-top:hover{text-decoration:underline}
+
+@media (max-width:640px){.toc ol{columns:1}.parties dl{grid-template-columns:1fr}}
+</style>
+</head>
+<body id="top">
+<header class="bar">
+  <div class="wrap">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M34,32 L50,18 L50,66 L68,66 L68,82 L34,82 Z" fill="#FDFBF7"/><circle cx="74" cy="74" r="15" fill="#E2C27A"/></svg>
+    <span class="name">Larkwell</span>
+    <a href="/">Back to site</a>
+  </div>
+</header>
+
+<div class="doc-head wrap">
+  <div class="doc-eyebrow">Legal document</div>
+  <h1>Terms of Service</h1>
+  <div class="doc-meta">
+    <span>Document version <b>1.1</b></span>
+    <span>Effective date <b id="tdate"></b></span>
+    <span>Governing law <b>Western Australia, Australia</b></span>
+  </div>
+
+  <div class="draft">
+    <svg class="draft-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2L2 17h16L10 2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 8v4M10 14h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <span><strong>Draft, not yet legal advice.</strong> This document is formatted as a formal agreement, but it has <strong>not</strong> been reviewed by a qualified Australian legal practitioner and is not legal advice. Larkwell recommends professional review before this is relied upon or published. Nothing in this document is intended to exclude, restrict or modify any right or remedy available to you under the Australian Consumer Law that cannot lawfully be excluded.</span>
+  </div>
+
+  <section class="parties" aria-label="Parties to this agreement">
+    <h2 style="margin:0 0 4px"><span class="num">§</span> Parties &amp; recitals</h2>
+    <p style="margin:0">This Agreement is entered into between the parties below whenever a Customer requests a preview, approves a build, or makes a payment through the Larkwell website.</p>
+    <dl>
+      <dt>The Provider</dt><dd><strong>Larkwell</strong> ("Larkwell", "we", "us", "our"), a web design service trading in Perth, Western Australia.</dd>
+      <dt>The Customer</dt><dd>The individual or business named on the applicable order, preview request, or invoice ("you", "your", "the Customer").</dd>
+      <dt>Contact</dt><dd><a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a></dd>
+    </dl>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#s1"><span class="n">1.</span> Definitions</a></li>
+      <li><a href="#s2"><span class="n">2.</span> What Larkwell does</a></li>
+      <li><a href="#s3"><span class="n">3.</span> Free preview, then payment</a></li>
+      <li><a href="#s4"><span class="n">4.</span> Domain names</a></li>
+      <li><a href="#s5"><span class="n">5.</span> Content you provide</a></li>
+      <li><a href="#s6"><span class="n">6.</span> Ownership</a></li>
+      <li><a href="#s7"><span class="n">7.</span> Account credentials</a></li>
+      <li><a href="#s8"><span class="n">8.</span> Timeframes</a></li>
+      <li><a href="#s9"><span class="n">9.</span> The Care Plan</a></li>
+      <li><a href="#s10"><span class="n">10.</span> Refunds</a></li>
+      <li><a href="#s11"><span class="n">11.</span> GST</a></li>
+      <li><a href="#s12"><span class="n">12.</span> Liability</a></li>
+      <li><a href="#s13"><span class="n">13.</span> General provisions</a></li>
+      <li><a href="#s14"><span class="n">14.</span> Acceptance</a></li>
+      <li><a href="#s15"><span class="n">15.</span> Contact</a></li>
+    </ol>
+  </nav>
+</div>
+
+<main class="wrap">
+
+  <h2 id="s1"><span class="num">1.</span> Definitions</h2>
+  <p class="clause-intro">In this Agreement, the following defined terms apply wherever they are used, capitalised:</p>
+  <div class="defs">
+    <div class="row"><dt>the Services</dt><dd>The website design, build, hosting, and/or maintenance services Larkwell provides, as selected by the Customer.</dd></div>
+    <div class="row"><dt>the Site</dt><dd>The website Larkwell builds for the Customer under this Agreement.</dd></div>
+    <div class="row"><dt>the Preview</dt><dd>A no-cost, no-obligation working draft of the Site provided before any payment is made.</dd></div>
+    <div class="row"><dt>the Domain</dt><dd>The web address (e.g. <code>yourbusiness.com.au</code>) registered for the Customer's use, where requested.</dd></div>
+    <div class="row"><dt>the Care Plan</dt><dd>Larkwell's optional monthly subscription covering hosting and small ongoing updates to the Site.</dd></div>
+    <div class="row"><dt>Year One Fee</dt><dd>The Domain's actual registration cost plus a 20% first-year setup fee, invoiced separately from the Site build.</dd></div>
+    <div class="row"><dt>ACL</dt><dd>The Australian Consumer Law, as set out in Schedule 2 of the Competition and Consumer Act 2010 (Cth).</dd></div>
+  </div>
+
+  <h2 id="s2"><span class="num">2.</span> What Larkwell does</h2>
+  <ol class="clauses">
+    <li>Larkwell designs and builds the Site for the Customer, and may optionally host and maintain it under the Care Plan.</li>
+    <li>The specific package, price, and any add-ons that form part of the Services are whatever the Customer selected and paid for, or was invoiced for, at the time of ordering.</li>
+  </ol>
+
+  <h2 id="s3"><span class="num">3.</span> Free preview, then payment</h2>
+  <ol class="clauses">
+    <li>The Customer may request a Preview at no cost and with no obligation to proceed.</li>
+    <li>The Customer only pays if they decide to go ahead following the Preview.</li>
+    <li>Build payments are made securely through Stripe, a third-party payment processor. Larkwell never sees or stores the Customer's card details.</li>
+  </ol>
+
+  <h2 id="s4"><span class="num">4.</span> Domain names</h2>
+  <p class="clause-intro">Where the Customer asks Larkwell to arrange the Domain, the following applies to every Customer equally, whether or not they hold the Care Plan:</p>
+  <ol class="clauses">
+    <li><span class="term">Not paid at checkout.</span> The Domain is never part of the Customer's Stripe checkout total. It is handled by a separate invoice.</li>
+    <li><span class="term">Year One.</span> Once the Customer approves the exact Domain name, Larkwell registers it and pays for the first year, then emails the Customer an invoice for the Year One Fee.</li>
+    <li><span class="term">Availability.</span> If the requested name is unavailable, Larkwell will email the Customer to agree an alternative before registering anything.</li>
+    <li><span class="term">Eligibility for .au domains.</span> Australian <code>.au</code> domains (including <code>.com.au</code>) legally require an eligible ABN or ACN. Where the Customer chooses a <code>.au</code> Domain, they must provide a valid ABN/ACN, used solely to verify eligibility and register the Domain, and never disclosed publicly or passed to the payment system.</li>
+    <li><span class="term">Handover.</span> Once the Year One Fee is paid, Larkwell hands over the Customer's own registrar account login for the Domain.</li>
+    <li><span class="term">After Year One.</span> From the second year onward, the Domain is entirely the Customer's responsibility to manage and renew through their own account. Larkwell does not invoice for, manage, or renew the Domain after Year One, regardless of Care Plan status.</li>
+    <li><span class="term">Non-payment.</span> If the Year One Fee is not paid, the account login is not handed over and Larkwell will not renew the Domain; it will lapse at the end of the year Larkwell already paid for.</li>
+    <li><span class="term">Third-party registrars.</span> Domains are registered through an independent third-party registrar. Larkwell is not responsible for that registrar's own price changes, policies, or outages.</li>
+  </ol>
+
+  <h2 id="s5"><span class="num">5.</span> Content you provide</h2>
+  <ol class="clauses">
+    <li>The Customer is responsible for ensuring any text, photos, logos, or other material they supply is theirs to use, or that they have permission to use it.</li>
+    <li>Larkwell is not responsible for copyright or trademark issues arising from content supplied by the Customer.</li>
+  </ol>
+
+  <h2 id="s6"><span class="num">6.</span> Ownership</h2>
+  <ol class="clauses">
+    <li>Once the Customer's final build payment clears, the design and content created for the Site become the Customer's to keep and use.</li>
+    <li>The Domain becomes fully the Customer's to control once the Year One Fee is paid and the account login is handed over (clause 4).</li>
+    <li>Where the Customer holds the Care Plan, Larkwell hosts the Site to enable fast updates. Hosting does not transfer ownership; the Site remains the Customer's at all times. If the Customer leaves or cancels, Larkwell provides a full copy of the Site files and hosting login within a reasonable time.</li>
+    <li>General-purpose code, templates, or components Larkwell reuses across multiple client projects remain Larkwell's own tools and are not assigned to the Customer, without affecting the Customer's ownership of their finished Site.</li>
+  </ol>
+
+  <h2 id="s7"><span class="num">7.</span> Account credentials</h2>
+  <p>Once any account login (registrar, hosting, or otherwise) is handed over to the Customer, keeping those credentials secure is the Customer's sole responsibility. Larkwell is not liable for loss or damage arising from credentials being shared, lost, or left unsecured after handover.</p>
+
+  <h2 id="s8"><span class="num">8.</span> Timeframes</h2>
+  <p>Builds are completed within 3 days of Larkwell receiving the Customer's business details and content, unless a different timeline was agreed. In the rare event of illness or an unforeseen circumstance on Larkwell's side, the Customer will be told promptly and offered a revised timeframe or a full refund of any amount already paid.</p>
+
+  <h2 id="s9"><span class="num">9.</span> The Care Plan</h2>
+  <ol class="clauses">
+    <li>The Care Plan is billed monthly at the price shown on Larkwell's pricing page.</li>
+    <li>It may be cancelled at any time, with no exit fee, effective at the end of the current billing period.</li>
+    <li>It covers hosting and small updates (such as prices, hours, or photos) at Larkwell's discretion; larger requests may be quoted separately.</li>
+    <li>The Care Plan does <strong>not</strong> include managing or renewing the Domain, which after Year One is always the Customer's own responsibility (clause 4).</li>
+  </ol>
+
+  <h2 id="s10"><span class="num">10.</span> Refunds</h2>
+  <p>Because each Site is built specifically for the Customer's business, one-off build payments are generally non-refundable once work has started, except where required by the ACL. If the Customer is not satisfied with their Preview, they are free to walk away before paying, at no cost. Care Plan payments already processed for a billing period are not refunded for partial months. Domain invoices, once the Domain has been registered on the Customer's behalf, reflect a real third-party cost already incurred and are not refundable.</p>
+
+  <h2 id="s11"><span class="num">11.</span> GST</h2>
+  <p>Larkwell is not currently registered for GST. Prices and invoices issued under this Agreement do not include a GST component. Should this change, tax treatment will be handled and disclosed as required by law at that time.</p>
+
+  <h2 id="s12"><span class="num">12.</span> Liability</h2>
+  <ol class="clauses">
+    <li>Larkwell provides the Services with due care and skill.</li>
+    <li>To the extent permitted by law, Larkwell is not liable for indirect or consequential loss, or for loss arising from the acts, omissions, or outages of third parties (including a domain registrar, hosting provider, or payment processor such as Stripe), or from content or information supplied by the Customer.</li>
+    <li><strong>Nothing in this Agreement excludes, restricts, or modifies any consumer guarantee, right, or remedy available to the Customer under the ACL that cannot lawfully be excluded.</strong> Where Larkwell is permitted by law to limit its liability, that liability is limited, at Larkwell's option, to re-supplying the Services or paying the cost of having the Services re-supplied.</li>
+  </ol>
+
+  <h2 id="s13"><span class="num">13.</span> General provisions</h2>
+  <ol class="clauses">
+    <li><span class="term">Severability.</span> If any part of this Agreement is found unenforceable, the remainder continues in full force.</li>
+    <li><span class="term">Entire agreement.</span> This Agreement, together with any specific order, quote, or invoice, is the entire agreement between the parties regarding the Services, and supersedes prior discussions on the same subject.</li>
+    <li><span class="term">Changes.</span> Larkwell may update this Agreement from time to time. The version in effect at the time the Customer agreed to it applies to their engagement; material changes affecting an active engagement will be communicated to the Customer.</li>
+    <li><span class="term">Notices.</span> Notices under this Agreement may be given by email to the address either party has on record for the other.</li>
+    <li><span class="term">Governing law.</span> This Agreement is governed by the law of Western Australia, Australia, and the parties submit to the non-exclusive jurisdiction of its courts.</li>
+  </ol>
+
+  <div class="accept">
+    <h2 id="s14"><span class="num">14.</span> Acceptance</h2>
+    <p>The Customer accepts this Agreement by ticking the "I've read and accept the Terms &amp; Conditions" checkbox at the point of submitting a Preview request or making a payment through the Larkwell website. No separate signed copy is required for that acceptance to take effect.</p>
+  </div>
+
+  <h2 id="s15"><span class="num">15.</span> Contact</h2>
+  <p>Questions about this Agreement can be sent to <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a>.</p>
+
+  <div class="doc-foot">
+    <p>This document is a draft prepared for Larkwell and does not constitute legal advice. It has not been reviewed by a qualified Australian legal practitioner.</p>
+    <div class="lawyer-list">
+      <h3>Before this goes live, a lawyer should specifically confirm:</h3>
+      <ul>
+        <li>The 20% Year One Fee disclosure and refund wording (clauses 4 &amp; 10) meets ACL disclosure standards for the Customer's jurisdiction.</li>
+        <li>The Domain non-payment / lapse clause (clause 4.7) is enforceable as drafted.</li>
+        <li>The liability limitation (clause 12) is appropriate for Larkwell's actual business structure and insurance position.</li>
+        <li>Whether handling ABN/ACN data (clause 4.4) triggers any additional privacy obligations.</li>
+      </ul>
+    </div>
+    <a class="back-top" href="#top">&#8593; Back to top</a>
+  </div>
+</main>
+<script>
+  document.getElementById('tdate').textContent = new Date().toLocaleDateString('en-AU', { year:'numeric', month:'long', day:'numeric' });
+</script>
+</body>
+</html>
