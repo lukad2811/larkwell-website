@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="light dark">
 <title>Terms of Service · Larkwell</title>
 <meta name="theme-color" content="#0F2E20">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  color-scheme:only light;
+  color-scheme:light dark;
   --bone:#FDFBF7; --bone-2:#F3EDE0; --ink:#1C1917; --ink-soft:#6B6259;
   --coral:#B45309; --coral-deep:#92400E; --night:#0F2E20; --night-2:#17402D; --gold:#E2C27A;
   --line:rgba(28,25,23,.14); --line-soft:rgba(28,25,23,.08);
@@ -126,6 +126,18 @@ code{font-family:var(--body);background:var(--bone-2);padding:.15em .4em;border-
   .defs .row{grid-template-columns:1fr;gap:4px}
   .history .row{grid-template-columns:60px 1fr;gap:4px 12px}
   .history .row span:nth-child(3){grid-column:1 / -1}
+}
+
+/* dark mode: same warm-dark palette as the main site */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bone:#141310; --bone-2:#201D16; --ink:#F2ECDE; --ink-soft:#ABA290;
+    --coral:#D2691E; --coral-deep:#C55E14; --gold:#E7CB8C;
+    --line:rgba(255,255,255,.13); --line-soft:rgba(255,255,255,.07);
+  }
+  .bar{color:#F2ECDE}
+  .toc,.execution{background:#201D16;border-color:var(--line)}
+  .draft{background:#2A1D12;border-color:var(--coral)}
 }
 </style>
 </head>
