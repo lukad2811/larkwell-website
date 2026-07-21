@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <script>document.documentElement.classList.add('js');</script>
 <title>Larkwell · Websites for Local Businesses in Perth, WA</title>
 <meta name="description" content="Larkwell builds clean, modern websites for local businesses in Perth and across Australia. Live within a week, looks great on phones, and the site is yours to keep. From $489.">
@@ -144,7 +144,7 @@
 /* clip, not hidden: hidden would make html a scroll container and can break
    the sticky header; clip only cuts the sideways spill from .rv reveal
    transforms (.care/.founder translateX) that phones showed as a 24px wiggle */
-html{scroll-behavior:smooth;background:var(--bone);overflow-x:clip;color-scheme:light dark}
+html{scroll-behavior:smooth;background:var(--bone);overflow-x:clip;color-scheme:only light}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
   font-family:var(--body);
@@ -396,8 +396,7 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
    heading's job at 600/.72rem/ink-soft — thinner, smaller and greyer than the
    .eyebrow above them. Brought up to the eyebrow's weight, tracking and accent,
    held one step down in size so the section eyebrow still leads. */
-.work-sub{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-family:var(--body);font-weight:800;font-size:.74rem;letter-spacing:.13em;text-transform:uppercase;color:var(--coral-deep)}
-.work-sub::after{content:"";height:1px;flex:1;background:var(--line)}
+.work-sub{display:block;margin:0 0 16px;font-family:var(--body);font-weight:800;font-size:.78rem;letter-spacing:.13em;text-transform:uppercase;color:var(--coral-deep)}
 /* clears the 34px reveal-rise of the grid above (transforms don't reflow),
    with clear air so the sub-heading reads as a fresh group, not a caption */
 /* the two sample rows are one body of work under one standard, so the break
@@ -1507,54 +1506,6 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
      every revealing element. The rise and fade carry the reveal on their own at
      phone size, so the blur comes off and each reveal becomes compositor-only. */
   .js .rv{filter:none;transition:opacity .72s var(--d),transform .72s var(--d);will-change:opacity,transform}
-}
-
-/* ============ DARK MODE ============
-   "Orchard Cream" is light by default. In dark mode the cream page, panels and
-   cards flip to a warm near-black; the deep-green sections (header, hero,
-   marquee, cta-band + the get-started form inside it) stay exactly as they are,
-   so it reads as the same site on a dark canvas rather than a different design.
-   Placed last so it also overrides the phone perf block's opaque-cream
-   fallbacks (equal specificity, later source wins). */
-@media (prefers-color-scheme: dark){
-  :root{
-    --bone:#141310;         /* warm near-black page */
-    --bone-2:#201D16;       /* dark warm panel */
-    --ink:#F2ECDE;          /* warm cream text */
-    --ink-soft:#ABA290;     /* muted warm text */
-    --blush:#221E17;
-    --line:rgba(255,255,255,.12);
-    --line-2:rgba(255,255,255,.065);
-    --gold:#E7CB8C;
-    --coral:#D2691E;        /* brighter terracotta for contrast on dark */
-    --coral-deep:#C55E14;
-    --glass:rgba(15,46,32,.5);
-    --glass-card:rgba(34,30,22,.82);
-    --glass-card-2:rgba(34,30,22,.72);
-    --glass-hi:rgba(255,255,255,.11);
-    --shadow:0 30px 70px -30px rgba(0,0,0,.72);
-    --shadow-soft:0 16px 40px -24px rgba(0,0,0,.58);
-    --glow:0 24px 48px -20px rgba(210,105,30,.32),0 30px 70px -30px rgba(0,0,0,.6);
-  }
-  /* chrome text/icons that sit on the (still dark-green) header, hero and bars
-     must stay cream — they used --bone as a foreground, which just flipped dark */
-  .brand,.nav a.link:hover{color:#F2ECDE}
-  .burger span{background:#F2ECDE}
-  .s-topbar,.legal-bar{color:#F2ECDE}
-  /* cream/white surfaces that hardcode their colour -> warm dark */
-  .panel{background:rgba(255,255,255,.04)}
-  footer{background:rgba(255,255,255,.028)}
-  .cookie-banner,.pay-status{background:#201D16;border-color:var(--line)}
-  .pay-select,.pay-dropdown-list{background:#201D16;border-color:var(--line);color:var(--ink)}
-  .pay-dropdown-list .pay-opt:hover,.pay-dropdown-list [aria-selected="true"]{background:rgba(255,255,255,.06)}
-  .totop{background:var(--glass-card)}
-  /* the glassy 1px white top-seam on cards reads as a bright line on dark; fade it */
-  .step,.tier,.founder,.care,.pay-card,.pf-bonus,.launch-offer{box-shadow:var(--shadow-soft),inset 0 1px 0 rgba(255,255,255,.05)}
-  .totop{box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05)}
-  /* the little "page being built" wireframe pills in the pricing previews */
-  .tprev-pill,.prow span{background:var(--bone-2);color:var(--ink-soft);border-color:var(--line)}
-  /* comparison table zebra / borders that used near-black on cream */
-  .ctable td,.ctable th{border-color:var(--line)}
 }
 </style>
 </head>
