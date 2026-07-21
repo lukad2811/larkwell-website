@@ -18,11 +18,15 @@
 <meta property="og:title" content="Larkwell · Websites for Local Businesses in Perth, WA">
 <meta property="og:description" content="Clean, modern websites for local businesses. Live within 3 days, looks great on phones, and the site is yours to keep. From $489.">
 <meta property="og:url" content="https://www.larkwell.com.au/">
-<!-- Social preview card. The design lives at /assets/og-image.svg; export it
-     to /og-image.png (1200x630) then uncomment the two lines below, since social
-     platforms need a PNG/JPG, not an SVG. -->
-<!-- <meta property="og:image" content="https://www.larkwell.com.au/og-image.png"> -->
-<!-- <meta name="twitter:image" content="https://www.larkwell.com.au/og-image.png"> -->
+<!-- Social preview card. Design source is /assets/og-image.svg, exported to
+     /og-image.png (1200x630, verified) since social platforms need a PNG/JPG,
+     not an SVG. If the design in the SVG ever changes, re-export the PNG to
+     match — the two files are not linked, this is a static snapshot. -->
+<meta property="og:image" content="https://www.larkwell.com.au/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta name="twitter:image" content="https://www.larkwell.com.au/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Larkwell · Websites for Local Businesses in Perth, WA">
 <meta name="twitter:description" content="Clean, modern websites for local businesses. Live within 3 days, looks great on phones, and yours to keep. From $489.">
@@ -134,6 +138,15 @@
   --glass-card-2:rgba(253,251,247,.5);
   --glass-hi:rgba(255,255,255,.65);
   --glass-blur:blur(16px) saturate(1.25);
+  /* Dither for the dark green fields. The banding there is 8-bit quantisation:
+     a low-alpha gradient crossing a dark, low-contrast field changes value so
+     slowly that each 1/255 step becomes a visible contour, and stacked layers
+     turn those contours into the crosshatch. Easing the colour stops (the
+     earlier attempt) only moves the steps around — the fix is to break them up
+     with noise below the threshold of visibility. Tiled 140px, ~5% alpha:
+     invisible as texture, enough to scatter the step edges. Self-contained
+     data URI, so no extra request. */
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='.035'/%3E%3C/svg%3E");
 }
 *{box-sizing:border-box;margin:0;padding:0}
 /* clip, not hidden: hidden would make html a scroll container and can break
@@ -157,6 +170,9 @@ body::before{
      soft-edged circles with abrupt "colour then transparent" stops are what
      create that faint crosshatch/moire look on a flat colour, easing each
      one across a wide mid-stop removes it without adding any texture */
+  /* deliberately NOT dithered: this layer is the one auraDrift scales, and
+     grain that scales with it crawls. The flat green fields that actually
+     banded (hero, cta-band, marquee) are all static, and carry the grain. */
   background:
     radial-gradient(46% 50% at 18% 22%, rgba(226,194,122,.22) 0%, rgba(226,194,122,.08) 45%, transparent 75%),
     radial-gradient(52% 54% at 84% 28%, rgba(180,83,9,.13) 0%, rgba(180,83,9,.05) 45%, transparent 75%),
@@ -248,10 +264,11 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
      jumping straight from full colour to nothing) so multiple soft-edged
      layers blend into one smooth field instead of visibly overlapping */
   background:
+    var(--grain),
     radial-gradient(120% 95% at 78% -12%, rgba(226,194,122,.26) 0%, rgba(226,194,122,.1) 38%, transparent 68%),
     radial-gradient(90% 80% at 8% 6%, rgba(88,150,113,.24) 0%, rgba(88,150,113,.08) 40%, transparent 70%),
-    radial-gradient(130% 120% at 50% -6%, transparent 45%, rgba(5,16,10,.42) 100%),
-    linear-gradient(160deg,#0A2417 0%,#103524 48%,#17452F 100%)}
+    radial-gradient(150% 135% at 50% -8%, transparent 50%, rgba(6,17,11,.16) 76%, rgba(5,14,9,.30) 100%),
+    linear-gradient(160deg,#0B2819 0%,#103524 48%,#17452F 100%)}
 .dawn{position:absolute;top:-260px;left:54%;transform:translateX(-34%);width:860px;height:860px;border-radius:50%;
   background:radial-gradient(circle at 50% 50%, rgba(240,215,150,.34), rgba(226,194,122,.14) 42%, transparent 66%);
   filter:blur(18px);z-index:0;pointer-events:none;will-change:transform;
@@ -268,7 +285,13 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
   box-shadow:0 44px 100px -46px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.14);
   backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3)}
 .hero .eyebrow{color:var(--gold)}
-.hero h1{font-size:clamp(2.7rem,5.7vw,4.3rem);margin:.55em 0 .3em;color:#FBF7ED;font-weight:800;letter-spacing:-.033em;line-height:1.01}
+/* -.033em measured as an actual -0.02px overlap between the "r" and "t" of
+   "worth" at this size (68.8px on a 1440px viewport) — the glyphs were
+   touching. The site's other large bold hero heading, .s-hero h1, sits at a
+   comparable size and uses -.02em without any collision, so this matches
+   that instead of picking a new number: verified below to open a clean
+   +0.9px gap at the same "worth". */
+.hero h1{font-size:clamp(2.7rem,5.7vw,4.3rem);margin:.55em 0 .3em;color:#FBF7ED;font-weight:800;letter-spacing:-.02em;line-height:1.01}
 .hero h1 .hl{position:relative;white-space:nowrap;
   background:linear-gradient(94deg,#D9B36A 0%,#F7E9C3 45%,#D9B36A 90%);background-size:220% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
@@ -331,9 +354,13 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .openbar small{color:var(--ink-soft);font-size:.84rem}
 
 /* marquee */
-.marq{background:linear-gradient(120deg,var(--pine) 0%,#153A28 50%,var(--night-2) 100%);color:#FBF7ED;padding:17px 0;overflow:hidden;white-space:nowrap;border-block:1px solid rgba(255,255,255,.12)}
+.marq{background:var(--grain), linear-gradient(120deg,var(--pine) 0%,#153A28 50%,var(--night-2) 100%);color:#FBF7ED;padding:17px 0;overflow:hidden;white-space:nowrap;border-block:1px solid rgba(255,255,255,.12)}
 .marq .track{display:inline-flex;gap:40px;animation:scroll 46s linear infinite;font-family:var(--serif);font-weight:700;font-size:1.12rem;letter-spacing:-.01em}
 .marq:hover .track{animation-play-state:paused}
+/* A 46s infinite scroll is the one piece of motion on the page that never
+   settles, and it was the only animation still running under Reduce Motion.
+   Stopped, the track simply reads as a static row of trades. */
+@media (prefers-reduced-motion:reduce){.marq .track{animation:none}}
 .marq .track span{display:inline-flex;align-items:center;gap:40px;opacity:.95}
 /* a real drawn 4-point sparkle instead of a Unicode glyph: consistent
    proportions everywhere, rather than depending on the platform's font
@@ -375,13 +402,20 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
    three-up beneath. No orphan rows either way. */
 .wg-tiers{grid-template-columns:repeat(4,1fr)}
 .wg-extras{grid-template-columns:repeat(3,1fr)}
-.work-sub{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-family:var(--body);font-weight:600;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-soft)}
+/* These divider labels head their own group of tiles, so they were carrying a
+   heading's job at 600/.72rem/ink-soft — thinner, smaller and greyer than the
+   .eyebrow above them. Brought up to the eyebrow's weight, tracking and accent,
+   held one step down in size so the section eyebrow still leads. */
+.work-sub{display:flex;align-items:center;gap:12px;margin:0 0 16px;font-family:var(--body);font-weight:800;font-size:.74rem;letter-spacing:.13em;text-transform:uppercase;color:var(--coral-deep)}
 .work-sub::after{content:"";height:1px;flex:1;background:var(--line)}
-/* 44px clears the 34px reveal-rise of the grid above (transforms don't reflow) */
-.work-grid + .work-sub{margin-top:44px}
+/* clears the 34px reveal-rise of the grid above (transforms don't reflow),
+   with clear air so the sub-heading reads as a fresh group, not a caption */
+/* the two sample rows are one body of work under one standard, so the break
+   between them is a sub-divider, not a section break — 72px read as the latter */
+.work-grid + .work-sub{margin-top:52px}
 /* the logo-add-on label follows a note, not a grid; give it a clear break so
    it reads as a new sub-topic rather than crowding the sample note above it */
-.work-note + .work-sub{margin-top:64px}
+.work-note + .work-sub{margin-top:88px}
 .tile{border-radius:24px;overflow:hidden;box-shadow:var(--shadow-soft);transition:transform .5s var(--spring),box-shadow .5s var(--d);border:1px solid var(--glass-hi);background:var(--glass-card)}
 .tile:hover{transform:translateY(-6px) scale(1.02);box-shadow:var(--glow)}
 /* live viewport mockup: a device frame around a live wireframe of the site being built */
@@ -449,13 +483,13 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .tile[data-view="mobile"] .wf-grid{flex-direction:column}
 .tile[data-view="mobile"] .wf-grid span{aspect-ratio:16/7}
 .tile .meta{padding:18px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line)}
-.tile .meta .t5{font-family:var(--serif);font-size:1.1rem;font-weight:800;display:block}
-/* which package the sample was built to, so the tier reads from the grid
-   without opening the demo. Only the four tier examples carry one; the
-   industry samples are deliberately unlabelled. Borrows the tile's own
-   --accent-deep so each pill matches the sample it sits under. */
-.t-tier{display:inline-block;margin-bottom:5px;font-family:var(--body);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent-deep,var(--coral-deep));background:#fff;border:1px solid var(--accent-deep,var(--line));padding:.3em .62em;border-radius:999px;white-space:nowrap}
-.tile .meta .t6{font-size:.86rem;color:var(--ink-soft);display:block;font-weight:600}
+.tile .meta .t5{font-family:var(--serif);font-size:1.1rem;font-weight:800;display:block;letter-spacing:-.01em}
+.tile .meta .t6{font-size:.86rem;color:var(--ink-soft);display:block;font-weight:600;margin-top:3px}
+/* three of the four package taglines wrap to two lines, so the one that does
+   not ("Warm and unhurried") left a visible hollow at the foot of its card.
+   Reserving the second line evens the row; the extras row is left alone
+   because none of its taglines wrap. */
+.wg-tiers .meta .t6{min-height:2lh}
 .tile .meta .open{display:inline-flex;align-items:center;gap:.35em;color:#fff;font-weight:700;font-size:.84rem;background:var(--accent-deep,var(--coral-deep));padding:.55em 1.05em;border-radius:999px;flex:0 0 auto;border:0;cursor:pointer;font-family:var(--body);transition:gap .25s var(--d),transform .25s var(--d)}
 .tile .meta .open .open-arrow{flex:0 0 auto;transition:transform .25s var(--d)}
 .tile .meta .open:hover{gap:.55em}
@@ -480,7 +514,7 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .wm-ironbark{font-family:'Anton',system-ui,sans-serif;font-weight:400;font-size:1.85rem;letter-spacing:.02em;color:#F2EFE7;text-transform:uppercase}
 /* margin clears the tiles' 34px reveal offset above; the icon opts out of
    flex shrinking so it stays a circle when the text wraps */
-.work-note{margin-top:44px;display:flex;align-items:center;gap:.6em;color:var(--ink-soft);font-size:.95rem}
+.work-note{margin-top:64px;display:flex;align-items:center;gap:.6em;color:var(--ink-soft);font-size:.95rem}
 .work-note svg{flex:0 0 auto}
 /* four-up tiles are ~260px wide, so their meta row tightens a touch to keep
    badge, name and button comfortable */
@@ -513,14 +547,27 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .tier:hover{transform:translateY(-6px) scale(1.02);box-shadow:var(--glow);border-color:rgba(180,83,9,.3)}
 .tier.feat{border-color:var(--coral);box-shadow:0 24px 60px -30px rgba(180,83,9,.45)}
 .tier.feat .badge{position:absolute;top:-13px;left:26px;background:var(--coral-deep);color:#fff;font-size:.72rem;font-weight:600;padding:.4em 1em;border-radius:999px;font-family:var(--body)}
-.tier.top{border-color:var(--ink);box-shadow:0 24px 60px -30px rgba(15,20,31,.5)}
+/* Everything is the top tier, but Grow is the recommended one. A full --ink
+   border here outweighed Grow's coral and pulled the eye to the dearest card,
+   so this keeps the dark badge and steps the outline back. */
+.tier.top{border-color:rgba(15,20,31,.3);box-shadow:0 20px 48px -32px rgba(15,20,31,.34)}
 .tier.top .badge{position:absolute;top:-13px;left:26px;background:var(--ink);color:#fff;font-size:.72rem;font-weight:600;padding:.4em 1em;border-radius:999px;font-family:var(--body)}
 /* the tier matching whatever package is currently chosen in the form */
 .tier.tier-selected{border-color:var(--coral);box-shadow:0 0 0 2px var(--coral),var(--glow);transform:scale(1.025)}
 .tier.tier-selected .tname{color:var(--coral-deep)}
 .tier.tier-selected:hover{transform:translateY(-6px) scale(1.03)}
 @media (prefers-reduced-motion:reduce){.tier.tier-selected{transform:none}.tier.tier-selected:hover{transform:none}}
-.ptable-wrap{overflow-x:auto;margin-bottom:44px;border-radius:20px;border:1px solid var(--line);background:#fff}
+/* The table is ~657px wide, so on a phone the Thrive and Everything columns sit
+   off-screen with nothing to say so. These are scroll shadows: the two `local`
+   layers travel with the content and uncover the fixed `scroll` shadows only on
+   the side that still has more table, so the cue appears and clears itself. */
+.ptable-wrap{overflow-x:auto;margin-bottom:44px;border-radius:20px;border:1px solid var(--line);
+  background:
+    linear-gradient(to right,#fff 40%,rgba(255,255,255,0)) left center/44px 100% no-repeat local,
+    linear-gradient(to left,#fff 40%,rgba(255,255,255,0)) right center/44px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%,rgba(28,25,23,.16),transparent) left center/16px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%,rgba(28,25,23,.16),transparent) right center/16px 100% no-repeat scroll,
+    #fff}
 .ptable-swipe{display:none;font-size:.8rem;font-weight:600;color:var(--ink-soft);margin:0 0 8px}
 @media (max-width:760px){.ptable-swipe{display:block}}
 .ptable{width:100%;border-collapse:collapse;font-size:.92rem;min-width:640px}
@@ -535,10 +582,15 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .addons{margin-top:44px;padding-top:36px;border-top:1px solid var(--line)}
 .addon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
 .addon-card{background:var(--bone-2);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:10px}
-.addon-card h4{font-family:var(--serif);font-size:1.05rem}
+/* two lines reserved so the body copy starts on one baseline across the row,
+   whether the title wraps or not */
+.addon-card h4{font-family:var(--serif);font-size:1.05rem;min-height:2.6em}
 .addon-card p{color:var(--ink-soft);font-size:.88rem;flex:1}
-.addon-price{font-family:var(--serif);font-weight:800;font-size:1.3rem;color:var(--coral-deep)}
-.tname{font-family:var(--body);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--ink-soft)}
+/* prices share one baseline across the three cards, whatever the copy length */
+.addon-price{font-family:var(--serif);font-weight:800;font-size:1.3rem;color:var(--coral-deep);margin-top:auto;padding-top:10px}
+/* the package name is what each card is called — it was set greyer and lighter
+   than the label above the grid it sits in */
+.tname{font-family:var(--body);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--ink)}
 .tprice-line{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
 .tprice-row{display:flex;align-items:baseline;gap:11px}
 .tprice-was{font-family:var(--body);font-size:1.1rem;font-weight:600;color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--coral-deep);text-decoration-thickness:2px}
@@ -584,12 +636,16 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .tprev-body{display:flex;flex-wrap:wrap;gap:6px}
 .tprev-pill{font-family:var(--body);font-weight:600;font-size:.66rem;letter-spacing:.03em;background:#fff;color:var(--ink-soft);border:1px solid var(--line);padding:.35em .7em;border-radius:999px}
 .tprev-pill.tprev-hi{background:var(--coral-deep);color:#fff;border-color:var(--coral-deep)}
-.tprev-open{display:inline-flex;align-items:center;gap:.4em;align-self:flex-start;background:rgba(180,83,9,.08);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1.5px solid rgba(180,83,9,.3);border-radius:999px;padding:.55em 1.05em;margin-bottom:20px;font-family:var(--body);font-weight:700;font-size:.82rem;color:var(--coral-deep);cursor:pointer;transition:background .25s var(--d),border-color .25s var(--d),transform .25s var(--d),gap .25s var(--d)}
+/* The four preview blocks above differ in height (1 to 3 rows of page pills), so
+   these buttons used to land at four different heights. Taking the slack here
+   pins them, and the reserved two-line height keeps the one that wraps the same
+   size as the rest — which also clears the 44px touch minimum. */
+.tprev-open{display:inline-flex;align-items:center;gap:.4em;align-self:flex-start;margin-top:auto;min-height:46px;background:rgba(180,83,9,.08);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1.5px solid rgba(180,83,9,.3);border-radius:999px;padding:.55em .9em;margin-bottom:20px;font-family:var(--body);font-weight:700;font-size:.76rem;color:var(--coral-deep);cursor:pointer;transition:background .25s var(--d),border-color .25s var(--d),transform .25s var(--d),gap .25s var(--d)}
 .tprev-open:hover{background:rgba(180,83,9,.16);border-color:var(--coral-deep);transform:translateY(-1px);gap:.6em}
 .tprev-open:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .tprev-open .open-arrow{flex:0 0 auto;transition:transform .25s var(--d)}
 .tprev-open:hover .open-arrow{transform:translateX(2px)}
-.tier .btn{margin-top:auto;width:100%;justify-content:center}
+.tier .btn{width:100%;justify-content:center}
 .care{margin-top:28px;background:var(--glass-card);border:1.5px dashed rgba(180,83,9,.35);border-radius:22px;padding:26px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;box-shadow:var(--shadow-soft),inset 0 1px 0 rgba(255,255,255,.6);transition:transform .5s var(--spring),box-shadow .5s var(--d)}
 .care:hover{transform:translateY(-4px);box-shadow:var(--glow)}
 @media (prefers-reduced-motion:reduce){.care:hover{transform:none}}
@@ -606,9 +662,10 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .tcard .ti{width:34px;height:34px;color:var(--coral-deep);margin-bottom:14px;transition:transform .5s var(--spring)}
 .tcard:hover .ti{transform:scale(1.15) rotate(-6deg)}
 @media (prefers-reduced-motion:reduce){.tcard:hover .ti{transform:none}}
-.tcard:nth-child(4n+2) .ti{color:var(--amber-deep)}
-.tcard:nth-child(4n+3) .ti{color:var(--teal-deep)}
-.tcard:nth-child(4n+4) .ti{color:var(--violet-deep)}
+/* rotate on 3, matching the 3-column grid, so each column keeps one accent.
+   On a 4-step cycle the colours fell diagonally and read as random. */
+.tcard:nth-child(3n+2) .ti{color:var(--amber-deep)}
+.tcard:nth-child(3n+3) .ti{color:var(--teal-deep)}
 .tcard h3{font-size:1.18rem;margin-bottom:7px;color:var(--ink)}
 .tcard p{color:var(--ink-soft);font-size:.93rem}
 
@@ -640,7 +697,7 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .q .a p strong{color:var(--ink)}
 
 /* cta band */
-.cta-band{background:radial-gradient(120% 150% at 82% -25%, rgba(226,194,122,.24) 0%, rgba(226,194,122,.08) 38%, transparent 68%), radial-gradient(90% 120% at 6% 112%, rgba(180,83,9,.16) 0%, rgba(180,83,9,.05) 40%, transparent 68%), linear-gradient(155deg,var(--night) 0%,#123421 50%,var(--night-2) 100%);color:#fff;border-radius:32px;padding:66px 48px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(226,194,122,.28);box-shadow:var(--shadow)}
+.cta-band{background:var(--grain), radial-gradient(120% 150% at 82% -25%, rgba(226,194,122,.24) 0%, rgba(226,194,122,.08) 38%, transparent 68%), radial-gradient(90% 120% at 6% 112%, rgba(180,83,9,.16) 0%, rgba(180,83,9,.05) 40%, transparent 68%), linear-gradient(155deg,var(--night) 0%,#123421 50%,var(--night-2) 100%);color:#fff;border-radius:32px;padding:66px 48px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(226,194,122,.28);box-shadow:var(--shadow)}
 .cta-band h2{color:#FBF7ED;max-width:18ch;margin:0 auto .4em}
 .cta-band .eyebrow{color:var(--gold)}
 .cta-band p{color:rgba(250,246,238,.85);max-width:46ch;margin:0 auto 28px;font-size:1.05rem;line-height:1.7}
@@ -711,7 +768,14 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .pf-pill:has(input:focus-visible){outline:2px solid #fff;outline-offset:2px}
 .pf-other{margin-top:2px}
 .pf-other[hidden]{display:none}
-.pf-hint{color:rgba(255,255,255,.75);font-size:.82rem;font-weight:700;margin:-4px 0 0}
+/* hints must read as subordinate to the field label above them: at .82rem/700
+   they were the same weight and near the same size as the label, so the longer
+   hint text won the eye. Same restraint the payment panel already used. */
+.pf-hint{color:rgba(255,255,255,.7);font-size:.78rem;font-weight:500;line-height:1.5;margin:-4px 0 0}
+/* oversized-file notice: a warm red distinct from the gold/coral already doing
+   pricing and emphasis duty in this form, so it reads unambiguously as a problem */
+.pf-filewarn{color:#FFB4A0;font-size:.78rem;font-weight:700;line-height:1.5;margin:-4px 0 0}
+.pf-photorow input.pf-photo{min-width:0}
 .pf-pill.locked{opacity:.4;cursor:not-allowed;background:rgba(255,255,255,.06)}
 .pf-pill.locked:hover{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.06)}
 #shopPaymentPanel{color:var(--ink)}
@@ -731,12 +795,22 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 #shopPaymentPanel .pf-divider{border:none;border-top:1px solid var(--line);margin:26px 0 2px}
 #shopPaymentPanel .pf-subhead{display:block;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-top:22px}
 .pf-tierhint{display:block;font-size:.74rem;font-weight:500;opacity:.85;margin-top:1px}
+/* the one pill that carries a real description (online booking): its own
+   full-width row, label on the first line, description underneath, and a
+   soft rectangle instead of a stadium so the two lines sit comfortably */
+.pf-pill.pf-pill-desc{flex:1 1 100%;flex-direction:column;align-items:flex-start;gap:2px;border-radius:18px;padding:.7em 1.2em .8em}
+.pf-pill.pf-pill-desc .pf-tierhint{opacity:.8;max-width:56ch}
 .pf-success{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:440px;margin:16px auto 0;padding:8px}
 .pf-success[hidden]{display:none}
 .pf-success p{font-size:1.02rem;font-weight:600}
 
 /* pay card */
 .pay-card{background:var(--glass-card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-hi);border-radius:24px;padding:32px;box-shadow:var(--shadow-soft),inset 0 1px 0 rgba(255,255,255,.6);display:flex;flex-direction:column;gap:14px}
+.pay-status{display:flex;gap:14px;align-items:flex-start;text-align:left;background:#fff;border-radius:16px;padding:18px 20px;margin-bottom:20px;border:1px solid var(--glass-hi);box-shadow:var(--shadow-soft)}
+.pay-status[hidden]{display:none}
+.pay-status svg{flex:0 0 auto;margin-top:1px}
+.pay-status strong{display:block;font-size:1rem;margin-bottom:3px}
+.pay-status p{color:var(--ink-soft);font-size:.92rem;line-height:1.5}
 .pay-label{font-family:var(--body);text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;color:var(--ink-soft);font-weight:800}
 .pay-select{width:100%;padding:.95em 1.1em;border-radius:14px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font-family:var(--body);font-size:.98rem;
   transition:border-color .2s,box-shadow .2s}
@@ -791,28 +865,34 @@ footer{background:rgba(243,237,224,.55);color:var(--ink);padding:62px 0 30px;bor
 .totop:hover{background:var(--coral-deep);color:#fff;border-color:var(--coral-deep)}
 
 /* reveal (only hidden when JS is active, so the page never renders blank if JS fails) */
-.js .rv{opacity:0;transform:translateY(30px);filter:blur(6px);transition:opacity .85s var(--d),transform .85s var(--d),filter .85s var(--d);will-change:opacity,transform,filter}
-.rv.in{opacity:1;transform:none;filter:none}
+/* One duration and one easing for every reveal on the page. The variety below
+   is carried by direction and distance (rise, side-slide, settle-in zoom),
+   which is what made each section feel different; timing was doing nothing but
+   making them feel unrelated — reveals ran at .62s, .85s and 1s, in two
+   different curves, so sections that met mid-scroll visibly disagreed. */
+.js .rv{opacity:0;transform:translateY(30px);filter:blur(6px);transition:opacity .72s var(--d),transform .72s var(--d),filter .72s var(--d);will-change:opacity,transform,filter}
+/* release the promoted layer once the element has arrived — will-change earns
+   its keep during the transition and costs memory for the rest of the page */
+.rv.in{opacity:1;transform:none;filter:none;will-change:auto}
 /* kinematic stagger: grid children cascade into place */
-.js .steps .rv:nth-child(2),.js .work-grid .rv:nth-child(2),.js .trust-grid .rv:nth-child(2),.js .tiers .rv:nth-child(2),.js .addon-grid .rv:nth-child(2){transition-delay:.09s}
-.js .steps .rv:nth-child(3),.js .work-grid .rv:nth-child(3),.js .trust-grid .rv:nth-child(3),.js .tiers .rv:nth-child(3),.js .addon-grid .rv:nth-child(3){transition-delay:.18s}
-.js .trust-grid .rv:nth-child(4),.js .tiers .rv:nth-child(4){transition-delay:.27s}
-.js .trust-grid .rv:nth-child(5){transition-delay:.36s}
-.js .trust-grid .rv:nth-child(6){transition-delay:.45s}
+.js .steps .rv:nth-child(2),.js .work-grid .rv:nth-child(2),.js .trust-grid .rv:nth-child(2),.js .tiers .rv:nth-child(2),.js .addon-grid .rv:nth-child(2){transition-delay:.07s}
+.js .steps .rv:nth-child(3),.js .work-grid .rv:nth-child(3),.js .trust-grid .rv:nth-child(3),.js .tiers .rv:nth-child(3),.js .addon-grid .rv:nth-child(3){transition-delay:.14s}
+.js .trust-grid .rv:nth-child(4),.js .tiers .rv:nth-child(4){transition-delay:.21s}
+.js .trust-grid .rv:nth-child(5){transition-delay:.28s}
+.js .trust-grid .rv:nth-child(6){transition-delay:.35s}
 /* the package row runs four-up, one step past what the shared rules cover */
-.js .wg-tiers .rv:nth-child(4){transition-delay:.27s}
-/* Per-section variety so the whole page doesn't reveal identically. Each
-   uses the same IntersectionObserver + .in toggle, only the starting
-   transform/easing differs, so there's no second competing scroll system. */
-/* section intros rise slower and further, with a gentle spring */
-.js .sec-head.rv{transform:translateY(46px);transition-duration:1s;transition-timing-function:var(--spring)}
+.js .wg-tiers .rv:nth-child(4){transition-delay:.21s}
+/* Per-section variety so the whole page doesn't reveal identically. Each uses
+   the same IntersectionObserver + .in toggle and the same duration and curve —
+   only the starting transform differs, so there's no second competing scroll
+   system and no two sections disagreeing on pace. */
+/* section intros rise further, so they still lead their content */
+.js .sec-head.rv{transform:translateY(46px)}
 /* the two big two-column blocks slide in from the side they sit toward */
 .js .founder.rv{transform:translateX(-40px) translateY(20px)}
 .js .care.rv{transform:translateX(40px) translateY(14px)}
 /* work + pricing cards arrive with a slight zoom, like panes settling into place */
-.js .work-grid .rv,.js .tiers .rv{transform:translateY(34px) scale(.965);transition-timing-function:var(--spring)}
-/* the launch-offer strip and the compare row snap up a touch quicker */
-.js .launch-offer.rv,.js .compare.rv{transition-duration:.62s}
+.js .work-grid .rv,.js .tiers .rv{transform:translateY(34px) scale(.965)}
 /* Reduce Motion asks for LESS motion, not none: this used to force every
    reveal to opacity:1 with no transition, so on any machine with the OS
    setting on (it ships on for a lot of Mac/iOS users) the entire scroll
@@ -860,7 +940,11 @@ body.locked{overflow:hidden}
 .cookie-banner-actions{display:flex;align-items:center;gap:16px;flex:0 0 auto}
 .cookie-banner-link{font-size:.85rem;color:var(--ink);text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 .cookie-banner-btn{padding:10px 20px;font-size:.85rem;white-space:nowrap}
-@media (max-width:480px){.cookie-banner{flex-direction:column;align-items:stretch;text-align:left}.cookie-banner-actions{justify-content:space-between}}
+@media (max-width:480px){.cookie-banner{flex-direction:column;align-items:stretch;text-align:left}.cookie-banner-actions{justify-content:space-between}
+  /* the paragraph's `flex:1 1 260px` basis is a width in the row layout above,
+     but becomes a 260px minimum HEIGHT once this switches to column, which left
+     a large empty band between the text and the buttons on a phone */
+  .cookie-banner p{flex:0 0 auto}}
 
 /* same display:none treatment as .sample, for the same first-load reasons */
 .legal-modal{position:fixed;inset:0;z-index:100;background:var(--bone);overflow-y:auto;overflow-x:hidden;display:none;opacity:0;transition:opacity .35s var(--d),display .35s var(--d) allow-discrete;color:var(--ink)}
@@ -910,7 +994,7 @@ body.locked{overflow:hidden}
    instantly, so the band holds its brand colour rather than flashing bare. */
 .s-hero.has-img{background-size:cover;background-position:center;color:#fff;padding:104px 0 88px}
 .sample.open .s-hero.has-img{background-image:var(--img)}
-.sample.open .s-gallery .g,.sample.open .s-team .av{background-image:var(--img);background-size:cover;background-position:center}
+.sample.open .s-gallery .g,.sample.open .s-team .av,.sample.open .bv-shot{background-image:var(--img);background-size:cover;background-position:center}
 .s-hero.has-img h1,.s-hero.has-img h2,.s-hero.has-img .s-hero-title{color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.35)}
 .s-hero.has-img p{color:rgba(255,255,255,.94);opacity:1;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .s-hero.has-img .s-eyebrow{color:rgba(255,255,255,.9)}
@@ -930,6 +1014,14 @@ body.locked{overflow:hidden}
 .s-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .s-grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 .s-card{background:var(--s-card,#fff);border:1.5px solid var(--s-line,rgba(0,0,0,.08));border-radius:var(--s-radius-lg,18px);padding:26px;box-shadow:0 14px 30px -24px rgba(0,0,0,.5)}
+/* Review cards close with a byline, and because the quote above it varies in
+   length the names drifted apart across a row (24px on Forge, 28px on Redline).
+   Pinning the byline to the card floor lines them up. Matched by shape — a
+   trailing div straight after the quote — since .s-card is also used for
+   service and feature cards, whose final paragraph must NOT be pushed down.
+   !important is needed because the byline carries an inline margin-top. */
+.s-card:has(> p + div:last-child){display:flex;flex-direction:column}
+.s-card:has(> p + div:last-child) > div:last-child{margin-top:auto!important;padding-top:14px}
 .s-card h3{font-family:var(--s-display,var(--serif));font-size:1.25rem;margin-bottom:8px;color:var(--s-head,inherit)}
 .s-card p{opacity:.8;font-size:.95rem}
 .s-price{font-family:var(--s-display,var(--serif));font-weight:800;color:var(--s-accent)}
@@ -957,7 +1049,11 @@ body.locked{overflow:hidden}
 .s-foot .in > div{line-height:1.6}
 .s-foot .in > div:last-child{color:color-mix(in srgb, var(--s-text) 72%, var(--s-bg));font-weight:500}
 .s-quote-form{display:grid;gap:12px;max-width:440px}
-.s-quote-form input,.s-quote-form textarea{padding:14px 16px;border-radius:var(--s-radius-lg,12px);border:1px solid var(--s-line,rgba(0,0,0,.2));font-family:var(--s-body,var(--body));font-size:.95rem;background:rgba(255,255,255,.7)}
+/* solid paper fields: the old 70%-white wash went muddy on the dark contact
+   bands (Bayview harbor, Redline coal, Ironbark charcoal) */
+.s-quote-form input,.s-quote-form textarea{padding:14px 16px;border-radius:var(--s-radius-lg,12px);border:1px solid var(--s-line,rgba(0,0,0,.2));font-family:var(--s-body,var(--body));font-size:.95rem;background:#FDFCF9;color:#26251F}
+.s-quote-form input::placeholder,.s-quote-form textarea::placeholder{color:#75706A;opacity:1}
+.s-quote-form input:focus,.s-quote-form textarea:focus{outline:none;border-color:var(--s-accent-2,var(--s-accent));box-shadow:0 0 0 3px color-mix(in srgb,var(--s-accent-2,var(--s-accent)) 30%,transparent)}
 .s-quote-form button{justify-self:start}
 .s-stat{display:flex;gap:40px;flex-wrap:wrap}
 .s-stat .st b{font-family:var(--s-display,var(--serif));font-size:2.4rem;line-height:1.05;color:var(--s-accent);display:block;letter-spacing:-.02em}
@@ -1014,7 +1110,21 @@ body.locked{overflow:hidden}
 #s-realestate .s-sec{padding:80px 0}
 /* listings read as a surveyed index: brass ref code, thin frame, price anchored bottom */
 #s-realestate #realestate-listings .s-card{position:relative;border:1px solid var(--s-line);border-radius:4px;padding:24px 24px 22px;overflow:hidden;box-shadow:none}
-#s-realestate #realestate-listings .s-card::before{content:"BV-0" counter(bvlist);counter-increment:bvlist;position:absolute;top:20px;right:22px;font-family:var(--s-body);font-weight:600;font-size:.66rem;letter-spacing:.12em;color:var(--s-accent-2);opacity:.9}
+/* the ref code now sits on the listing photo like a plate number, so it gets
+   a harbor scrim to stay readable over any image */
+#s-realestate #realestate-listings .s-card::before{content:"BV-0" counter(bvlist);counter-increment:bvlist;position:absolute;top:34px;right:34px;z-index:2;font-family:var(--s-body);font-weight:600;font-size:.64rem;letter-spacing:.12em;color:#F7F5F0;background:rgba(17,37,49,.62);padding:.45em .8em;border-radius:2px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+/* listing photo header: bleeds to the card edges, status chip anchored on it */
+#s-realestate .bv-shot{position:relative;aspect-ratio:4/3;margin:-24px -24px 18px;background-size:cover;background-position:center;background-color:#DCE4E4}
+#s-realestate .bv-status{position:absolute;left:14px;bottom:12px;font-family:var(--s-body);font-weight:600;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#F7F5F0;background:var(--s-accent);padding:.5em .95em;border-radius:2px}
+#s-realestate .bv-status.is-offer{background:var(--s-accent-2);color:#1B3A4B}
+#s-realestate .bv-specs{list-style:none;display:flex;padding:0;margin:10px 0 4px;font-family:var(--s-body);font-weight:600;font-size:.84rem;color:var(--s-text)}
+#s-realestate .bv-specs li+li{margin-left:.75em;padding-left:.75em;border-left:1px solid var(--s-line)}
+#s-realestate .bv-note{font-size:.88rem;color:var(--s-text);opacity:.66;margin:0 0 14px}
+#s-realestate .bv-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-top:1px solid var(--s-line);padding-top:14px}
+#s-realestate .bv-view{font-family:var(--s-body);font-weight:600;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--s-accent);white-space:nowrap}
+#s-realestate .bv-view span{display:inline-block;transition:transform .25s var(--d)}
+#s-realestate .bv-view:hover span{transform:translateX(3px)}
+@media (prefers-reduced-motion:reduce){#s-realestate .bv-view:hover span{transform:none}}
 #s-realestate #realestate-listings .s-grid3{counter-reset:bvlist}
 #s-realestate #realestate-listings .s-card h3{font-size:1.42rem;font-weight:700;letter-spacing:.002em;max-width:16ch}
 #s-realestate #realestate-listings .s-card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--s-accent-2);transform:scaleY(0);transform-origin:top;transition:transform .4s var(--d)}
@@ -1060,6 +1170,14 @@ body.locked{overflow:hidden}
 #s-auto .s-tprice{font-weight:600;letter-spacing:.01em}
 #s-auto .s-tname{font-family:var(--s-body);letter-spacing:.14em}
 #s-auto .s-stat .st b{text-transform:uppercase;letter-spacing:.01em;font-weight:600}
+/* service cards: prices sit on a shared baseline whatever the copy length */
+#s-auto #auto-services .s-card{display:flex;flex-direction:column}
+#s-auto #auto-services .s-price{margin-top:auto !important;padding-top:14px}
+/* one muted treatment for every "per visit", featured card included */
+#s-auto .s-tprice small{color:rgba(255,255,255,.62)}
+/* served suburbs on the area page */
+#s-auto .rl-areas{list-style:none;display:flex;flex-wrap:wrap;gap:10px;padding:0;margin:26px 0 0;max-width:60ch}
+#s-auto .rl-areas li{font-family:var(--s-body);font-weight:600;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#EDEFF2;border:1px solid rgba(228,3,46,.5);border-left:3px solid var(--s-accent);padding:.55em 1em;border-radius:2px;background:rgba(228,3,46,.07)}
 #s-auto #auto-pricing .s-h2{position:relative;padding-bottom:20px}
 #s-auto #auto-pricing .s-h2::after{content:"";position:absolute;left:0;bottom:0;width:130px;height:7px;background:repeating-linear-gradient(45deg,var(--s-accent) 0 9px,#22252B 9px 18px)}
 /* the workshop-promise list: tick chip leads each row instead of drifting
@@ -1085,6 +1203,10 @@ body.locked{overflow:hidden}
 #s-fitness .s-card h3{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:1.3rem;letter-spacing:.02em}
 #s-fitness #fitness-classes .s-card:hover{border-top-color:var(--s-accent)}
 #s-fitness .s-tprice{font-family:'Anton',sans-serif;font-weight:400}
+#s-fitness .s-tprice small{color:rgba(255,255,255,.6)}
+/* class timetable line: volt tab that makes each class read like a real
+   session you could walk into, not a category label */
+#s-fitness .ff-times{display:inline-block;margin-top:12px;font-family:var(--s-body);font-weight:700;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--s-accent);border-top:2px solid rgba(198,241,53,.35);padding-top:8px}
 #s-fitness .s-tname{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.12em;font-size:.98rem}
 
 /* ---- 4 · BLOOM & BARK (Launch example): gentle mobile dog groomer, DM Serif Display / Nunito Sans ---- */
@@ -1094,6 +1216,11 @@ body.locked{overflow:hidden}
 #s-tier-starter .s-cta{font-weight:800}
 #s-tier-starter .s-links a{font-weight:700}
 #s-tier-starter .s-eyebrow{font-weight:800;letter-spacing:.08em;color:var(--s-accent)}
+/* plum vanishes against the hero photo; go blush there instead */
+#s-tier-starter .s-hero.has-img .s-eyebrow{color:#F2DFDC}
+/* price cards share one baseline whatever the copy length */
+#s-tier-starter .s-grid3 .s-card{display:flex;flex-direction:column}
+#s-tier-starter .s-grid3 .s-price{margin-top:auto !important;padding-top:12px}
 #s-tier-starter .s-hero-title{font-family:'DM Serif Display',serif;font-weight:400;letter-spacing:0;line-height:1.06}
 #s-tier-starter .s-h2{font-family:'DM Serif Display',serif;font-weight:400;letter-spacing:0;line-height:1.1}
 #s-tier-starter .s-card h3{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.34rem}
@@ -1121,6 +1248,16 @@ body.locked{overflow:hidden}
 #s-tier-standard .s-item .nm{font-weight:600;font-size:1.16rem}
 #s-tier-standard .s-item .pr{font-weight:700}
 #s-tier-standard .s-menu .s-item:nth-child(even) .pr{color:var(--s-accent)}
+/* the quote-steps aside on the services page: pencil-rule discipline */
+#s-tier-standard .ib-quotehow{background:#F3EDE0;border:1px solid var(--s-line);border-radius:10px;padding:24px 26px}
+#s-tier-standard .ib-quotehow h3{font-family:var(--s-display);font-weight:700;font-size:1.14rem;margin:0 0 12px;color:var(--s-head)}
+#s-tier-standard .ib-quotehow ol{list-style:none;margin:0 0 16px;padding:0;counter-reset:ibq}
+#s-tier-standard .ib-quotehow li{counter-increment:ibq;position:relative;padding:10px 0 10px 40px;font-size:.93rem;opacity:.9}
+#s-tier-standard .ib-quotehow li+li{border-top:1px solid var(--s-line)}
+#s-tier-standard .ib-quotehow li::before{content:counter(ibq);position:absolute;left:0;top:10px;width:26px;height:26px;border-radius:4px;background:var(--s-accent-2);color:#211C18;font-family:var(--s-display);font-weight:700;font-size:.9rem;display:flex;align-items:center;justify-content:center}
+/* workshop principles on the About page, cut like timber tags */
+#s-tier-standard .ib-values{list-style:none;display:flex;flex-wrap:wrap;gap:10px;padding:0;margin:24px 0 0}
+#s-tier-standard .ib-values li{font-family:var(--s-body);font-weight:600;font-size:.84rem;color:var(--s-head);background:#F3EDE0;border:1px solid var(--s-line);border-left:3px solid var(--s-accent-2);padding:.6em 1.05em;border-radius:4px}
 #s-tier-standard #standard-contact .s-eyebrow{color:var(--s-accent-2)}
 /* on the charcoal contact band the umber CTA would sink; switch it to oak */
 #s-tier-standard #standard-contact .s-cta{background:var(--s-accent-2);color:#211C18}
@@ -1140,6 +1277,16 @@ body.locked{overflow:hidden}
 #s-tier-premium .s-item .nm{font-weight:600;font-size:1.04rem}
 #s-tier-premium .s-item .pr{font-weight:700;color:var(--s-accent)}
 #s-tier-premium .s-stat .st b{font-weight:700;letter-spacing:-.01em}
+/* first-visit panel on the services page: soft clinical card, aqua ticks */
+#s-tier-premium .cp-firstvisit{background:#fff;border:1px solid var(--s-line);border-radius:22px;padding:26px 28px;box-shadow:0 20px 44px -32px rgba(14,59,58,.4)}
+#s-tier-premium .cp-firstvisit h3{font-weight:600;font-size:1.12rem;margin:0 0 12px;color:var(--s-head)}
+#s-tier-premium .cp-firstvisit ul{list-style:none;margin:0 0 16px;padding:0}
+#s-tier-premium .cp-firstvisit li{position:relative;padding:8px 0 8px 30px;font-size:.93rem;opacity:.9}
+#s-tier-premium .cp-firstvisit li::before{content:"";position:absolute;left:0;top:12px;width:18px;height:18px;border-radius:50%;background:var(--s-accent-2);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3 3 7-7' stroke='black' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat, linear-gradient(#000,#000);
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3 3 7-7' stroke='black' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat, linear-gradient(#000,#000);
+  -webkit-mask-composite:destination-out;mask-composite:exclude}
+#s-tier-premium .cp-rebate{font-size:.86rem;background:#D5E9E5;color:#0E3B3A;border-radius:12px;padding:12px 16px;margin:0 0 18px}
 #s-tier-premium #premium-book .s-eyebrow{color:var(--s-accent-2)}
 /* on the deep-teal booking band the teal CTA would sink; switch it to aqua */
 #s-tier-premium #premium-book .s-cta{background:var(--s-accent-2);color:var(--s-on-accent-2)}
@@ -1155,7 +1302,12 @@ body.locked{overflow:hidden}
 /* the olive accent vanishes against the hero photo; go latte there instead */
 #s-tier-ultimate .s-hero.has-img .s-eyebrow{color:#EAD9BD}
 #s-tier-ultimate .s-hero{text-align:left}
-#s-tier-ultimate .s-hero-title{font-weight:700;font-size:clamp(2.6rem,6vw,4.2rem);line-height:1.02;letter-spacing:-.03em;max-width:15ch;margin:0 0 .2em}
+/* -.03em was the tightest override of any of the 7 sample heroes (every other
+   one loosens from the -.02em shared base, none of the others go tighter) and
+   the only one at a font-size this large — "coffee." rendered with its two f's
+   visibly fused together. Matches the shared .s-hero-title base, same value
+   Coastal Physio's override already uses safely one size class down. */
+#s-tier-ultimate .s-hero-title{font-weight:700;font-size:clamp(2.6rem,6vw,4.2rem);line-height:1.02;letter-spacing:-.02em;max-width:15ch;margin:0 0 .2em}
 #s-tier-ultimate .s-hero p{margin:20px 0 30px;max-width:46ch}
 #s-tier-ultimate .s-hero .s-btns{flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:14px}
 #s-tier-ultimate .s-h2{font-weight:700;letter-spacing:-.02em;line-height:1.05;font-size:clamp(1.8rem,3.8vw,2.5rem)}
@@ -1164,6 +1316,13 @@ body.locked{overflow:hidden}
 #s-tier-ultimate .s-menu .s-item{border-bottom:1px dotted rgba(67,48,30,.4)}
 #s-tier-ultimate .s-menu .s-item .nm{font-weight:600;font-size:1.16rem;letter-spacing:-.01em}
 #s-tier-ultimate .s-menu .s-item .pr{font-family:var(--s-body);font-weight:700;color:var(--s-accent);font-size:.98rem}
+/* shop cards: product art on a latte plinth, cart buttons on one baseline */
+#s-tier-ultimate .cl-product{display:flex;flex-direction:column}
+#s-tier-ultimate .cl-art{display:flex;align-items:flex-end;justify-content:center;background:#EAD9BD;border-radius:8px;padding:18px 0 0;margin-bottom:16px;min-height:104px}
+#s-tier-ultimate .cl-product .s-price{margin-bottom:16px}
+#s-tier-ultimate .cl-cart{margin-top:auto;align-self:flex-start;display:inline-block}
+/* blog cards: dated like a real journal */
+#s-tier-ultimate .cl-meta{display:block;font-family:var(--s-body);font-weight:700;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--s-accent-2);margin-bottom:8px}
 #s-tier-ultimate #ultimate-visit .s-eyebrow{color:#D39B5E}
 /* on the espresso band the burnt-orange CTA would sink; switch it to caramel */
 #s-tier-ultimate #ultimate-visit .s-cta{background:#D39B5E;color:#43301E}
@@ -1181,6 +1340,9 @@ body.locked{overflow:hidden}
      trim the marks to keep both on one line down to a 320px phone */
   #s-realestate .s-logo svg{width:24px;height:24px}
   #s-auto .s-logo svg{width:42px;height:17px}
+  /* ID-scoped CTA padding beats the generic shrink above, so restate it with
+     the ID for the samples whose buttons otherwise wrap to two lines */
+  #s-realestate .s-cta,#s-auto .s-cta{padding:.6em 1em;font-size:.7rem;letter-spacing:.1em;white-space:nowrap}
 }
 
 /* ===== interaction layer ===== */
@@ -1252,7 +1414,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   .wg-extras > .tile:last-child{grid-column:1/-1;width:calc(50% - 14px);justify-self:center}
   /* and the cascade re-keys to two columns */
   .js .work-grid .rv:nth-child(2n+1){transition-delay:0s}
-  .js .work-grid .rv:nth-child(2n+2){transition-delay:.09s}
+  .js .work-grid .rv:nth-child(2n+2){transition-delay:.07s}
   .addon-grid{grid-template-columns:1fr}
   .founder{grid-template-columns:1fr}
   .founder .pic{max-width:200px}
@@ -1287,10 +1449,15 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   .tprev-open{padding:.72em .95em}
   .cookie-banner-link{display:inline-block;padding:.55em .35em;margin:-.35em 0}
   .cookie-banner .btn{padding:.72em 1.35em}
-  /* and a hard 42px floor on all of them, centred so the type stays put */
-  .vp-toggle-btn,.tile .meta .open,.swbtn,.tprev-open,.cookie-banner .btn{min-height:42px;display:inline-flex;align-items:center;justify-content:center}
+  /* and a hard 46px floor on all of them, centred so the type stays put.
+     42px still measured under the 44px touch minimum. */
+  .vp-toggle-btn,.tile .meta .open,.swbtn,.tprev-open,.cookie-banner .btn{min-height:46px;display:inline-flex;align-items:center;justify-content:center}
   /* footer links become full-width rows with breathing room, not 16px text */
-  .fcol a{display:inline-block;padding:.34em 0}
+  .fcol a{display:inline-block;padding:.7em 0}
+  /* the sample sites' own buttons measured 30-42px on a phone. They are the
+     work being judged, so they get the same touch floor as Larkwell's own. */
+  .s-cta,.s-ghost{min-height:46px;display:inline-flex;align-items:center;justify-content:center}
+  .s-topbar .sclose{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 }
 
 /* fallback for browsers without backdrop-filter support: every glass
@@ -1306,6 +1473,48 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   .preview-form input,.preview-form textarea,.preview-form select{background:#fff}
   footer{background:var(--bone-2)}
   .totop{background:#fff}
+}
+
+/* ---- phone performance ----
+   backdrop-filter is by far the most expensive thing on this page on a phone.
+   Every element carrying it makes the compositor snapshot the backdrop behind
+   it and blur that snapshot, and this page has ~90 of them: 62 .pf-pill chips,
+   every form field, all four tier cards and their wireframes, the seven sample
+   navs, the header and the hero card. At phone size the frost is worth almost
+   nothing visually, so below 760px we drop it and reuse the same opaque
+   surfaces the no-backdrop-filter path above already falls back to — so this
+   is a path the design was built to survive, not a new one. */
+@media (max-width:760px){
+  :root{
+    --glass-card:#FDFBF7;
+    --glass-card-2:#FDFBF7;
+    --glass-hi:var(--line);
+  }
+  #top.solid,#top.glass,.hero-card,.lo-unit,.tier,.tprev-open,.tprev-wire .wf,
+  .preview-form input,.preview-form textarea,.preview-form select,
+  .pf-pill,.pf-pill:has(input:checked),#shopPaymentPanel .pf-pill:has(input:checked),
+  .pay-card,.pf-bonus,.totop,.s-nav,#s-realestate #realestate-listings .s-card::before{
+    backdrop-filter:none;-webkit-backdrop-filter:none}
+  #top.solid,#top.glass{background:#123B2A}
+  .preview-form input,.preview-form textarea,.preview-form select{background:#fff}
+  .totop{background:#fff}
+  /* the hero card loses its frost, so carry a little more of its own tint to
+     keep the panel edge reading against the gradient behind it */
+  .hero-card{background:linear-gradient(155deg,rgba(255,255,255,.14),rgba(255,255,255,.05))}
+  /* Both ambient loops hold a promoted, roughly viewport-sized layer for the
+     whole life of the page, and body::before is inset -15% so its layer is
+     ~1.7x the viewport. Frozen on phones: the gradients still read exactly the
+     same, the per-frame compositing and the layer memory both go away.
+     will-change is dropped with them — it only ever earns its keep mid-animation. */
+  body::before{animation:none;will-change:auto}
+  /* .dawn is an 860px square running an 18px blur; the source is already a
+     soft radial gradient, so dropping the blur costs almost nothing to look at
+     and removes an offscreen blur buffer. */
+  .dawn{animation:none;will-change:auto;filter:none}
+  /* animating filter:blur repaints rather than just compositing, and it runs on
+     every revealing element. The rise and fade carry the reveal on their own at
+     phone size, so the blur comes off and each reveal becomes compositor-only. */
+  .js .rv{filter:none;transition:opacity .72s var(--d),transform .72s var(--d);will-change:opacity,transform}
 }
 </style>
 </head>
@@ -1494,7 +1703,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           <button type="button" class="vp-toggle-btn" data-device="mobile" aria-pressed="false">Mobile</button>
         </div>
         <div class="meta">
-          <span><span class="t-tier">Launch example</span><span class="t5">Bloom &amp; Bark</span><span class="t6">Gentle, calm, unhurried</span></span>
+          <span><span class="t5">Bloom &amp; Bark</span><span class="t6">Gentle, calm, unhurried</span></span>
           <button type="button" class="open" data-open="tier-starter">Open<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="open-arrow"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
@@ -1514,7 +1723,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           <button type="button" class="vp-toggle-btn" data-device="mobile" aria-pressed="false">Mobile</button>
         </div>
         <div class="meta">
-          <span><span class="t-tier">Grow example</span><span class="t5">Ironbark Joinery</span><span class="t6">Honest, heavy, built to last</span></span>
+          <span><span class="t5">Ironbark Joinery</span><span class="t6">Honest, heavy, built to last</span></span>
           <button type="button" class="open" data-open="tier-standard">Open<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="open-arrow"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
@@ -1534,7 +1743,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           <button type="button" class="vp-toggle-btn" data-device="mobile" aria-pressed="false">Mobile</button>
         </div>
         <div class="meta">
-          <span><span class="t-tier">Thrive example</span><span class="t5">Coastal Physio</span><span class="t6">Calm, clinical, reassuring</span></span>
+          <span><span class="t5">Coastal Physio</span><span class="t6">Calm, clinical, reassuring</span></span>
           <button type="button" class="open" data-open="tier-premium">Open<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="open-arrow"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
@@ -1554,7 +1763,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           <button type="button" class="vp-toggle-btn" data-device="mobile" aria-pressed="false">Mobile</button>
         </div>
         <div class="meta">
-          <span><span class="t-tier">Everything example</span><span class="t5">Crema Lane</span><span class="t6">Warm and unhurried</span></span>
+          <span><span class="t5">Crema Lane</span><span class="t6">Warm and unhurried</span></span>
           <button type="button" class="open" data-open="tier-ultimate">Open<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="open-arrow"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
@@ -1668,7 +1877,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           </svg>
         </div>
         <div class="meta">
-          <span><span class="t-tier">Coffee roastery · Fremantle</span><span class="t5">Ember Lane Roasting Co.</span><span class="t6">Warm &amp; handcrafted</span></span>
+          <span><span class="t5">Ember Lane Roasting Co.</span><span class="t6">Warm &amp; handcrafted</span></span>
         </div>
       </div>
 
@@ -1687,7 +1896,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           </div>
         </div>
         <div class="meta">
-          <span><span class="t-tier">Software · Perth</span><span class="t5">Loopwork</span><span class="t6">Clean &amp; modern</span></span>
+          <span><span class="t5">Loopwork</span><span class="t6">Clean &amp; modern</span></span>
         </div>
       </div>
 
@@ -1716,7 +1925,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           </div>
         </div>
         <div class="meta">
-          <span><span class="t-tier">Jewellery · Subiaco</span><span class="t5">Aurélie Fine Jewellery</span><span class="t6">Elegant &amp; minimal</span></span>
+          <span><span class="t5">Aurélie Fine Jewellery</span><span class="t6">Elegant &amp; minimal</span></span>
         </div>
       </div>
 
@@ -1738,7 +1947,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           </div>
         </div>
         <div class="meta">
-          <span><span class="t-tier">Gym · Osborne Park</span><span class="t5">Ironbark Strength Co.</span><span class="t6">Bold &amp; geometric</span></span>
+          <span><span class="t5">Ironbark Strength Co.</span><span class="t6">Bold &amp; geometric</span></span>
         </div>
       </div>
 
@@ -2012,7 +2221,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
       </div>
       <div>
         <span class="eyebrow">Why Larkwell</span>
-        <blockquote>"Most small businesses know their website lets them down. They just do not have the time to fix it. So I take the whole job off their hands and give them something they are proud to share."</blockquote>
+        <blockquote>&ldquo;Most small businesses know their website lets them down. They just do not have the time to fix it. So I take the whole job off their hands and give them something they are proud to share.&rdquo;</blockquote>
         <p class="sig">Larkwell · a small Perth-based studio building websites for local businesses</p>
         <!-- PERSUASION: unity/similarity + statistical social proof, merged into one line -->
         <p style="color:var(--ink-soft);margin-top:16px;max-width:52ch">I'm not a big agency, I work with small business owners directly, one build at a time. Worth knowing: Stanford's Web Credibility Research found that <strong style="color:var(--ink)">75% of people judge a business's credibility by its website design</strong> alone, before they've read a word of it.</p>
@@ -2119,8 +2328,9 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           <label class="pf-pill"><input type="radio" name="logo_status" value="need">No, I need one made <span class="pf-price">· +$149</span></label>
           <label class="pf-pill"><input type="radio" name="logo_status" value="unsure">Not sure yet</label>
         </div>
-        <input type="file" name="logo" id="logoUpload" accept="image/*" aria-label="Attach your logo" aria-describedby="logoUploadHint">
-        <p class="pf-hint" id="logoUploadHint">Got one already? Attach it here. PNG with a see-through background works best if you have it.</p>
+        <input type="file" name="logo" id="logoUpload" accept="image/*" aria-label="Attach your logo" aria-describedby="logoUploadHint logoUploadWarn">
+        <p class="pf-hint" id="logoUploadHint">Got one already? Attach it here, up to 2MB. PNG with a see-through background works best if you have it.</p>
+        <p class="pf-filewarn" id="logoUploadWarn" role="alert" hidden></p>
         <span class="pf-label">Got a colour scheme in mind?</span>
         <div class="pf-pillgroup" role="radiogroup" aria-label="Got a colour scheme in mind?" id="colourGroup">
           <label class="pf-pill"><input type="radio" name="colour_scheme" value="warm">Warm &amp; earthy</label>
@@ -2136,11 +2346,20 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
           <label class="pf-pill"><input type="radio" name="photos_status" value="soon">Not yet, I'll get some</label>
           <label class="pf-pill"><input type="radio" name="photos_status" value="placeholder">No, use placeholders</label>
         </div>
-        <input type="file" name="photos" id="photosUpload" accept="image/*" multiple aria-label="Attach photos" aria-describedby="photosUploadHint">
-        <p class="pf-hint" id="photosUploadHint">Attach a few now if handy, food, work or the shopfront all help. JPG or PNG, no rush if you would rather send them later.</p>
+        <!-- Netlify Forms does not support a single <input type=file multiple>: only
+             one file per field is accepted, so extra files silently never arrived.
+             Four separate named fields is Netlify's documented working pattern. -->
+        <div class="pf-row pf-photorow" id="photosUploadGroup">
+          <input type="file" name="photo_1" class="pf-photo" accept="image/*" aria-label="Photo 1 (optional)" aria-describedby="photosUploadHint photosUploadWarn">
+          <input type="file" name="photo_2" class="pf-photo" accept="image/*" aria-label="Photo 2 (optional)" aria-describedby="photosUploadHint photosUploadWarn">
+          <input type="file" name="photo_3" class="pf-photo" accept="image/*" aria-label="Photo 3 (optional)" aria-describedby="photosUploadHint photosUploadWarn">
+          <input type="file" name="photo_4" class="pf-photo" accept="image/*" aria-label="Photo 4 (optional)" aria-describedby="photosUploadHint photosUploadWarn">
+        </div>
+        <p class="pf-hint" id="photosUploadHint">Attach up to 4 now if handy, each under 1.2MB, food, work or the shopfront all help. JPG or PNG. Got more, or bigger files? Email them to <a href="mailto:hello@larkwell.com.au" style="color:inherit">hello@larkwell.com.au</a> instead, no rush either way.</p>
+        <p class="pf-filewarn" id="photosUploadWarn" role="alert" hidden></p>
         <span class="pf-label">What do you want on the site? Tick all that apply</span>
         <div class="pf-pillgroup" role="group" aria-label="What do you want on the site?" id="featuresGroup">
-          <label class="pf-pill" data-min="premium"><input type="checkbox" name="features[]" value="booking">Online booking<span class="pf-tierhint">Customers pick a day and time on your site and the request goes straight to your email inbox. No extra accounts or subscriptions needed.</span></label>
+          <label class="pf-pill pf-pill-desc" data-min="premium"><input type="checkbox" name="features[]" value="booking">Online booking<span class="pf-tierhint">Customers pick a day and time on your site and the request goes straight to your email inbox. No extra accounts or subscriptions needed.</span></label>
           <label class="pf-pill" data-min="premium"><input type="checkbox" name="features[]" value="ordering">Online ordering<span class="pf-tierhint"></span></label>
           <label class="pf-pill" data-min="starter"><input type="checkbox" name="features[]" value="menu">Menu or price list<span class="pf-tierhint"></span></label>
           <label class="pf-pill" data-min="standard"><input type="checkbox" name="features[]" value="gallery">Photo gallery<span class="pf-tierhint"></span></label>
@@ -2218,10 +2437,15 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
         </div>
         <label class="care-check light" id="pfTermsCheckWrap" style="margin-top:6px">
           <input type="checkbox" id="pfTermsCheck" required>
-          <span>I've read and accept the <a href="#" data-open-terms style="color:inherit;text-decoration:underline;text-underline-offset:2px">Terms &amp; Conditions</a>, including the limitation of liability in section 11.</span>
+          <span>I've read and accept the <a href="#" data-open-terms style="color:inherit;text-decoration:underline;text-underline-offset:2px">Terms &amp; Conditions</a>, including the limitation of liability in clause 19.</span>
         </label>
         <input type="hidden" name="terms_accepted" id="pfTermsAcceptedField" value="No">
         <input type="hidden" name="terms_accepted_at" id="pfTermsAcceptedAtField" value="">
+        <!-- Clause 2.2 promises a record of the version, date and time of acceptance;
+             only date/time were actually captured above. This is the version, a static
+             value since it doesn't change per submission — bump it by hand if terms.html's
+             "Document version" ever does. -->
+        <input type="hidden" name="terms_version" id="pfTermsVersionField" value="2.0">
         <input type="hidden" name="package_label" id="pfPackageLabelField">
         <input type="hidden" name="selection_summary" id="pfSelectionSummaryField">
         <button class="btn btn-ink" type="submit" id="pfSubmit">Get my free preview</button>
@@ -2247,6 +2471,20 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
       <span class="eyebrow">Already seen your preview?</span>
       <h2>Ready to go ahead?</h2>
       <p class="lead" style="margin-inline:auto">Pick the package we agreed on and pay securely through Stripe. Not sure which one? Check the email I sent you, or get in touch first. Every build is live within 3 days, guaranteed.</p>
+    </div>
+    <!-- Stripe returns here via success_url/cancel_url in the checkout function
+         (?checkout=success or ?checkout=cancelled, both #pay), but nothing read
+         that parameter, so paying landed someone back on the exact same blank
+         form with no acknowledgement their card had already been charged.
+         Display-only: reads the URL, shows a message, done — no session/price/
+         key logic touched. -->
+    <div class="pay-status" id="payStatusSuccess" hidden tabindex="-1">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="var(--teal)"/><path d="M8 13.5l3.3 3.3L18.5 9" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><strong>Payment received, thank you.</strong><p>I'll be in touch within 1 business day to get things moving. Keep an eye on your inbox.</p></div>
+    </div>
+    <div class="pay-status pay-status-cancelled" id="payStatusCancelled" hidden tabindex="-1">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="var(--coral-deep)"/><path d="M9 9l8 8M17 9l-8 8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><strong>Checkout was cancelled.</strong><p>No payment was taken. Pick your package below whenever you're ready to try again.</p></div>
     </div>
     <div class="pay-card rv">
       <label class="pay-label" for="payBusiness">Business name</label>
@@ -2295,7 +2533,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
       </label>
       <label class="care-check light" id="payTermsCheckWrap" style="margin-top:6px">
         <input type="checkbox" id="payTermsCheck" required>
-        <span>I've read and accept the <a href="#" data-open-terms style="color:inherit;text-decoration:underline;text-underline-offset:2px">Terms &amp; Conditions</a>, including the limitation of liability in section 11.</span>
+        <span>I've read and accept the <a href="#" data-open-terms style="color:inherit;text-decoration:underline;text-underline-offset:2px">Terms &amp; Conditions</a>, including the limitation of liability in clause 19.</span>
       </label>
       <button class="btn btn-primary" id="payNowBtn" type="button">Pay now</button>
       <p class="pay-note" id="payNote">Secure checkout through Stripe, covering your package, the care plan, and any add-ons ticked above, all already selected and totalled.</p>
@@ -2364,7 +2602,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <div class="s-links"><a href="#" data-jump="realestate-listings">Listings</a><a href="#" data-jump="realestate-packages">Sell</a><a href="#" data-jump="realestate-team">Team</a><a href="#" data-jump="realestate-visit">Contact</a></div>
     <a href="#" class="s-cta" data-demo="open a booking calendar to arrange a free property appraisal.">Book an appraisal</a>
   </div></nav>
-  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(17,37,49,.8),rgba(17,37,49,.32)),url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=60&auto=format&fit=crop')"><div class="s-wrap">
+  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(17,37,49,.8),rgba(17,37,49,.32)),url('assets/img/bayview-hero.jpg')"><div class="s-wrap">
     <span class="s-eyebrow">Sales &amp; rentals · servicing the bay</span>
     <h2 class="s-hero-title">Sold before the sign goes up.</h2>
     <p>Straightforward advice, sharp marketing and an agent who actually answers the phone. Selling, buying or renting, we make it easy.</p>
@@ -2382,22 +2620,25 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <h2 class="s-h2">Currently on the market</h2>
     <div class="s-grid3">
       <div class="s-card">
+        <div class="bv-shot" role="img" aria-label="White two-storey home with pool at 14 Marina Court" style="--img:url('assets/img/bayview-listing-marina.jpg')"><span class="bv-status">For sale</span></div>
         <h3>14 Marina Court, Bayside</h3>
-        <p>4 bed · 2 bath · 2 car, walk to the water</p>
-        <div class="s-price" style="margin-top:12px">$1,250,000</div>
-        <a href="#" class="s-cta" style="margin-top:16px;display:inline-block" data-demo="open the full listing with photos, floorplan and an enquiry form.">For sale</a>
+        <ul class="bv-specs" aria-label="Property details"><li>4 bed</li><li>2 bath</li><li>2 car</li></ul>
+        <p class="bv-note">Walk to the water</p>
+        <div class="bv-row"><div class="s-price">$1,250,000</div><a href="#" class="bv-view" data-demo="open the full listing with photos, floorplan and an enquiry form.">View listing<span aria-hidden="true"> &rarr;</span></a></div>
       </div>
       <div class="s-card">
+        <div class="bv-shot" role="img" aria-label="Light-filled modern living area in the Foreshore Drive unit" style="--img:url('assets/img/bayview-listing-foreshore.jpg')"><span class="bv-status is-offer">Under offer</span></div>
         <h3>8/22 Foreshore Drive</h3>
-        <p>2 bed · 1 bath · 1 car, low-maintenance unit</p>
-        <div class="s-price" style="margin-top:12px">$685,000</div>
-        <a href="#" class="s-cta" style="margin-top:16px;display:inline-block" data-demo="open the full listing with photos, floorplan and an enquiry form.">Under offer</a>
+        <ul class="bv-specs" aria-label="Property details"><li>2 bed</li><li>1 bath</li><li>1 car</li></ul>
+        <p class="bv-note">Low-maintenance unit</p>
+        <div class="bv-row"><div class="s-price">$685,000</div><a href="#" class="bv-view" data-demo="open the full listing with photos, floorplan and an enquiry form.">View listing<span aria-hidden="true"> &rarr;</span></a></div>
       </div>
       <div class="s-card">
+        <div class="bv-shot" role="img" aria-label="Architect-designed timber home at dusk on Ridgeline Avenue" style="--img:url('assets/img/bayview-listing-ridgeline.jpg')"><span class="bv-status">For sale</span></div>
         <h3>51 Ridgeline Ave, Hillcrest</h3>
-        <p>3 bed · 2 bath · 2 car, elevated block, views</p>
-        <div class="s-price" style="margin-top:12px">$895,000</div>
-        <a href="#" class="s-cta" style="margin-top:16px;display:inline-block" data-demo="open the full listing with photos, floorplan and an enquiry form.">For sale</a>
+        <ul class="bv-specs" aria-label="Property details"><li>3 bed</li><li>2 bath</li><li>2 car</li></ul>
+        <p class="bv-note">Elevated block, views</p>
+        <div class="bv-row"><div class="s-price">$895,000</div><a href="#" class="bv-view" data-demo="open the full listing with photos, floorplan and an enquiry form.">View listing<span aria-hidden="true"> &rarr;</span></a></div>
       </div>
     </div>
   </div></section>
@@ -2450,9 +2691,9 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <span class="s-eyebrow">Our team</span>
     <h2 class="s-h2">Who you'll actually deal with</h2>
     <div class="s-team">
-      <div class="m"><div class="av" role="img" aria-label="Nadia, principal agent" style="--img:url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=520&q=60&auto=format&fit=crop'), linear-gradient(135deg,#7FA99B,#527D6F)"></div><h4>Nadia</h4><p>Principal agent</p></div>
-      <div class="m"><div class="av" role="img" aria-label="Callum, sales agent" style="--img:url('https://images.unsplash.com/photo-1560250097-0b93528c311a?w=520&q=60&auto=format&fit=crop'), linear-gradient(135deg,#2C526A,#1B3A4B)"></div><h4>Callum</h4><p>Sales agent</p></div>
-      <div class="m"><div class="av" role="img" aria-label="Reeva, property management" style="--img:url('https://images.unsplash.com/photo-1580489944761-15a19d654956?w=520&q=60&auto=format&fit=crop'), linear-gradient(135deg,#DDBE8A,#C9A66B)"></div><h4>Reeva</h4><p>Property management</p></div>
+      <div class="m"><div class="av" role="img" aria-label="Nadia, principal agent" style="--img:url('assets/img/bayview-team-nadia.jpg'), linear-gradient(135deg,#7FA99B,#527D6F)"></div><h4>Nadia</h4><p>Principal agent</p></div>
+      <div class="m"><div class="av" role="img" aria-label="Callum, sales agent" style="--img:url('assets/img/bayview-team-callum.jpg'), linear-gradient(135deg,#2C526A,#1B3A4B)"></div><h4>Callum</h4><p>Sales agent</p></div>
+      <div class="m"><div class="av" role="img" aria-label="Reeva, property management" style="--img:url('assets/img/bayview-team-reeva.jpg'), linear-gradient(135deg,#DDBE8A,#C9A66B)"></div><h4>Reeva</h4><p>Property management</p></div>
     </div>
   </div></section>
   <section class="s-sec s-page" data-page="home" style="background:#E9E1D3"><div class="s-wrap">
@@ -2510,7 +2751,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <div class="s-links" style="color:#F0EFEA"><a href="#" data-jump="auto-services">Services</a><a href="#" data-jump="auto-pricing">Pricing</a><a href="#" data-jump="auto-area">Service area</a><a href="#" data-jump="auto-quote">Book online</a></div>
     <a href="#" class="s-cta" data-demo="open the booking calendar to pick a time and drop-off slot.">Book a service</a>
   </div></nav>
-  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(22,24,29,.92),rgba(22,24,29,.48)),url('https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1400&q=60&auto=format&fit=crop')"><div class="s-wrap">
+  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(22,24,29,.92),rgba(22,24,29,.48)),url('assets/img/redline-hero.jpg')"><div class="s-wrap">
     <span class="s-eyebrow">Licensed mechanics · logbook servicing</span>
     <h2 class="s-hero-title">Honest mechanics, no upsell.</h2>
     <p>Logbook servicing, brakes, batteries and everything in between. Straight answers, fair prices, and your car back the same day.</p>
@@ -2619,6 +2860,9 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <span class="s-eyebrow">Service area</span>
     <h2 class="s-h2">Mobile pickup across the west side</h2>
     <p style="opacity:.85;max-width:60ch">Workshop drop-off any time, or book a pickup and we will collect your car and bring it back done. Ask if you are not sure whether you are in range.</p>
+    <ul class="rl-areas" aria-label="Suburbs we service">
+      <li>West Leederville</li><li>Subiaco</li><li>Shenton Park</li><li>Claremont</li><li>Cottesloe</li><li>Mosman Park</li><li>Fremantle</li>
+    </ul>
   </div></section>
   <footer class="s-foot"><div class="s-wrap in">
     <div><b style="font-family:var(--s-display);font-size:1.2rem;color:var(--s-accent)">Redline Auto Care</b><br>Licence MVR 4821 · bookings@redlineauto.example</div>
@@ -2634,7 +2878,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <div class="s-links"><a href="#" data-jump="fitness-classes">Classes</a><a href="#" data-jump="fitness-membership">Membership</a><a href="#" data-jump="fitness-trainers">Trainers</a><a href="#" data-jump="fitness-gallery">Gallery</a><a href="#" data-demo="open a booking calendar to reserve a free trial class.">Join</a></div>
     <a href="#" class="s-cta" data-demo="open a booking calendar to reserve a free trial class.">Book a free class</a>
   </div></nav>
-  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(11,12,15,.9),rgba(11,12,15,.42)),url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1400&q=60&auto=format&fit=crop')"><div class="s-wrap">
+  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(11,12,15,.9),rgba(11,12,15,.42)),url('assets/img/forge-hero.jpg')"><div class="s-wrap">
     <span class="s-eyebrow">Strength &amp; conditioning · all levels welcome</span>
     <h2 class="s-hero-title">Get stronger. Actually enjoy&nbsp;it.</h2>
     <p>Small-group strength training and conditioning, built around real coaching, not just a playlist. Your first class is always free.</p>
@@ -2651,12 +2895,12 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <span class="s-eyebrow">Classes</span>
     <h2 class="s-h2">Something on most days</h2>
     <div class="s-grid3">
-      <div class="s-card"><h3>Strength</h3><p>Barbell fundamentals, coached technique, progressive loading.</p></div>
-      <div class="s-card"><h3>Conditioning</h3><p>High-output intervals, scaled to your level, every time.</p></div>
-      <div class="s-card"><h3>Beginners</h3><p>A slower on-ramp for anyone new to the gym floor.</p></div>
-      <div class="s-card"><h3>Open Gym</h3><p>Coached but self-paced, for when you know your own program.</p></div>
-      <div class="s-card"><h3>Mobility</h3><p>Low-impact, high-value, the session your body will thank you for.</p></div>
-      <div class="s-card"><h3>Small Group PT</h3><p>3 to 4 people, a program built specifically around your goals.</p></div>
+      <div class="s-card"><h3>Strength</h3><p>Barbell fundamentals, coached technique, progressive loading.</p><span class="ff-times">Mon · Wed · Fri — 6am &amp; 5.30pm</span></div>
+      <div class="s-card"><h3>Conditioning</h3><p>High-output intervals, scaled to your level, every time.</p><span class="ff-times">Tue · Thu — 6am &amp; 6pm</span></div>
+      <div class="s-card"><h3>Beginners</h3><p>A slower on-ramp for anyone new to the gym floor.</p><span class="ff-times">Mon &amp; Sat — 9am</span></div>
+      <div class="s-card"><h3>Open Gym</h3><p>Coached but self-paced, for when you know your own program.</p><span class="ff-times">Every day — staffed hours</span></div>
+      <div class="s-card"><h3>Mobility</h3><p>Low-impact, high-value, the session your body will thank you for.</p><span class="ff-times">Wed — 7pm · Sun — 9am</span></div>
+      <div class="s-card"><h3>Small Group PT</h3><p>3 to 4 people, a program built specifically around your goals.</p><span class="ff-times">By booking — see the desk</span></div>
     </div>
   </div></section>
   <section class="s-sec s-page" id="fitness-membership" hidden style="background:#14161B"><div class="s-wrap">
@@ -2702,9 +2946,9 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <span class="s-eyebrow">Trainers</span>
     <h2 class="s-h2">Coached by people who actually watch you lift</h2>
     <div class="s-team">
-      <div class="m"><div class="av" role="img" aria-label="Reece, head coach" style="--img:url('https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=520&q=60&auto=format&fit=crop'), linear-gradient(135deg,#C6F135,#8FB513)"></div><h4>Reece</h4><p>Head coach</p></div>
-      <div class="m"><div class="av" role="img" aria-label="Talia, strength coach" style="--img:url('https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=520&q=60&auto=format&fit=crop'), linear-gradient(135deg,#8C9196,#5B6066)"></div><h4>Talia</h4><p>Strength coach</p></div>
-      <div class="m"><div class="av" role="img" aria-label="Bilal, conditioning coach" style="--img:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=520&q=60&auto=format&fit=crop'), linear-gradient(135deg,#3A3E46,#1B1D22)"></div><h4>Bilal</h4><p>Conditioning coach</p></div>
+      <div class="m"><div class="av" role="img" aria-label="Reece, head coach" style="--img:url('assets/img/forge-coach-reece.jpg'), linear-gradient(135deg,#C6F135,#8FB513)"></div><h4>Reece</h4><p>Head coach</p></div>
+      <div class="m"><div class="av" role="img" aria-label="Talia, strength coach" style="--img:url('assets/img/forge-coach-talia.jpg'), linear-gradient(135deg,#8C9196,#5B6066)"></div><h4>Talia</h4><p>Strength coach</p></div>
+      <div class="m"><div class="av" role="img" aria-label="Bilal, conditioning coach" style="--img:url('assets/img/forge-coach-bilal.jpg'), linear-gradient(135deg,#3A3E46,#1B1D22)"></div><h4>Bilal</h4><p>Conditioning coach</p></div>
     </div>
   </div></section>
   <section class="s-sec s-page" data-page="home" style="background:#14161B"><div class="s-wrap">
@@ -2742,10 +2986,10 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
       <span class="s-eyebrow">The gym floor</span>
       <h2 class="s-h2">Take a look inside</h2>
       <div class="s-gallery" style="grid-template-columns:1fr 1fr">
-        <div class="g" role="img" aria-label="Dumbbell rack on the gym floor" style="--img:url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700&q=55&auto=format&fit=crop'), linear-gradient(135deg,#C6F135,#93B917)"></div>
-        <div class="g" role="img" aria-label="The strength training area" style="--img:url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=700&q=55&auto=format&fit=crop'), linear-gradient(135deg,#3A3E46,#22252B)"></div>
-        <div class="g" role="img" aria-label="A member picking up dumbbells" style="--img:url('https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=700&q=55&auto=format&fit=crop'), linear-gradient(135deg,#8C9196,#5F646A)"></div>
-        <div class="g" role="img" aria-label="The conditioning room" style="--img:url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=700&q=55&auto=format&fit=crop'), linear-gradient(135deg,#1B1D22,#101216)"></div>
+        <div class="g" role="img" aria-label="Dumbbell rack on the gym floor" style="--img:url('assets/img/forge-gym-rack.jpg'), linear-gradient(135deg,#C6F135,#93B917)"></div>
+        <div class="g" role="img" aria-label="The strength training area" style="--img:url('assets/img/forge-gym-floor.jpg'), linear-gradient(135deg,#3A3E46,#22252B)"></div>
+        <div class="g" role="img" aria-label="A member picking up dumbbells" style="--img:url('assets/img/forge-gym-member.jpg'), linear-gradient(135deg,#8C9196,#5F646A)"></div>
+        <div class="g" role="img" aria-label="The conditioning room" style="--img:url('assets/img/forge-gym-conditioning.jpg'), linear-gradient(135deg,#1B1D22,#101216)"></div>
       </div>
     </div>
     <div>
@@ -2773,7 +3017,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <div class="s-links"><a href="#" data-jump="starter-visit">Visit</a></div>
     <a href="#" class="s-cta" data-demo="call the business phone directly, one tap from a mobile.">Call now</a>
   </div></nav>
-  <header class="s-hero has-img" style="--img:linear-gradient(180deg,rgba(62,40,52,.5),rgba(52,34,44,.68)),url('https://images.unsplash.com/photo-1581888227599-779811939961?w=1400&q=60&auto=format&fit=crop')"><div class="s-wrap">
+  <header class="s-hero has-img" style="--img:linear-gradient(180deg,rgba(62,40,52,.5),rgba(52,34,44,.68)),url('assets/img/bloom-hero.jpg')"><div class="s-wrap">
     <span class="s-eyebrow">Mobile dog grooming · comes to you</span>
     <h2 class="s-hero-title">Happy pets, tidy homes, zero stress.</h2>
     <p>Mobile dog grooming and walks that come to your door. Gentle handling, fully insured, and your pet never has to leave home.</p>
@@ -2824,7 +3068,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <div class="s-links"><a href="#" data-jump="standard-menu">Services</a><a href="#" data-jump="standard-gallery">Gallery</a><a href="#" data-jump="standard-story">About</a><a href="#" data-jump="standard-contact">Contact</a></div>
     <a href="#" class="s-cta" data-demo="email the enquiry straight to the business inbox.">Get a quote</a>
   </div></nav>
-  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(26,21,17,.86),rgba(26,21,17,.4)),url('https://images.unsplash.com/photo-1497219055242-93359eeed651?w=1400&q=60&auto=format&fit=crop')"><div class="s-wrap">
+  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(26,21,17,.86),rgba(26,21,17,.4)),url('assets/img/ironbark-hero.jpg')"><div class="s-wrap">
     <span class="s-eyebrow">Custom furniture &amp; carpentry · handmade locally</span>
     <h2 class="s-hero-title">Furniture built to outlast the house.</h2>
     <p>Custom tables, cabinetry and built-ins, handmade from sustainably sourced timber. Every piece made to fit your space exactly, not the other way around.</p>
@@ -2851,10 +3095,10 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <span class="s-eyebrow">Gallery</span>
     <h2 class="s-h2">Straight off the bench</h2>
     <div class="s-gallery">
-      <div class="g" style="--img:url('https://images.unsplash.com/photo-1588854337221-4cf9fa96059c?w=700&q=55&auto=format&fit=crop')" role="img" aria-label="Custom white kitchen with timber floor"></div>
-      <div class="g" style="--img:url('https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=700&q=55&auto=format&fit=crop')" role="img" aria-label="Light oak wall cabinet"></div>
-      <div class="g" style="--img:url('https://images.unsplash.com/photo-1497219055242-93359eeed651?w=700&q=55&auto=format&fit=crop')" role="img" aria-label="Hand-carving detail in the workshop"></div>
-      <div class="g" style="--img:url('https://images.unsplash.com/photo-1484154218962-a197022b5858?w=700&q=55&auto=format&fit=crop')" role="img" aria-label="Fitted kitchen island with stools"></div>
+      <div class="g" style="--img:url('assets/img/ironbark-gallery-kitchen.jpg')" role="img" aria-label="Custom white kitchen with timber floor"></div>
+      <div class="g" style="--img:url('assets/img/ironbark-gallery-cabinet.jpg')" role="img" aria-label="Light oak wall cabinet"></div>
+      <div class="g" style="--img:url('assets/img/ironbark-gallery-carving.jpg')" role="img" aria-label="Hand-carving detail in the workshop"></div>
+      <div class="g" style="--img:url('assets/img/ironbark-gallery-island.jpg')" role="img" aria-label="Fitted kitchen island with stools"></div>
     </div>
     <a href="#" class="s-cta" style="margin-top:26px;display:inline-block" data-jump="standard-gallery">See more recent builds</a>
   </div></section>
@@ -2867,27 +3111,44 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   <section class="s-sec s-page" id="standard-menu" hidden><div class="s-wrap">
     <span class="s-eyebrow">What we make</span>
     <h2 class="s-h2">Built once, built properly</h2>
-    <div class="s-menu" style="max-width:640px">
-      <div class="s-item"><div><div class="nm">Dining tables</div><div class="ds">Solid timber, seats 6 to 10</div></div><div class="pr">From $2,400</div></div>
-      <div class="s-item"><div><div class="nm">Built-in cabinetry</div><div class="ds">Kitchens, laundries, media units</div></div><div class="pr">Quoted</div></div>
-      <div class="s-item"><div><div class="nm">Custom shelving</div><div class="ds">Fitted to your exact wall and space</div></div><div class="pr">From $650</div></div>
-      <div class="s-item"><div><div class="nm">Restorations</div><div class="ds">Bringing old, loved pieces back to life</div></div><div class="pr">From $300</div></div>
+    <div class="s-grid2" style="gap:48px;align-items:start">
+      <div class="s-menu">
+        <div class="s-item"><div><div class="nm">Dining tables</div><div class="ds">Solid timber, seats 6 to 10</div></div><div class="pr">From $2,400</div></div>
+        <div class="s-item"><div><div class="nm">Built-in cabinetry</div><div class="ds">Kitchens, laundries, media units</div></div><div class="pr">Quoted</div></div>
+        <div class="s-item"><div><div class="nm">Custom shelving</div><div class="ds">Fitted to your exact wall and space</div></div><div class="pr">From $650</div></div>
+        <div class="s-item"><div><div class="nm">Restorations</div><div class="ds">Bringing old, loved pieces back to life</div></div><div class="pr">From $300</div></div>
+      </div>
+      <aside class="ib-quotehow">
+        <h3>How a quote works</h3>
+        <ol>
+          <li><b>Measure.</b> We visit, measure the space, and talk through timber and finish.</li>
+          <li><b>Fixed quote.</b> You get one written price. It doesn't move unless the job does.</li>
+          <li><b>Make &amp; fit.</b> Built in the workshop, fitted clean, no surprises on the day.</li>
+        </ol>
+        <a href="#" class="s-cta" data-jump="standard-contact" style="margin-top:6px;display:inline-block">Get a quote</a>
+      </aside>
     </div>
   </div></section>
   <section class="s-sec s-page" id="standard-gallery" hidden style="background:#E0D4BE"><div class="s-wrap">
     <span class="s-eyebrow">Gallery</span>
     <h2 class="s-h2">Recent builds</h2>
     <div class="s-gallery">
-      <div class="g" style="--img:url('https://images.unsplash.com/photo-1588854337221-4cf9fa96059c?w=700&q=55&auto=format&fit=crop')" role="img" aria-label="Custom white kitchen with timber floor"></div>
-      <div class="g" style="--img:url('https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=700&q=55&auto=format&fit=crop')" role="img" aria-label="Light oak wall cabinet"></div>
-      <div class="g" style="--img:url('https://images.unsplash.com/photo-1497219055242-93359eeed651?w=700&q=55&auto=format&fit=crop')" role="img" aria-label="Hand-carving detail in the workshop"></div>
-      <div class="g" style="--img:url('https://images.unsplash.com/photo-1484154218962-a197022b5858?w=700&q=55&auto=format&fit=crop')" role="img" aria-label="Fitted kitchen island with stools"></div>
+      <div class="g" style="--img:url('assets/img/ironbark-gallery-kitchen.jpg')" role="img" aria-label="Custom white kitchen with timber floor"></div>
+      <div class="g" style="--img:url('assets/img/ironbark-gallery-cabinet.jpg')" role="img" aria-label="Light oak wall cabinet"></div>
+      <div class="g" style="--img:url('assets/img/ironbark-gallery-carving.jpg')" role="img" aria-label="Hand-carving detail in the workshop"></div>
+      <div class="g" style="--img:url('assets/img/ironbark-gallery-island.jpg')" role="img" aria-label="Fitted kitchen island with stools"></div>
     </div>
   </div></section>
   <section class="s-sec s-page" id="standard-story" hidden><div class="s-wrap">
     <span class="s-eyebrow">About</span>
     <h2 class="s-h2">Two generations in the workshop</h2>
     <p style="opacity:.8;max-width:60ch">Ironbark Joinery started in a single-car garage, building one table at a time. These days it is a proper workshop, but every piece is still measured, cut and finished by hand, the same way it always has been.</p>
+    <ul class="ib-values" aria-label="How we work">
+      <li>Measured on site</li>
+      <li>Solid timber only</li>
+      <li>Finished by hand</li>
+      <li>One job at a time</li>
+    </ul>
   </div></section>
   <section class="s-sec s-page" id="standard-contact" hidden style="background:#211C18;color:#E8E0D2;--s-line:rgba(255,255,255,.16)"><div class="s-wrap"><div class="s-grid2" style="gap:48px">
     <div>
@@ -2924,7 +3185,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <div class="s-links"><a href="#" data-jump="premium-services">Services</a><a href="#" data-jump="premium-conditions">Conditions</a><a href="#" data-jump="premium-reviews">Reviews</a><a href="#" data-jump="premium-book">Book</a></div>
     <a href="#" class="s-cta" data-demo="open the booking calendar to pick a time and practitioner.">Book online</a>
   </div></nav>
-  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(180deg,rgba(14,59,58,.5),rgba(14,59,58,.68)),url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1400&q=60&auto=format&fit=crop')"><div class="s-wrap">
+  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(180deg,rgba(14,59,58,.5),rgba(14,59,58,.68)),url('assets/img/physio-hero.jpg')"><div class="s-wrap">
     <span class="s-eyebrow">Physiotherapy &amp; rehab · same-week appointments</span>
     <h2 class="s-hero-title">Move better. Feel better. Stay that way.</h2>
     <p>Hands-on physiotherapy for injuries, sport and everyday aches. Private health rebates available, book online in under a minute.</p>
@@ -2972,11 +3233,23 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   <section class="s-sec s-page" id="premium-services" hidden><div class="s-wrap">
     <span class="s-eyebrow">Services</span>
     <h2 class="s-h2">Treatment that gets to the cause</h2>
-    <div class="s-menu" style="max-width:640px">
-      <div class="s-item"><div><div class="nm">Initial consult</div><div class="ds">Assessment and a plan going forward, 45 min</div></div><div class="pr">$120</div></div>
-      <div class="s-item"><div><div class="nm">Follow-up session</div><div class="ds">Hands-on treatment and exercise review</div></div><div class="pr">$95</div></div>
-      <div class="s-item"><div><div class="nm">Sports massage</div><div class="ds">Deep tissue, for training and recovery</div></div><div class="pr">$85</div></div>
-      <div class="s-item"><div><div class="nm">Rehab program</div><div class="ds">Ongoing plan for injury or post-surgery recovery</div></div><div class="pr">Quoted</div></div>
+    <div class="s-grid2" style="gap:48px;align-items:start">
+      <div class="s-menu">
+        <div class="s-item"><div><div class="nm">Initial consult</div><div class="ds">Assessment and a plan going forward, 45 min</div></div><div class="pr">$120</div></div>
+        <div class="s-item"><div><div class="nm">Follow-up session</div><div class="ds">Hands-on treatment and exercise review</div></div><div class="pr">$95</div></div>
+        <div class="s-item"><div><div class="nm">Sports massage</div><div class="ds">Deep tissue, for training and recovery</div></div><div class="pr">$85</div></div>
+        <div class="s-item"><div><div class="nm">Rehab program</div><div class="ds">Ongoing plan for injury or post-surgery recovery</div></div><div class="pr">Quoted</div></div>
+      </div>
+      <aside class="cp-firstvisit">
+        <h3>Your first visit</h3>
+        <ul>
+          <li>A proper 45-minute assessment, not a rushed once-over</li>
+          <li>Hands-on treatment from day one, so you leave feeling it</li>
+          <li>A simple plan you take home, with exercises that fit your week</li>
+        </ul>
+        <p class="cp-rebate">Private health rebates on the spot through HICAPS. Just bring your card.</p>
+        <a href="#" class="s-cta" data-demo="open the booking calendar to pick a time and practitioner." style="display:inline-block">Book an appointment</a>
+      </aside>
     </div>
   </div></section>
   <section class="s-sec s-page" id="premium-conditions" hidden style="background:#D5E9E5"><div class="s-wrap">
@@ -3040,7 +3313,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <div class="s-links"><a href="#" data-jump="ultimate-menu">Menu</a><a href="#" data-jump="ultimate-shop">Shop</a><a href="#" data-jump="ultimate-blog">Blog</a><a href="#" data-jump="ultimate-locations">Locations</a><a href="#" data-jump="ultimate-reviews">Reviews</a><a href="#" data-jump="ultimate-visit">Visit</a></div>
     <a href="#" class="s-cta" data-demo="connect to an online ordering system so customers can order and pay ahead.">Order ahead</a>
   </div></nav>
-  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(43,29,16,.88),rgba(43,29,16,.42)),url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1400&q=60&auto=format&fit=crop')"><div class="s-wrap">
+  <header class="s-hero s-page has-img" data-page="home" style="--img:linear-gradient(90deg,rgba(43,29,16,.88),rgba(43,29,16,.42)),url('assets/img/crema-hero.jpg')"><div class="s-wrap">
     <span class="s-eyebrow">Specialty coffee · roasted daily</span>
     <h2 class="s-hero-title">Slow mornings and seriously good coffee.</h2>
     <p>A neighbourhood cafe roasting small-batch beans and cooking honest brunch, now with two locations and beans shipped Australia-wide.</p>
@@ -3117,23 +3390,32 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <span class="s-eyebrow">Shop</span>
     <h2 class="s-h2">Take Crema Lane home</h2>
     <div class="s-grid3">
-      <div class="s-card">
+      <div class="s-card cl-product">
+        <div class="cl-art" aria-hidden="true">
+          <svg viewBox="0 0 72 84" width="62" height="72"><path d="M14 20 Q14 10 24 9 L48 9 Q58 10 58 20 L58 70 Q58 78 50 78 L22 78 Q14 78 14 70 Z" fill="#43301E"/><path d="M24 9 L48 9 L46 3 Q45 0 41 0 L31 0 Q27 0 26 3 Z" fill="#2B1D10"/><rect x="20" y="30" width="32" height="26" rx="3" fill="#F3E7D3"/><text x="36" y="41" text-anchor="middle" style="font:700 7px 'Bricolage Grotesque',sans-serif" fill="#43301E">CREMA LANE</text><text x="36" y="51" text-anchor="middle" style="font:600 6px Karla,sans-serif" fill="#C25E33">HOUSE BLEND</text><circle cx="36" cy="66" r="5" fill="#D39B5E"/><path d="M36 62 Q38 66 36 70 Q34 66 36 62" fill="#43301E"/></svg>
+        </div>
         <h3>House Blend, 250g</h3>
         <p>Our everyday roast, balanced and smooth.</p>
         <div class="s-price" style="margin-top:12px">$16</div>
-        <a href="#" class="s-cta" style="margin-top:16px;display:inline-block" data-demo="add the item to a real shopping cart and take a secure payment at checkout.">Add to cart</a>
+        <a href="#" class="s-cta cl-cart" data-demo="add the item to a real shopping cart and take a secure payment at checkout.">Add to cart</a>
       </div>
-      <div class="s-card">
+      <div class="s-card cl-product">
+        <div class="cl-art" aria-hidden="true">
+          <svg viewBox="0 0 72 84" width="62" height="72"><path d="M14 20 Q14 10 24 9 L48 9 Q58 10 58 20 L58 70 Q58 78 50 78 L22 78 Q14 78 14 70 Z" fill="#6F6B3A"/><path d="M24 9 L48 9 L46 3 Q45 0 41 0 L31 0 Q27 0 26 3 Z" fill="#4C491F"/><rect x="20" y="30" width="32" height="26" rx="3" fill="#F3E7D3"/><text x="36" y="41" text-anchor="middle" style="font:700 7px 'Bricolage Grotesque',sans-serif" fill="#43301E">CREMA LANE</text><text x="36" y="51" text-anchor="middle" style="font:600 6px Karla,sans-serif" fill="#6F6B3A">SINGLE ORIGIN</text><circle cx="36" cy="66" r="5" fill="#D39B5E"/><path d="M36 62 Q38 66 36 70 Q34 66 36 62" fill="#43301E"/></svg>
+        </div>
         <h3>Single Origin, 250g</h3>
         <p>Rotating small-batch lot, a new one every month.</p>
         <div class="s-price" style="margin-top:12px">$21</div>
-        <a href="#" class="s-cta" style="margin-top:16px;display:inline-block" data-demo="add the item to a real shopping cart and take a secure payment at checkout.">Add to cart</a>
+        <a href="#" class="s-cta cl-cart" data-demo="add the item to a real shopping cart and take a secure payment at checkout.">Add to cart</a>
       </div>
-      <div class="s-card">
+      <div class="s-card cl-product">
+        <div class="cl-art" aria-hidden="true">
+          <svg viewBox="0 0 72 84" width="62" height="72"><path d="M16 26 L56 26 L52 74 Q51 80 45 80 L27 80 Q21 80 20 74 Z" fill="#F3E7D3" stroke="#43301E" stroke-width="2.5"/><path d="M56 34 L60 34 Q68 34 68 44 Q68 54 60 54 L53 54" fill="none" stroke="#43301E" stroke-width="2.5" stroke-linecap="round"/><path d="M24 40 Q30 36 36 40 T48 40" stroke="#C25E33" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="36" cy="58" r="7" fill="#D39B5E"/><path d="M36 52 Q38.5 58 36 64 Q33.5 58 36 52" fill="#43301E"/></svg>
+        </div>
         <h3>Crema Lane Mug</h3>
         <p>Stoneware, holds a proper flat white.</p>
         <div class="s-price" style="margin-top:12px">$28</div>
-        <a href="#" class="s-cta" style="margin-top:16px;display:inline-block" data-demo="add the item to a real shopping cart and take a secure payment at checkout.">Add to cart</a>
+        <a href="#" class="s-cta cl-cart" data-demo="add the item to a real shopping cart and take a secure payment at checkout.">Add to cart</a>
       </div>
     </div>
   </div></section>
@@ -3142,14 +3424,17 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <h2 class="s-h2">Notes from the roastery</h2>
     <div class="s-grid3">
       <div class="s-card">
+        <span class="cl-meta">12 July 2026 · 3 min read</span>
         <h3>Our new summer roast</h3>
         <p>Why we picked a washed Ethiopian for the warmer months, and what to expect in the cup.</p>
       </div>
       <div class="s-card">
+        <span class="cl-meta">28 June 2026 · 4 min read</span>
         <h3>Meet our newest barista</h3>
         <p>A quick chat with Theo, who joined the team this year and makes a mean cortado.</p>
       </div>
       <div class="s-card">
+        <span class="cl-meta">9 June 2026 · 2 min read</span>
         <h3>Behind the brunch menu</h3>
         <p>How we choose seasonal produce for the weekend specials board.</p>
       </div>
@@ -3230,68 +3515,286 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   </div>
   <div class="legal-body"><div class="wrap">
     <span class="eyebrow">Legal</span>
-    <h2 class="legal-title">Terms &amp; Conditions</h2>
-    <p class="legal-updated">Last updated: 7 July 2026 · Applies to all Larkwell website builds and care plan subscriptions.</p>
+    <h2 class="legal-title">Terms of Service</h2>
+    <p class="legal-updated">Document version <strong>2.0</strong> · Effective <strong>18 July 2026</strong> · Governing law: Western Australia, Australia. Applies to all Larkwell website builds and Care Plan subscriptions.</p>
 
-    <h2>1. Who this agreement is with</h2>
-    <p>These terms are between you (the customer) and Larkwell ("Larkwell", "I", "me"), a website-building studio based in Perth, Western Australia, serving local businesses across Australia. By requesting a preview, approving a build, or making a payment, you agree to these terms.</p>
+    <p><a href="/terms.html" target="_blank" rel="noopener">Open the full standalone document at /terms.html</a> if you would like to print or save a copy. It opens in a new tab, so you will not lose your place here.</p>
 
-    <h2>2. The service</h2>
-    <p>Larkwell designs and builds a website for your business based on the package you choose (Launch, Grow, Thrive or Everything, as described on the pricing page), or a custom scope agreed in writing. You will always see a full working preview before any payment is due.</p>
+    <p><strong>Not legal advice.</strong> This document has been prepared for Larkwell but has not been reviewed by an admitted Australian legal practitioner. It is not legal advice and should be reviewed by a lawyer before it is relied on in a dispute. Nothing in this document is intended to exclude, restrict or modify any right or remedy you have under the Australian Consumer Law that cannot lawfully be excluded, restricted or modified.</p>
 
-    <h2>3. Quotes and pricing</h2>
-    <p>Prices listed on the Larkwell website are current at the time of your enquiry and may change for future customers, but the price you are quoted for your build will not change once agreed, unless you ask for extra work outside the original scope. All prices are in Australian dollars (AUD).</p>
-
-    <h2>4. Payment</h2>
-    <p>Payment for a one-off build is due once you approve your preview, and is taken securely through Stripe. Larkwell does not see or store your card details. The care plan, if you choose it, is billed monthly in advance and can be added at the time of payment or later.</p>
-
-    <h2>5. Revisions and scope</h2>
-    <p>Each package includes a set number of revision rounds, as listed on the pricing page. Requests that go beyond the original brief, such as extra pages, new features, or a different design direction, may be quoted separately.</p>
-
-    <h2>6. Timeframes</h2>
-    <p>Builds are completed within 3 days of receiving your business details and content, this is a firm commitment, not a loose estimate. In the rare case of illness or an unforeseen circumstance on Larkwell's side, you will be told straight away and offered a new timeframe or a full refund of anything already paid.</p>
-
-    <h2>7. Content you provide</h2>
-    <p>You are responsible for making sure any text, photos, logos or other material you provide is yours to use, or that you have permission to use it. Larkwell is not responsible for copyright or trademark issues arising from content you supply.</p>
-
-    <h2>8. Ownership and intellectual property</h2>
+    <h2>Parties</h2>
+    <p>This Agreement is made between the parties described below. It takes effect when you accept it under clause 2.</p>
     <ul>
-      <li>Your domain name is registered in your name and is yours from the moment it is purchased.</li>
-      <li>Once your final payment for a build clears, the design and content created for your site become yours to keep and use.</li>
-      <li>If you are on the care plan, Larkwell hosts the site on your behalf to allow fast updates. Hosting the site does not transfer ownership to Larkwell. Ownership always sits with you.</li>
-      <li>If you leave or cancel the care plan, you will be given a full copy of your site's files and your hosting login details within a reasonable time, so you or anyone you choose can continue running it elsewhere.</li>
-      <li>Any general-purpose code, templates or components Larkwell reuses across multiple client projects remain Larkwell's own tools, but this does not affect your ownership of your finished site.</li>
+      <li><strong>The Provider:</strong> <strong>Larkwell</strong> ("Larkwell", "we", "us", "our"), a sole trader carrying on business in Perth, Western Australia.</li>
+      <li><strong>The Customer:</strong> The individual or entity named on the applicable Order ("you", "your").</li>
+      <li><strong>Contact:</strong> <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a></li>
     </ul>
 
-    <h2>9. The care plan (subscription)</h2>
-    <p>The care plan is billed monthly at the price shown on the pricing page and can be cancelled at any time with no exit fee, effective at the end of the current billing period. It covers small updates, such as prices, hours or photos, at Larkwell's discretion; larger requests may be quoted separately. Cancelling the care plan does not affect your ownership of the site, see clause 8.</p>
-
-    <h2>10. Refunds</h2>
-    <p>Because each site is built specifically for your business, one-off build payments are generally non-refundable once work has started, except where required by Australian Consumer Law. If you are not happy with your preview, you are free to walk away before paying, at no cost to you. Care plan payments already processed for a billing period are not refunded for partial months.</p>
-
-    <h2>11. Liability</h2>
-    <p>Larkwell takes reasonable care in designing, building and testing your site, but cannot guarantee it will be completely free of faults, or that it will produce any particular business outcome, such as sales, enquiries, bookings or search engine rankings.</p>
-    <p>To the extent permitted by law:</p>
+    <h2>1. Definitions and interpretation</h2>
+    <p>In this Agreement, capitalised terms have the meanings given below.</p>
     <ul>
-      <li>Larkwell is not liable for any loss of income, profit, business opportunity, or existing or potential customers, arising from a bug, fault, downtime, security issue or other problem with your site, however it was caused.</li>
-      <li>Larkwell is not liable for indirect or consequential loss of any kind.</li>
-      <li>Larkwell's total liability for any claim connected to this agreement, however caused, is limited to the amount you paid Larkwell for the relevant service in the 12 months before the claim.</li>
+      <li><strong>ACL</strong> — The Australian Consumer Law, being Schedule 2 to the <em>Competition and Consumer Act 2010</em> (Cth).</li>
+      <li><strong>Agreement</strong> — This document, together with the Order and any written variation agreed under clause 10.</li>
+      <li><strong>Care Plan</strong> — Our optional monthly subscription covering hosting and Minor Updates, described in clause 12.</li>
+      <li><strong>Customer Materials</strong> — Any text, images, logos, video, data, trade marks or other material you supply to us, or direct us to use, for the Site.</li>
+      <li><strong>Deliverables</strong> — The Site and any other material we create for you under the Order, excluding Larkwell Tools.</li>
+      <li><strong>Domain</strong> — A domain name registered for your use in connection with the Site.</li>
+      <li><strong>Larkwell Tools</strong> — Code, components, layouts, scripts, libraries, techniques and know-how that we owned before this Agreement or develop independently of it, and which we reuse across client projects.</li>
+      <li><strong>Minor Update</strong> — A change to existing content or settings on a live Site that we assess as taking 30 minutes or less, such as changing prices, trading hours, contact details, or swapping a photograph.</li>
+      <li><strong>Order</strong> — The package, price, add-ons and any agreed scope you select at checkout or that we confirm to you in writing.</li>
+      <li><strong>Preview</strong> — A working draft of the Site provided at no cost before any payment is due.</li>
+      <li><strong>Site</strong> — The website we build for you under the Order.</li>
+      <li><strong>Start Date</strong> — The date we confirm to you in writing that we have received everything listed in clause 8.1 and have begun work.</li>
     </ul>
-    <p>You're responsible for checking your site properly during the free preview stage and telling Larkwell about anything wrong before you pay. Genuine faults reported after launch will be fixed at no charge, within a reasonable time, but Larkwell is not liable for loss caused by a fault you had a fair chance to catch during the preview and did not report.</p>
-    <p>Nothing in this agreement excludes, restricts or modifies any guarantee, right or remedy you have under the Australian Consumer Law that cannot lawfully be excluded, restricted or modified. Where the law allows a guarantee to be limited rather than excluded, Larkwell's liability for breaching it is limited, at Larkwell's choice, to re-supplying the service or paying the cost of having it re-supplied.</p>
-    <p>By ticking the acceptance box when paying for your build, you confirm you have read and accept this section.</p>
+    <p><strong>1.1</strong> Headings are for convenience and do not affect interpretation.</p>
+    <p><strong>1.2</strong> "Including" and similar words are not words of limitation.</p>
+    <p><strong>1.3</strong> A reference to legislation includes that legislation as amended or replaced.</p>
+    <p><strong>1.4</strong> Business Day means a day that is not a Saturday, Sunday or public holiday in Perth, Western Australia.</p>
+    <p><strong>1.5</strong> If there is any inconsistency, the Order prevails over this document to the extent of the inconsistency.</p>
 
-    <h2>12. Changes to these terms</h2>
-    <p>These terms may be updated from time to time. The version in effect at the time you approve a build or make a payment is the version that applies to that transaction.</p>
+    <h2>2. Formation and acceptance</h2>
+    <p><strong>2.1</strong> This Agreement is formed when you tick the acceptance box and submit a Preview request, or tick the acceptance box and complete a payment, whichever happens first.</p>
+    <p><strong>2.2</strong> The version of this Agreement displayed at the moment you accept it is the version that governs your engagement. We keep a record of the version, the date and the time of your acceptance.</p>
+    <p><strong>2.3</strong> You confirm that you have had a reasonable opportunity to read this Agreement before accepting it, and that you are authorised to accept it on behalf of the person or entity named on the Order.</p>
+    <p><strong>2.4</strong> No separate signed copy is required. Acceptance by ticking the box is effective under the <em>Electronic Transactions Act 2011</em> (WA) and the <em>Electronic Transactions Act 1999</em> (Cth).</p>
 
-    <h2>13. Governing law</h2>
-    <p>These terms are governed by the laws of Western Australia, Australia.</p>
+    <h2>3. What we provide</h2>
+    <p><strong>3.1</strong> We will design and build the Site described in your Order, and where you have chosen the Care Plan, host and maintain it under clause 12.</p>
+    <p><strong>3.2</strong> The Order defines the scope. Anything not described in the Order is outside scope and is dealt with under clause 10.</p>
+    <p><strong>3.3</strong> We will perform the services with due care and skill, and provide them within a reasonable time.</p>
+    <p><strong>3.4</strong> We may use subcontractors to perform any part of the services. We remain responsible to you for work performed by our subcontractors as if we had performed it ourselves.</p>
 
-    <h2>14. Privacy</h2>
-    <p>Details submitted through the enquiry or payment forms are used only to prepare your preview, arrange your build and reply to you. Form submissions are stored with the site's form provider (Netlify), and payments are processed by Stripe. Your details are never sold or passed to third parties for marketing.</p>
+    <h2>4. The Preview</h2>
+    <p><strong>4.1</strong> You may request a Preview at no cost and with no obligation to proceed.</p>
+    <p><strong>4.2</strong> The Preview remains our property until the Site is paid for. You must not publish, copy, or commercially use the Preview, or any part of it, before payment.</p>
+    <p><strong>4.3</strong> We may take the Preview offline at any time before payment is made.</p>
+    <p><strong>4.4</strong> If you decide not to proceed after seeing the Preview, you owe us nothing and this Agreement ends, except for clauses that are expressed to survive.</p>
 
-    <h2>15. Contact</h2>
-    <p>Questions about these terms can be sent to <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a>.</p>
+    <h2>5. Fees and payment</h2>
+    <p><strong>5.1</strong> Fees are those stated in your Order. All amounts are in Australian dollars.</p>
+    <p><strong>5.2</strong> The price quoted in your Order is fixed for that Order and will not change, except where you request work outside the agreed scope under clause 10. Prices advertised on our website may change for future customers at any time.</p>
+    <p><strong>5.3</strong> Build fees are payable after you approve the Preview and before the Site goes live, unless we agree otherwise in writing.</p>
+    <p><strong>5.4</strong> Payments are processed by Stripe. We do not receive or store your full card details. Your use of Stripe is subject to Stripe's own terms.</p>
+    <p><strong>5.5</strong> Care Plan fees are billed monthly in advance from the date you subscribe.</p>
+    <p><strong>5.6</strong> Invoices issued separately (including under clause 11) are payable within 14 days of the invoice date.</p>
+    <p><strong>5.7</strong> If an invoice remains unpaid more than 14 days after its due date, we may charge simple interest on the outstanding amount at 2% above the Reserve Bank of Australia cash rate, calculated daily from the due date until payment. We will give you at least 7 days' written notice before interest begins to accrue. We may also recover reasonable costs we actually incur in recovering the debt.</p>
+
+    <h2>6. GST</h2>
+    <p><strong>6.1</strong> We are not currently registered for GST. Prices quoted and invoices issued do not include a GST component.</p>
+    <p><strong>6.2</strong> If we become registered for GST, prices for Orders placed after the date of registration will be stated inclusive or exclusive of GST as required by law. Registration will not increase the price of an Order you have already placed.</p>
+
+    <h2>7. Timeframes</h2>
+    <p><strong>7.1</strong> We will deliver your Site within <strong>3 Business Days of the Start Date</strong>, unless your Order specifies a different timeframe or you have chosen a no-rush option.</p>
+    <p><strong>7.2</strong> The Start Date does not occur until we have received everything listed in clause 8.1. Time we spend waiting for material from you does not count towards the 3 Business Days.</p>
+    <p><strong>7.3</strong> If we fail to deliver within that period for a reason within our control, you may choose either a revised delivery date agreed with us, or a full refund of amounts you have paid for the affected work. This is in addition to, and does not limit, any rights you have under the ACL.</p>
+    <p><strong>7.4</strong> Clause 27 applies where delivery is delayed by an event outside our control.</p>
+
+    <h2>8. Your obligations</h2>
+    <p><strong>8.1</strong> To enable us to start, you must provide: your business name and contact details; the content you want on the Site, or written confirmation that we may write it; any logo or images you want used; and access to any existing accounts we need.</p>
+    <p><strong>8.2</strong> You warrant that you own the Customer Materials, or have permission to use them and to allow us to use them for the purposes of this Agreement.</p>
+    <p><strong>8.3</strong> You are responsible for the accuracy of the Customer Materials, including prices, claims about your business, qualifications, licence numbers, and any statement a regulator might scrutinise.</p>
+    <p><strong>8.4</strong> You must respond to our reasonable requests for information, approvals or feedback within a reasonable time.</p>
+    <p><strong>8.5</strong> Once we hand over any account credentials to you, keeping them secure is your responsibility.</p>
+
+    <h2>9. Delay and inactivity</h2>
+    <p><strong>9.1</strong> If we are waiting on you and have not heard from you for <strong>30 consecutive days</strong>, we may place your project on hold and notify you in writing.</p>
+    <p><strong>9.2</strong> If a project remains on hold for a further <strong>60 days</strong> after that notice, we may treat the Order as cancelled by you. Before doing so, we will send you a reminder at least 14 days beforehand to the email address on your Order.</p>
+    <p><strong>9.3</strong> If an Order is cancelled under clause 9.2, we will refund any amounts you have paid, less a fair and reasonable amount for work actually performed up to the date of cancellation. We will provide you with a written breakdown of that amount on request.</p>
+    <p><strong>9.4</strong> You may reactivate a cancelled Order within 6 months by paying any difference between amounts retained and our then-current price for the same package.</p>
+
+    <h2>10. Revisions and changes of scope</h2>
+    <p><strong>10.1</strong> Your Order includes the number of revision rounds stated on our pricing page for the package you selected. A revision round means one consolidated set of change requests from you.</p>
+    <p><strong>10.2</strong> Work outside the agreed scope, including additional pages, new features, a different design direction after approval, or further revision rounds, will be quoted separately.</p>
+    <p><strong>10.3</strong> We will not perform out-of-scope work, or charge you for it, unless you have approved the additional fee in writing first.</p>
+    <p><strong>10.4</strong> Neither party may vary the scope or price of an Order without the written agreement of the other.</p>
+
+    <h2>11. Domain names</h2>
+    <p>Australian domain names are administered by .au Domain Administration Ltd (auDA). Under the auDA rules a registrant holds a <strong>licence</strong> to use a domain name for a period; a domain name is not owned outright.</p>
+    <p><strong>11.1</strong> Where you ask us to arrange a Domain, we will register it <strong>in your name as registrant</strong>, using your details and, for a .au Domain, your ABN or ACN. We will not register your Domain in our own name.</p>
+    <p><strong>11.2</strong> You are the registrant and licence holder from the moment of registration. We may be listed as a technical contact so that we can configure the Site.</p>
+    <p><strong>11.3</strong> A .au Domain requires an eligible ABN or ACN that remains valid for the licence period. If your ABN or ACN is cancelled or becomes invalid, auDA or the registrar may suspend or cancel the licence. That is outside our control.</p>
+    <p><strong>11.4</strong> We use your ABN or ACN solely to verify eligibility and complete registration. It is not passed to our payment processor and is not published by us.</p>
+    <p><strong>11.5</strong> The Domain is not included in your checkout total. We will invoice you separately for the Domain's actual registration cost plus our stated first-year setup fee, as shown in your Order.</p>
+    <p><strong>11.6</strong> If the name you want is unavailable, we will contact you to agree an alternative before registering anything.</p>
+    <p><strong>11.7</strong> We will give you access to the registrar account, or transfer control of the Domain to an account you nominate, once the Domain invoice is paid.</p>
+    <p><strong>11.8</strong> If the Domain invoice is not paid, we may decline to transfer control until it is. We will not cancel or transfer your Domain to a third party, and we will give you at least 14 days' written notice before the licence is due to expire so that you can renew it directly.</p>
+    <p><strong>11.9</strong> From the second year onwards, renewing the Domain is your responsibility. We do not manage or renew Domains after the first year, whether or not you hold the Care Plan.</p>
+    <p><strong>11.10</strong> We are not responsible for the pricing, policies, outages, or decisions of auDA or of any registrar.</p>
+
+    <h2>12. Hosting and the Care Plan</h2>
+    <p><strong>12.1</strong> The Care Plan covers hosting of the Site and Minor Updates, at the monthly price shown in your Order.</p>
+    <p><strong>12.2</strong> Minor Updates are defined in clause 1. Requests beyond that definition will be quoted separately before any work is done. We will tell you if we consider a request falls outside a Minor Update.</p>
+    <p><strong>12.3</strong> We will action Minor Update requests within 3 Business Days of receiving them, or within a longer period we agree with you.</p>
+    <p><strong>12.4</strong> You may cancel the Care Plan at any time, effective at the end of the current billing period. There is no exit fee and no minimum term.</p>
+    <p><strong>12.5</strong> We may cancel the Care Plan by giving you at least <strong>30 days'</strong> written notice.</p>
+    <p><strong>12.6</strong> Within 14 days of the Care Plan ending for any reason, we will provide you with a complete copy of the Site files at no charge, so that you or anyone you choose can host it elsewhere.</p>
+    <p><strong>12.7</strong> Hosting the Site does not give us any ownership of it. Clause 13 governs ownership.</p>
+    <p><strong>12.8</strong> We do not guarantee uninterrupted availability of hosting. Clause 17 applies.</p>
+
+    <h2>13. Intellectual property</h2>
+    <p><strong>13.1</strong> You retain all intellectual property rights in the Customer Materials. You grant us a non-exclusive licence to use, reproduce and adapt the Customer Materials for the purpose of providing the services and for the purpose described in clause 15.</p>
+    <p><strong>13.2</strong> We retain all intellectual property rights in the Larkwell Tools. Nothing in this Agreement assigns the Larkwell Tools to you.</p>
+    <p><strong>13.3</strong> <strong>Assignment.</strong> On receipt of the final build payment for your Order in cleared funds, we assign to you all of our right, title and interest, including copyright, in the Deliverables, throughout the world, for the full term of copyright. This clause operates as an assignment in writing for the purposes of section 196(3) of the <em>Copyright Act 1968</em> (Cth), executed by Larkwell as set out at the foot of this document.</p>
+    <p><strong>13.4</strong> To the extent that the Deliverables incorporate any Larkwell Tools, we grant you a perpetual, irrevocable, worldwide, royalty-free, non-exclusive licence to use, reproduce, modify and sublicense those Larkwell Tools as part of the Site, including after this Agreement ends.</p>
+    <p><strong>13.5</strong> The Deliverables may include third-party components, such as fonts, plugins or libraries, licensed under their own terms. Those components are not assigned to you and remain subject to their own licences. We will tell you on request which components these are.</p>
+    <p><strong>13.6</strong> We will do all things reasonably necessary to give effect to the assignment in clause 13.3, at your cost, if you ask us to.</p>
+    <p><strong>13.7</strong> Until the final build payment is received in cleared funds, we retain ownership of the Deliverables and you have no licence to use them.</p>
+
+    <h2>14. Moral rights</h2>
+    <p><strong>14.1</strong> Moral rights cannot be assigned under Australian law. We remain the author of the Deliverables for the purposes of Part IX of the <em>Copyright Act 1968</em> (Cth).</p>
+    <p><strong>14.2</strong> We consent to you, and anyone you authorise, doing anything that would otherwise infringe our moral rights in the Deliverables, including altering, adding to, removing, relocating or replacing any part of the Site, and using the Site without identifying us as the author.</p>
+    <p><strong>14.3</strong> This consent is given genuinely and without duress, and continues after this Agreement ends.</p>
+
+    <h2>15. Portfolio use</h2>
+    <p><strong>15.1</strong> You grant us a non-exclusive, royalty-free licence to reproduce screenshots of, and to link to, the completed Site, and to use your business name and logo, for the purpose of showing our work in our portfolio, case studies and marketing.</p>
+    <p><strong>15.2</strong> You may withdraw this licence at any time by writing to us. We will remove the material within 30 days of your request and will not use it again. We are not required to recall printed material already distributed.</p>
+    <p><strong>15.3</strong> We will not disclose your confidential information or your commercial figures in any portfolio use without your separate written consent.</p>
+
+    <h2>16. Third-party services</h2>
+    <p><strong>16.1</strong> The Site depends on third-party services, which may include a domain registrar, a hosting or deployment provider, a payment processor, a form handler, font and analytics providers, and email services.</p>
+    <p><strong>16.2</strong> Those services are supplied by their providers on their own terms, not by us. We are not responsible for their acts, omissions, outages, price changes, policy changes, or discontinuation of service.</p>
+    <p><strong>16.3</strong> If a third-party service we have used becomes unavailable, we will tell you and, where you hold the Care Plan, work with you in good faith to find a reasonable replacement.</p>
+
+    <h2>17. What we do not promise</h2>
+    <p>This clause is subject to clause 18. It does not limit any right you have under the ACL.</p>
+    <p><strong>17.1</strong> We do not promise any particular commercial outcome, including sales, enquiries, bookings, revenue, search engine rankings, traffic volumes, or placement in any AI or search result.</p>
+    <p><strong>17.2</strong> We do not promise that the Site will be free from all faults, or that it will be available without interruption. Software of this kind is not error-free.</p>
+    <p><strong>17.3</strong> We do not promise that the Site will display identically in every browser, on every device, or at every screen size. We build for current versions of mainstream browsers.</p>
+    <p><strong>17.4</strong> Unless your Order expressly says so, we do not promise that the Site meets any particular accessibility standard, such as WCAG. If accessibility conformance matters to you, tell us before you order and we will quote for it. Nothing in this clause affects your own obligations under the <em>Disability Discrimination Act 1992</em> (Cth).</p>
+    <p><strong>17.5</strong> We do not provide legal, financial, tax, medical or regulatory advice, and we do not check whether the content of your Site complies with laws applying to your industry. That remains your responsibility under clause 8.3.</p>
+
+    <h2>18. Australian Consumer Law</h2>
+    <p><strong>Our services come with guarantees that cannot be excluded under the Australian Consumer Law.</strong> Nothing in this Agreement excludes, restricts or modifies any guarantee, condition, warranty, right or remedy that the ACL confers on you and that cannot lawfully be excluded, restricted or modified.</p>
+    <p>If any term of this Agreement would otherwise have that effect, it is to be read down to the extent necessary, and if it cannot be read down, it is severed.</p>
+    <p><strong>18.1</strong> You may be a "consumer" under the ACL even though you are acquiring the services for your business, because the ACL treats a person who acquires services costing $100,000 or less as a consumer.</p>
+    <p><strong>18.2</strong> If we fail to meet a consumer guarantee, you have rights under the ACL. Depending on whether the failure is major or minor, those rights may include having the services supplied again, a refund, or compensation for reasonably foreseeable loss.</p>
+    <p><strong>18.3</strong> We will not represent to you that you do not have a right or remedy that the ACL gives you.</p>
+
+    <h2>19. Liability</h2>
+    <p><strong>19.1</strong> This clause is subject to clause 18 and operates only to the extent the law permits.</p>
+    <p><strong>19.2</strong> <strong>Limitation under section 64A of the ACL.</strong> The services we supply are not of a kind ordinarily acquired for personal, domestic or household use or consumption. Accordingly, and to the extent permitted by section 64A of the ACL, our liability for failure to comply with a consumer guarantee in relation to those services is limited, at our option, to:</p>
+    <ul>
+      <li>supplying the services again; or</li>
+      <li>paying the cost of having the services supplied again.</li>
+    </ul>
+    <p>This limitation does not apply where it would not be fair or reasonable for us to rely on it.</p>
+    <p><strong>19.3</strong> Subject to clauses 18, 19.2 and 19.5, our total aggregate liability to you arising out of or in connection with this Agreement, whether in contract, tort (including negligence), under statute or otherwise, is limited to the greater of:</p>
+    <ul>
+      <li>the total fees you have paid to us under the affected Order in the 12 months before the event giving rise to the liability; and</li>
+      <li>$1,000.</li>
+    </ul>
+    <p><strong>19.4</strong> Subject to clauses 18 and 19.5, neither party is liable to the other for any loss of profit, loss of revenue, loss of anticipated savings, loss of business opportunity, loss of goodwill, or loss or corruption of data, in each case to the extent that loss is indirect or consequential.</p>
+    <p><strong>19.5</strong> Nothing in this clause limits either party's liability for:</p>
+    <ul>
+      <li>fraud, or fraudulent misrepresentation;</li>
+      <li>wilful misconduct;</li>
+      <li>death or personal injury caused by that party's negligence;</li>
+      <li>a breach of clause 24 (Confidentiality); or</li>
+      <li>any liability that cannot be limited at law.</li>
+    </ul>
+    <p><strong>19.6</strong> Each party's liability is reduced to the extent that the other party's own act, omission or breach caused or contributed to the loss.</p>
+    <p><strong>19.7</strong> Each party must take reasonable steps to mitigate its loss.</p>
+
+    <h2>20. Your indemnity</h2>
+    <p><strong>20.1</strong> You indemnify us against loss, damage, and reasonable legal costs we actually incur arising from a third-party claim that the Customer Materials infringe that third party's intellectual property rights or are defamatory.</p>
+    <p><strong>20.2</strong> This indemnity does not apply to the extent the claim arises from our own breach, negligence or wilful misconduct, or from material we created ourselves.</p>
+    <p><strong>20.3</strong> The indemnity is capped at the amount specified in clause 19.3.</p>
+    <p><strong>20.4</strong> We must notify you promptly of any claim, must not admit liability without your consent, and must allow you a reasonable opportunity to conduct or settle the claim, provided you act reasonably in doing so.</p>
+
+    <h2>21. Refunds and cancellation</h2>
+    <p><strong>21.1</strong> You may walk away at any time before you pay, at no cost, and owe us nothing.</p>
+    <p><strong>21.2</strong> Because each Site is built specifically for you, build fees are not generally refundable once we have started work, except as set out in this clause or as required by the ACL.</p>
+    <p><strong>21.3</strong> If you cancel after work has started but before delivery, we will refund amounts you have paid less a fair and reasonable amount for work actually performed, calculated by reference to the proportion of the Order completed. We will provide a written breakdown on request.</p>
+    <p><strong>21.4</strong> Care Plan fees already charged for a billing period are not refunded for a partial month, but no further amounts will be charged after cancellation takes effect.</p>
+    <p><strong>21.5</strong> Domain invoices are not refundable once the Domain has been registered, because they reflect a third-party cost we have already incurred on your behalf.</p>
+    <p><strong>21.6</strong> Nothing in this clause limits your right to a remedy under the ACL where a consumer guarantee has not been met.</p>
+
+    <h2>22. Chargebacks</h2>
+    <p><strong>22.1</strong> If you believe a charge is incorrect, contact us first at <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a>. We will investigate and respond within 5 Business Days.</p>
+    <p><strong>22.2</strong> Raising a chargeback with your bank or card issuer does not affect your rights under the ACL, and nothing in this clause prevents you from doing so.</p>
+    <p><strong>22.3</strong> If a chargeback is initiated and later resolved in our favour, you must pay any fee charged to us by the payment processor in connection with it, up to a maximum of $50.</p>
+    <p><strong>22.4</strong> Where a chargeback is made in respect of a Site that is live, we may suspend hosting of that Site under clause 23.4 until the matter is resolved.</p>
+
+    <h2>23. Termination</h2>
+    <p><strong>23.1</strong> Either party may terminate this Agreement immediately by written notice if the other party breaches a material term and fails to remedy that breach within <strong>14 days</strong> of being asked in writing to do so.</p>
+    <p><strong>23.2</strong> Either party may terminate immediately if the other becomes insolvent, has an administrator or liquidator appointed, or becomes bankrupt.</p>
+    <p><strong>23.3</strong> You may cancel an Order before delivery under clause 21.3, and may cancel the Care Plan under clause 12.4.</p>
+    <p><strong>23.4</strong> We may suspend hosting of a live Site only where: fees are more than 30 days overdue and we have given you 14 days' written notice; the Site breaches clause 26; or we are required to do so by law or by a third-party provider. We will restore the Site promptly once the cause is resolved.</p>
+    <p><strong>23.5</strong> On termination, you must pay for services performed up to the date of termination, and we must refund amounts paid for services not yet performed.</p>
+    <p><strong>23.6</strong> If you have paid your final build payment, termination does not affect the assignment in clause 13.3.</p>
+    <p><strong>23.7</strong> Within 14 days of termination we will provide you with a copy of the Site files and any account credentials that are yours.</p>
+    <p><strong>23.8</strong> Clauses 13, 14, 15, 18, 19, 20, 24, 25, 28 and 30 survive termination.</p>
+
+    <h2>24. Confidentiality</h2>
+    <p><strong>24.1</strong> Each party must keep the other's confidential information confidential, and must use it only for the purposes of this Agreement.</p>
+    <p><strong>24.2</strong> Confidential information does not include information that is public through no fault of the receiving party, was already lawfully known, or is independently developed.</p>
+    <p><strong>24.3</strong> Either party may disclose confidential information where required by law, or to its professional advisers on a confidential basis.</p>
+    <p><strong>24.4</strong> This clause continues for 3 years after this Agreement ends.</p>
+
+    <h2>25. Privacy</h2>
+    <p><strong>25.1</strong> We collect personal information you give us, such as your name, business name, email address, phone number and, where relevant, your ABN or ACN.</p>
+    <p><strong>25.2</strong> We use that information only to prepare your Preview, build and support your Site, invoice you, and respond to you.</p>
+    <p><strong>25.3</strong> We disclose personal information only to service providers we use to deliver the services, such as our payment processor, hosting provider and form handler, and only to the extent needed.</p>
+    <p><strong>25.4</strong> We do not sell your personal information, and we do not disclose it to third parties for their own marketing.</p>
+    <p><strong>25.5</strong> We take reasonable steps to protect personal information from misuse, loss and unauthorised access, and we destroy or de-identify it when it is no longer needed.</p>
+    <p><strong>25.6</strong> You may ask us for a copy of the personal information we hold about you, or ask us to correct it, by writing to <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a>. We will respond within 30 days.</p>
+    <p><strong>25.7</strong> If you send us personal information about other people, such as your own customers, you are responsible for having the right to do so.</p>
+    <p><strong>25.8</strong> If we become aware of a data breach that is likely to cause you serious harm, we will notify you promptly.</p>
+
+    <h2>26. Acceptable use</h2>
+    <p><strong>26.1</strong> You must not use the Site, or ask us to build or host content, that is unlawful, defamatory, infringing, misleading or deceptive, that harasses or vilifies any person, or that relates to material we are not lawfully permitted to host.</p>
+    <p><strong>26.2</strong> We may decline to build or host content that we reasonably consider falls within clause 26.1. If we decline before starting work, you owe us nothing.</p>
+    <p><strong>26.3</strong> If we decline after starting work, clause 21.3 applies.</p>
+
+    <h2>27. Events outside our control</h2>
+    <p><strong>27.1</strong> Neither party is liable for failing to perform an obligation, other than an obligation to pay money, to the extent that failure is caused by an event beyond its reasonable control, including natural disaster, fire, flood, pandemic, industrial action, war, act of terrorism, failure of telecommunications or power infrastructure, or the failure of a third-party service described in clause 16.</p>
+    <p><strong>27.2</strong> Serious illness or injury affecting Larkwell is such an event. We will tell you promptly and offer you either a revised timeframe or a full refund of amounts paid for work not yet performed.</p>
+    <p><strong>27.3</strong> If the event continues for more than 30 days, either party may terminate this Agreement by written notice, and clause 23.5 applies.</p>
+
+    <h2>28. Resolving disputes</h2>
+    <p><strong>28.1</strong> If a dispute arises, the party raising it must notify the other in writing, setting out what the dispute is about and what outcome they want.</p>
+    <p><strong>28.2</strong> The parties must then genuinely try to resolve the dispute by discussion within 14 days of that notice.</p>
+    <p><strong>28.3</strong> If the dispute is not resolved, either party may refer it to mediation through a recognised mediation service in Perth, with the parties sharing the mediator's costs equally.</p>
+    <p><strong>28.4</strong> This clause does not prevent either party from seeking urgent interlocutory relief, from complaining to a regulator, or from applying to a court or tribunal. In particular, nothing in this clause prevents you from applying to the Magistrates Court of Western Australia or from contacting Consumer Protection WA or the ACCC.</p>
+
+    <h2>29. Changes to this Agreement</h2>
+    <p><strong>29.1</strong> We may update this Agreement from time to time. Updates apply only to Orders placed after the update takes effect, and never retrospectively to an Order you have already placed.</p>
+    <p><strong>29.2</strong> For an ongoing Care Plan, we will give you at least <strong>30 days'</strong> written notice of any change to this Agreement or to the Care Plan price.</p>
+    <p><strong>29.3</strong> If you do not accept a change notified under clause 29.2, you may cancel the Care Plan before the change takes effect, at no cost, and the change will not apply to you.</p>
+    <p><strong>29.4</strong> Every version of this Agreement is recorded in the version history at the foot of this document.</p>
+
+    <h2>30. General</h2>
+    <p><strong>30.1</strong> <strong>Governing law.</strong> This Agreement is governed by the law of Western Australia. The parties submit to the non-exclusive jurisdiction of the courts of Western Australia and of courts able to hear appeals from them.</p>
+    <p><strong>30.2</strong> <strong>Entire agreement.</strong> This Agreement and the Order are the entire agreement between the parties about their subject matter. This clause does not exclude liability for any statement made fraudulently, or any liability under the ACL.</p>
+    <p><strong>30.3</strong> <strong>Severability.</strong> If a provision is unenforceable, it is severed and the rest of the Agreement continues.</p>
+    <p><strong>30.4</strong> <strong>Waiver.</strong> A failure to enforce a right is not a waiver of it.</p>
+    <p><strong>30.5</strong> <strong>Assignment.</strong> Neither party may assign this Agreement without the other's written consent, which must not be unreasonably withheld. We may assign it as part of a sale of our business, on written notice to you.</p>
+    <p><strong>30.6</strong> <strong>Relationship.</strong> The parties are independent contractors. Nothing creates a partnership, employment or agency relationship.</p>
+    <p><strong>30.7</strong> <strong>Notices.</strong> Notices may be given by email to the address each party has on record for the other, and are taken to be received on the next Business Day after sending, unless the sender receives a delivery failure notification.</p>
+    <p><strong>30.8</strong> <strong>Counterparts and electronic acceptance.</strong> This Agreement may be accepted electronically, and that acceptance has the same effect as a signature.</p>
+
+    <h2>31. Acceptance</h2>
+    <p><strong>31.1</strong> You accept this Agreement by ticking the box marked "I've read and accept the Terms &amp; Conditions" when you submit a Preview request or make a payment on our website.</p>
+    <p><strong>31.2</strong> The box is not pre-ticked. You must tick it yourself.</p>
+    <p><strong>31.3</strong> We record the version of this Agreement you accepted, and the date and time you accepted it.</p>
+    <p><strong>31.4</strong> If you would prefer a countersigned paper copy, email us and we will provide one.</p>
+
+    <h2>Execution by Larkwell</h2>
+    <p>Larkwell executes this document for the purposes of clause 13.3, so that the assignment of copyright in the Deliverables is an assignment in writing signed by or on behalf of the assignor within the meaning of section 196(3) of the <em>Copyright Act 1968</em> (Cth), and for the purposes of the moral rights consent in clause 14.</p>
+    <ul>
+      <li><strong>Signed for and on behalf of Larkwell</strong></li>
+      <li>Capacity: Sole trader</li>
+      <li>Date: 18 July 2026</li>
+    </ul>
+
+    <h2>Version history</h2>
+    <ul>
+      <li><strong>2.0</strong> — 18 July 2026 — Full rewrite. Domain registered in customer's name from the outset; express copyright assignment and moral rights consent; ACL section 64A limitation; mutual termination and variation rights; delay, chargeback, confidentiality, privacy, force majeure and dispute clauses added.</li>
+      <li><strong>1.1</strong> — July 2026 — Formal restructure of the July 2026 terms.</li>
+      <li><strong>1.0</strong> — 7 July 2026 — First published terms.</li>
+    </ul>
+
+    <p>Questions about this Agreement: <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a></p>
   </div></div>
 </div>
 
@@ -3314,11 +3817,14 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   /* year */
   document.getElementById('yr').textContent = new Date().getFullYear();
 
-  /* launch offer countdown. Update LAUNCH_OFFER_END when the promo period
-     changes, e.g. new Date('2026-09-01T23:59:59+10:00'). Once it passes,
-     the banner hides itself; remove the launch pricing on the tier cards
-     by hand at that point (swap tprice-was/tprice back to full price). */
-  var LAUNCH_OFFER_END = new Date('2026-08-15T23:59:59+10:00');
+  /* launch offer countdown. Perth runs AWST, +08:00 year-round (no daylight
+     saving), which is what this offset must always match — it was previously
+     +10:00, the Sydney/Melbourne offset, so the banner was quietly running on
+     eastern-states time for a Perth business. Update LAUNCH_OFFER_END when the
+     promo period changes, e.g. new Date('2026-09-01T23:59:59+08:00'). Once it
+     passes, the banner hides itself; remove the launch pricing on the tier
+     cards by hand at that point (swap tprice-was/tprice back to full price). */
+  var LAUNCH_OFFER_END = new Date('2026-08-15T23:59:59+08:00');
   var launchOffer = document.getElementById('launchOffer');
   if(launchOffer){
     var lcD = document.getElementById('lcD');
@@ -3814,9 +4320,12 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
      nothing to do with photos on that tier, lock the photo fields out
      while it's selected rather than collecting files that go unused */
   var photosRadios = document.querySelectorAll('input[name="photos_status"]');
-  var photosUpload = document.getElementById('photosUpload');
+  var photosUploadInputs = document.querySelectorAll('.pf-photo');
   var photosUploadHint = document.getElementById('photosUploadHint');
-  var PHOTOS_HINT_DEFAULT = photosUploadHint ? photosUploadHint.textContent : '';
+  /* innerHTML, not textContent: the default hint carries a mailto link, and
+     textContent would have flattened it to plain text every time this hint
+     gets restored after being swapped to the locked copy. */
+  var PHOTOS_HINT_DEFAULT = photosUploadHint ? photosUploadHint.innerHTML : '';
   var PHOTOS_HINT_LOCKED = "Launch is a clean one-page site without a photo gallery, so there's nothing to attach here. Pick Grow or above if you'd like photos on the site.";
   function syncPhotosAvailability(){
     var isLaunch = getPkgValue() === 'starter';
@@ -3826,12 +4335,42 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
       if(pill) pill.classList.toggle('locked', isLaunch);
       if(isLaunch) r.checked = false;
     });
-    if(photosUpload){
-      photosUpload.disabled = isLaunch;
-      if(isLaunch) photosUpload.value = '';
-    }
-    if(photosUploadHint) photosUploadHint.textContent = isLaunch ? PHOTOS_HINT_LOCKED : PHOTOS_HINT_DEFAULT;
+    photosUploadInputs.forEach(function(f){
+      f.disabled = isLaunch;
+      if(isLaunch) f.value = '';
+    });
+    if(photosUploadHint) photosUploadHint.innerHTML = isLaunch ? PHOTOS_HINT_LOCKED : PHOTOS_HINT_DEFAULT;
   }
+
+  /* Netlify Forms caps a whole submission (every field plus every attached
+     file) at 8MB, and rejects the lot if that's exceeded, not just the
+     oversized file: the customer sees the generic "that did not send" error
+     below with no clue why, and this get-started form is also step one of
+     the checkout path (see goToCheckout below), so a silently-too-big photo
+     was capable of quietly blocking someone from ever reaching payment.
+     Caps here (2MB logo + 4 * 1.2MB photos = 6.8MB) leave clear headroom
+     under that ceiling for the text fields, and catch the problem the moment
+     a file is chosen rather than after a failed submit. */
+  function guardFileSize(input, warnEl, maxBytes, maxLabel){
+    if(!input) return;
+    input.addEventListener('change', function(){
+      var f = input.files && input.files[0];
+      if(f && f.size > maxBytes){
+        input.value = '';
+        if(warnEl){
+          warnEl.textContent = '"' + f.name + '" is too big (' + (f.size / 1048576).toFixed(1) + 'MB). Please use one under ' + maxLabel + ', or email it to hello@larkwell.com.au instead.';
+          warnEl.hidden = false;
+        }
+      } else if(warnEl){
+        warnEl.hidden = true;
+      }
+    });
+  }
+  guardFileSize(document.getElementById('logoUpload'), document.getElementById('logoUploadWarn'), 2 * 1048576, '2MB');
+  var photosUploadWarn = document.getElementById('photosUploadWarn');
+  photosUploadInputs.forEach(function(f){
+    guardFileSize(f, photosUploadWarn, 1.2 * 1048576, '1.2MB');
+  });
 
   /* The button shows the full total of everything selected: package, care
      plan, and any of rush/domain/logo ticked here. Rush/domain/logo aren't
@@ -4222,7 +4761,8 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
       var pkgLabelField = document.getElementById('pfPackageLabelField');
       var summaryField = document.getElementById('pfSelectionSummaryField');
       if(pkgLabelField) pkgLabelField.value = chosenPackage === 'unsure' ? 'Not sure yet' : (TIER_NAME[chosenPackage] || chosenPackage);
-      if(summaryField) summaryField.value = buildSelectionSummary(chosenPackage, wantsCare) + ' | Terms & Conditions accepted: Yes, at ' + acceptedAt;
+      var termsVersion = (document.getElementById('pfTermsVersionField') || {}).value || '';
+      if(summaryField) summaryField.value = buildSelectionSummary(chosenPackage, wantsCare) + ' | Terms & Conditions v' + termsVersion + ' accepted: Yes, at ' + acceptedAt;
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending...';
       var formData = new FormData(previewForm);
@@ -4363,6 +4903,27 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
         payPkgSelect.disabled = true;
         if(payPkgLockNote) payPkgLockNote.hidden = false;
       }
+    }
+
+    /* The checkout function's success_url/cancel_url both return here as
+       ?checkout=success or ?checkout=cancelled (see create-checkout-session.js).
+       Show the matching banner, move focus to it so screen readers announce it
+       and it's visible without scrolling, then strip the parameter so a page
+       refresh or revisit doesn't keep re-showing "payment received". */
+    var checkoutState = new URLSearchParams(window.location.search).get('checkout');
+    var payStatusSuccess = document.getElementById('payStatusSuccess');
+    var payStatusCancelled = document.getElementById('payStatusCancelled');
+    if(checkoutState === 'success' && payStatusSuccess){
+      payStatusSuccess.hidden = false;
+      payStatusSuccess.focus();
+    } else if(checkoutState === 'cancelled' && payStatusCancelled){
+      payStatusCancelled.hidden = false;
+      payStatusCancelled.focus();
+    }
+    if(checkoutState && window.history && window.history.replaceState){
+      var cleanUrl = new URL(window.location.href);
+      cleanUrl.searchParams.delete('checkout');
+      window.history.replaceState(null, '', cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
     }
   }
 

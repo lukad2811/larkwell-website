@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Terms of Service · Larkwell</title>
-<meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0F2E20">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,7 +38,7 @@ h1{font-family:var(--serif);font-weight:700;font-size:clamp(2rem,5vw,2.7rem);let
 .doc-meta{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--ink-soft);font-size:.86rem;margin-bottom:22px}
 .doc-meta b{color:var(--ink);font-weight:700}
 
-/* draft warning, kept exactly as prominent as before */
+/* review notice */
 .draft{display:flex;gap:14px;align-items:flex-start;background:#FBE7D6;border:1.5px solid var(--coral);border-radius:14px;padding:18px 20px;margin:22px 0 34px;font-size:.94rem;line-height:1.6}
 .draft-icon{flex:0 0 auto;width:22px;height:22px;color:var(--coral-deep);margin-top:2px}
 .draft strong{color:var(--coral-deep)}
@@ -84,11 +83,31 @@ code{font-family:var(--body);background:var(--bone-2);padding:.15em .4em;border-
 .defs dt{font-weight:800;color:var(--ink);font-size:.9rem}
 .defs dd{color:var(--ink-soft);font-size:.9rem}
 
+/* callout for the non-excludable rights statement */
+.statutory{border-left:4px solid var(--coral);background:var(--bone-2);border-radius:0 12px 12px 0;padding:16px 20px;margin:18px 0}
+.statutory p:last-child{margin-bottom:0}
+
 /* signature / acceptance block */
 .accept{background:linear-gradient(155deg,var(--night),var(--night-2));color:var(--bone);border-radius:18px;padding:26px 28px;margin:44px 0}
 .accept h2{color:#fff;margin-top:0 !important}
 .accept h2 .num{color:var(--gold)}
 .accept p{color:rgba(253,251,247,.82)}
+.accept ol.clauses > li{color:rgba(253,251,247,.82)}
+.accept ol.clauses > li::before{color:var(--gold)}
+.accept strong{color:#fff}
+
+/* execution block */
+.execution{border:1.5px solid var(--line);border-radius:14px;padding:22px 24px;margin:34px 0;background:#fff}
+.execution h3{font-family:var(--serif);font-size:1.05rem;margin-bottom:10px;color:var(--ink)}
+.execution .sig{margin-top:16px;padding-top:16px;border-top:1px solid var(--line-soft);font-size:.9rem}
+.execution .sig b{display:block;color:var(--ink)}
+
+/* version history */
+.history{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:16px}
+.history .row{display:grid;grid-template-columns:70px 130px 1fr;gap:14px;padding:11px 18px;border-bottom:1px solid var(--line-soft);font-size:.86rem;color:var(--ink-soft)}
+.history .row:last-child{border-bottom:0}
+.history .row:nth-child(even){background:var(--bone-2)}
+.history .row b{color:var(--ink)}
 
 /* document footer */
 .doc-foot{margin-top:50px;padding-top:24px;border-top:1px solid var(--line)}
@@ -99,7 +118,13 @@ code{font-family:var(--body);background:var(--bone-2);padding:.15em .4em;border-
 .back-top{display:inline-flex;align-items:center;gap:.4em;margin-top:26px;color:var(--coral-deep);font-weight:600;font-size:.88rem;text-decoration:none}
 .back-top:hover{text-decoration:underline}
 
-@media (max-width:640px){.toc ol{columns:1}.parties dl{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .toc ol{columns:1}
+  .parties dl{grid-template-columns:1fr}
+  .defs .row{grid-template-columns:1fr;gap:4px}
+  .history .row{grid-template-columns:60px 1fr;gap:4px 12px}
+  .history .row span:nth-child(3){grid-column:1 / -1}
+}
 </style>
 </head>
 <body id="top">
@@ -115,162 +140,421 @@ code{font-family:var(--body);background:var(--bone-2);padding:.15em .4em;border-
   <div class="doc-eyebrow">Legal document</div>
   <h1>Terms of Service</h1>
   <div class="doc-meta">
-    <span>Document version <b>1.1</b></span>
-    <span>Effective date <b id="tdate"></b></span>
+    <span>Document version <b>2.0</b></span>
+    <span>Effective date <b>18 July 2026</b></span>
     <span>Governing law <b>Western Australia, Australia</b></span>
   </div>
 
   <div class="draft">
-    <svg class="draft-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2L2 17h16L10 2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 8v4M10 14h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    <span><strong>Draft, not yet legal advice.</strong> This document is formatted as a formal agreement, but it has <strong>not</strong> been reviewed by a qualified Australian legal practitioner and is not legal advice. Larkwell recommends professional review before this is relied upon or published. Nothing in this document is intended to exclude, restrict or modify any right or remedy available to you under the Australian Consumer Law that cannot lawfully be excluded.</span>
+    <svg class="draft-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16.5v.01"/></svg>
+    <div><strong>Not legal advice.</strong> This document has been prepared for Larkwell but has not been reviewed by an admitted Australian legal practitioner. It is not legal advice and should be reviewed by a lawyer before it is relied on in a dispute. Nothing in this document is intended to exclude, restrict or modify any right or remedy you have under the Australian Consumer Law that cannot lawfully be excluded, restricted or modified.</div>
   </div>
-
-  <section class="parties" aria-label="Parties to this agreement">
-    <h2 style="margin:0 0 4px"><span class="num">§</span> Parties &amp; recitals</h2>
-    <p style="margin:0">This Agreement is entered into between the parties below whenever a Customer requests a preview, approves a build, or makes a payment through the Larkwell website.</p>
-    <dl>
-      <dt>The Provider</dt><dd><strong>Larkwell</strong> ("Larkwell", "we", "us", "our"), a web design service trading in Perth, Western Australia.</dd>
-      <dt>The Customer</dt><dd>The individual or business named on the applicable order, preview request, or invoice ("you", "your", "the Customer").</dd>
-      <dt>Contact</dt><dd><a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a></dd>
-    </dl>
-  </section>
-
-  <nav class="toc" aria-label="Table of contents">
-    <div class="toc-title">Contents</div>
-    <ol>
-      <li><a href="#s1"><span class="n">1.</span> Definitions</a></li>
-      <li><a href="#s2"><span class="n">2.</span> What Larkwell does</a></li>
-      <li><a href="#s3"><span class="n">3.</span> Free preview, then payment</a></li>
-      <li><a href="#s4"><span class="n">4.</span> Domain names</a></li>
-      <li><a href="#s5"><span class="n">5.</span> Content you provide</a></li>
-      <li><a href="#s6"><span class="n">6.</span> Ownership</a></li>
-      <li><a href="#s7"><span class="n">7.</span> Account credentials</a></li>
-      <li><a href="#s8"><span class="n">8.</span> Timeframes</a></li>
-      <li><a href="#s9"><span class="n">9.</span> The Care Plan</a></li>
-      <li><a href="#s10"><span class="n">10.</span> Refunds</a></li>
-      <li><a href="#s11"><span class="n">11.</span> GST</a></li>
-      <li><a href="#s12"><span class="n">12.</span> Liability</a></li>
-      <li><a href="#s13"><span class="n">13.</span> General provisions</a></li>
-      <li><a href="#s14"><span class="n">14.</span> Acceptance</a></li>
-      <li><a href="#s15"><span class="n">15.</span> Contact</a></li>
-    </ol>
-  </nav>
 </div>
 
 <main class="wrap">
 
-  <h2 id="s1"><span class="num">1.</span> Definitions</h2>
-  <p class="clause-intro">In this Agreement, the following defined terms apply wherever they are used, capitalised:</p>
-  <div class="defs">
-    <div class="row"><dt>the Services</dt><dd>The website design, build, hosting, and/or maintenance services Larkwell provides, as selected by the Customer.</dd></div>
-    <div class="row"><dt>the Site</dt><dd>The website Larkwell builds for the Customer under this Agreement.</dd></div>
-    <div class="row"><dt>the Preview</dt><dd>A no-cost, no-obligation working draft of the Site provided before any payment is made.</dd></div>
-    <div class="row"><dt>the Domain</dt><dd>The web address (e.g. <code>yourbusiness.com.au</code>) registered for the Customer's use, where requested.</dd></div>
-    <div class="row"><dt>the Care Plan</dt><dd>Larkwell's optional monthly subscription covering hosting and small ongoing updates to the Site.</dd></div>
-    <div class="row"><dt>Year One Fee</dt><dd>The Domain's actual registration cost plus a 20% first-year setup fee, invoiced separately from the Site build.</dd></div>
-    <div class="row"><dt>ACL</dt><dd>The Australian Consumer Law, as set out in Schedule 2 of the Competition and Consumer Act 2010 (Cth).</dd></div>
+  <section class="parties">
+    <h2><span class="num">§</span> Parties</h2>
+    <p>This Agreement is made between the parties described below. It takes effect when you accept it under clause&nbsp;2.</p>
+    <dl>
+      <dt>The Provider</dt>
+      <dd><strong>Larkwell</strong> ("Larkwell", "we", "us", "our"), a sole trader carrying on business in Perth, Western Australia.</dd>
+      <dt>The Customer</dt>
+      <dd>The individual or entity named on the applicable Order ("you", "your").</dd>
+      <dt>Contact</dt>
+      <dd><a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a></dd>
+    </dl>
+  </section>
+
+  <nav class="toc" aria-label="Contents">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#c1"><span class="n">1</span> Definitions and interpretation</a></li>
+      <li><a href="#c2"><span class="n">2</span> Formation and acceptance</a></li>
+      <li><a href="#c3"><span class="n">3</span> What we provide</a></li>
+      <li><a href="#c4"><span class="n">4</span> The Preview</a></li>
+      <li><a href="#c5"><span class="n">5</span> Fees and payment</a></li>
+      <li><a href="#c6"><span class="n">6</span> GST</a></li>
+      <li><a href="#c7"><span class="n">7</span> Timeframes</a></li>
+      <li><a href="#c8"><span class="n">8</span> Your obligations</a></li>
+      <li><a href="#c9"><span class="n">9</span> Delay and inactivity</a></li>
+      <li><a href="#c10"><span class="n">10</span> Revisions and changes of scope</a></li>
+      <li><a href="#c11"><span class="n">11</span> Domain names</a></li>
+      <li><a href="#c12"><span class="n">12</span> Hosting and the Care Plan</a></li>
+      <li><a href="#c13"><span class="n">13</span> Intellectual property</a></li>
+      <li><a href="#c14"><span class="n">14</span> Moral rights</a></li>
+      <li><a href="#c15"><span class="n">15</span> Portfolio use</a></li>
+      <li><a href="#c16"><span class="n">16</span> Third-party services</a></li>
+      <li><a href="#c17"><span class="n">17</span> What we do not promise</a></li>
+      <li><a href="#c18"><span class="n">18</span> Australian Consumer Law</a></li>
+      <li><a href="#c19"><span class="n">19</span> Liability</a></li>
+      <li><a href="#c20"><span class="n">20</span> Your indemnity</a></li>
+      <li><a href="#c21"><span class="n">21</span> Refunds and cancellation</a></li>
+      <li><a href="#c22"><span class="n">22</span> Chargebacks</a></li>
+      <li><a href="#c23"><span class="n">23</span> Termination</a></li>
+      <li><a href="#c24"><span class="n">24</span> Confidentiality</a></li>
+      <li><a href="#c25"><span class="n">25</span> Privacy</a></li>
+      <li><a href="#c26"><span class="n">26</span> Acceptable use</a></li>
+      <li><a href="#c27"><span class="n">27</span> Events outside our control</a></li>
+      <li><a href="#c28"><span class="n">28</span> Resolving disputes</a></li>
+      <li><a href="#c29"><span class="n">29</span> Changes to this Agreement</a></li>
+      <li><a href="#c30"><span class="n">30</span> General</a></li>
+      <li><a href="#c31"><span class="n">31</span> Acceptance</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="c1"><span class="num">1</span> Definitions and interpretation</h2>
+  <p class="clause-intro">In this Agreement, capitalised terms have the meanings given below.</p>
+  <dl class="defs">
+    <div class="row"><dt>ACL</dt><dd>The Australian Consumer Law, being Schedule 2 to the <em>Competition and Consumer Act 2010</em> (Cth).</dd></div>
+    <div class="row"><dt>Agreement</dt><dd>This document, together with the Order and any written variation agreed under clause 10.</dd></div>
+    <div class="row"><dt>Care Plan</dt><dd>Our optional monthly subscription covering hosting and Minor Updates, described in clause 12.</dd></div>
+    <div class="row"><dt>Customer Materials</dt><dd>Any text, images, logos, video, data, trade marks or other material you supply to us, or direct us to use, for the Site.</dd></div>
+    <div class="row"><dt>Deliverables</dt><dd>The Site and any other material we create for you under the Order, excluding Larkwell Tools.</dd></div>
+    <div class="row"><dt>Domain</dt><dd>A domain name registered for your use in connection with the Site.</dd></div>
+    <div class="row"><dt>Larkwell Tools</dt><dd>Code, components, layouts, scripts, libraries, techniques and know-how that we owned before this Agreement or develop independently of it, and which we reuse across client projects.</dd></div>
+    <div class="row"><dt>Minor Update</dt><dd>A change to existing content or settings on a live Site that we assess as taking 30 minutes or less, such as changing prices, trading hours, contact details, or swapping a photograph.</dd></div>
+    <div class="row"><dt>Order</dt><dd>The package, price, add-ons and any agreed scope you select at checkout or that we confirm to you in writing.</dd></div>
+    <div class="row"><dt>Preview</dt><dd>A working draft of the Site provided at no cost before any payment is due.</dd></div>
+    <div class="row"><dt>Site</dt><dd>The website we build for you under the Order.</dd></div>
+    <div class="row"><dt>Start Date</dt><dd>The date we confirm to you in writing that we have received everything listed in clause 8.1 and have begun work.</dd></div>
+  </dl>
+  <ol class="clauses">
+    <li>Headings are for convenience and do not affect interpretation.</li>
+    <li>"Including" and similar words are not words of limitation.</li>
+    <li>A reference to legislation includes that legislation as amended or replaced.</li>
+    <li>Business Day means a day that is not a Saturday, Sunday or public holiday in Perth, Western Australia.</li>
+    <li>If there is any inconsistency, the Order prevails over this document to the extent of the inconsistency.</li>
+  </ol>
+
+  <h2 id="c2"><span class="num">2</span> Formation and acceptance</h2>
+  <ol class="clauses">
+    <li>This Agreement is formed when you tick the acceptance box and submit a Preview request, or tick the acceptance box and complete a payment, whichever happens first.</li>
+    <li>The version of this Agreement displayed at the moment you accept it is the version that governs your engagement. We keep a record of the version, the date and the time of your acceptance.</li>
+    <li>You confirm that you have had a reasonable opportunity to read this Agreement before accepting it, and that you are authorised to accept it on behalf of the person or entity named on the Order.</li>
+    <li>No separate signed copy is required. Acceptance by ticking the box is effective under the <em>Electronic Transactions Act 2011</em> (WA) and the <em>Electronic Transactions Act 1999</em> (Cth).</li>
+  </ol>
+
+  <h2 id="c3"><span class="num">3</span> What we provide</h2>
+  <ol class="clauses">
+    <li>We will design and build the Site described in your Order, and where you have chosen the Care Plan, host and maintain it under clause 12.</li>
+    <li>The Order defines the scope. Anything not described in the Order is outside scope and is dealt with under clause 10.</li>
+    <li>We will perform the services with due care and skill, and provide them within a reasonable time.</li>
+    <li>We may use subcontractors to perform any part of the services. We remain responsible to you for work performed by our subcontractors as if we had performed it ourselves.</li>
+  </ol>
+
+  <h2 id="c4"><span class="num">4</span> The Preview</h2>
+  <ol class="clauses">
+    <li>You may request a Preview at no cost and with no obligation to proceed.</li>
+    <li>The Preview remains our property until the Site is paid for. You must not publish, copy, or commercially use the Preview, or any part of it, before payment.</li>
+    <li>We may take the Preview offline at any time before payment is made.</li>
+    <li>If you decide not to proceed after seeing the Preview, you owe us nothing and this Agreement ends, except for clauses that are expressed to survive.</li>
+  </ol>
+
+  <h2 id="c5"><span class="num">5</span> Fees and payment</h2>
+  <ol class="clauses">
+    <li>Fees are those stated in your Order. All amounts are in Australian dollars.</li>
+    <li>The price quoted in your Order is fixed for that Order and will not change, except where you request work outside the agreed scope under clause 10. Prices advertised on our website may change for future customers at any time.</li>
+    <li>Build fees are payable after you approve the Preview and before the Site goes live, unless we agree otherwise in writing.</li>
+    <li>Payments are processed by Stripe. We do not receive or store your full card details. Your use of Stripe is subject to Stripe's own terms.</li>
+    <li>Care Plan fees are billed monthly in advance from the date you subscribe.</li>
+    <li>Invoices issued separately (including under clause 11) are payable within 14 days of the invoice date.</li>
+    <li>If an invoice remains unpaid more than 14 days after its due date, we may charge simple interest on the outstanding amount at 2% above the Reserve Bank of Australia cash rate, calculated daily from the due date until payment. We will give you at least 7 days' written notice before interest begins to accrue. We may also recover reasonable costs we actually incur in recovering the debt.</li>
+  </ol>
+
+  <h2 id="c6"><span class="num">6</span> GST</h2>
+  <ol class="clauses">
+    <li>We are not currently registered for GST. Prices quoted and invoices issued do not include a GST component.</li>
+    <li>If we become registered for GST, prices for Orders placed after the date of registration will be stated inclusive or exclusive of GST as required by law. Registration will not increase the price of an Order you have already placed.</li>
+  </ol>
+
+  <h2 id="c7"><span class="num">7</span> Timeframes</h2>
+  <ol class="clauses">
+    <li>We will deliver your Site within <strong>3 Business Days of the Start Date</strong>, unless your Order specifies a different timeframe or you have chosen a no-rush option.</li>
+    <li>The Start Date does not occur until we have received everything listed in clause 8.1. Time we spend waiting for material from you does not count towards the 3 Business Days.</li>
+    <li>If we fail to deliver within that period for a reason within our control, you may choose either a revised delivery date agreed with us, or a full refund of amounts you have paid for the affected work. This is in addition to, and does not limit, any rights you have under the ACL.</li>
+    <li>Clause 27 applies where delivery is delayed by an event outside our control.</li>
+  </ol>
+
+  <h2 id="c8"><span class="num">8</span> Your obligations</h2>
+  <ol class="clauses">
+    <li>To enable us to start, you must provide: your business name and contact details; the content you want on the Site, or written confirmation that we may write it; any logo or images you want used; and access to any existing accounts we need.</li>
+    <li>You warrant that you own the Customer Materials, or have permission to use them and to allow us to use them for the purposes of this Agreement.</li>
+    <li>You are responsible for the accuracy of the Customer Materials, including prices, claims about your business, qualifications, licence numbers, and any statement a regulator might scrutinise.</li>
+    <li>You must respond to our reasonable requests for information, approvals or feedback within a reasonable time.</li>
+    <li>Once we hand over any account credentials to you, keeping them secure is your responsibility.</li>
+  </ol>
+
+  <h2 id="c9"><span class="num">9</span> Delay and inactivity</h2>
+  <ol class="clauses">
+    <li>If we are waiting on you and have not heard from you for <strong>30 consecutive days</strong>, we may place your project on hold and notify you in writing.</li>
+    <li>If a project remains on hold for a further <strong>60 days</strong> after that notice, we may treat the Order as cancelled by you. Before doing so, we will send you a reminder at least 14 days beforehand to the email address on your Order.</li>
+    <li>If an Order is cancelled under clause 9.2, we will refund any amounts you have paid, less a fair and reasonable amount for work actually performed up to the date of cancellation. We will provide you with a written breakdown of that amount on request.</li>
+    <li>You may reactivate a cancelled Order within 6 months by paying any difference between amounts retained and our then-current price for the same package.</li>
+  </ol>
+
+  <h2 id="c10"><span class="num">10</span> Revisions and changes of scope</h2>
+  <ol class="clauses">
+    <li>Your Order includes the number of revision rounds stated on our pricing page for the package you selected. A revision round means one consolidated set of change requests from you.</li>
+    <li>Work outside the agreed scope, including additional pages, new features, a different design direction after approval, or further revision rounds, will be quoted separately.</li>
+    <li>We will not perform out-of-scope work, or charge you for it, unless you have approved the additional fee in writing first.</li>
+    <li>Neither party may vary the scope or price of an Order without the written agreement of the other.</li>
+  </ol>
+
+  <h2 id="c11"><span class="num">11</span> Domain names</h2>
+  <p class="clause-intro">Australian domain names are administered by .au Domain Administration Ltd (auDA). Under the auDA rules a registrant holds a <strong>licence</strong> to use a domain name for a period; a domain name is not owned outright.</p>
+  <ol class="clauses">
+    <li>Where you ask us to arrange a Domain, we will register it <strong>in your name as registrant</strong>, using your details and, for a <code>.au</code> Domain, your ABN or ACN. We will not register your Domain in our own name.</li>
+    <li>You are the registrant and licence holder from the moment of registration. We may be listed as a technical contact so that we can configure the Site.</li>
+    <li>A <code>.au</code> Domain requires an eligible ABN or ACN that remains valid for the licence period. If your ABN or ACN is cancelled or becomes invalid, auDA or the registrar may suspend or cancel the licence. That is outside our control.</li>
+    <li>We use your ABN or ACN solely to verify eligibility and complete registration. It is not passed to our payment processor and is not published by us.</li>
+    <li>The Domain is not included in your checkout total. We will invoice you separately for the Domain's actual registration cost plus our stated first-year setup fee, as shown in your Order.</li>
+    <li>If the name you want is unavailable, we will contact you to agree an alternative before registering anything.</li>
+    <li>We will give you access to the registrar account, or transfer control of the Domain to an account you nominate, once the Domain invoice is paid.</li>
+    <li>If the Domain invoice is not paid, we may decline to transfer control until it is. We will not cancel or transfer your Domain to a third party, and we will give you at least 14 days' written notice before the licence is due to expire so that you can renew it directly.</li>
+    <li>From the second year onwards, renewing the Domain is your responsibility. We do not manage or renew Domains after the first year, whether or not you hold the Care Plan.</li>
+    <li>We are not responsible for the pricing, policies, outages, or decisions of auDA or of any registrar.</li>
+  </ol>
+
+  <h2 id="c12"><span class="num">12</span> Hosting and the Care Plan</h2>
+  <ol class="clauses">
+    <li>The Care Plan covers hosting of the Site and Minor Updates, at the monthly price shown in your Order.</li>
+    <li>Minor Updates are defined in clause 1. Requests beyond that definition will be quoted separately before any work is done. We will tell you if we consider a request falls outside a Minor Update.</li>
+    <li>We will action Minor Update requests within 3 Business Days of receiving them, or within a longer period we agree with you.</li>
+    <li>You may cancel the Care Plan at any time, effective at the end of the current billing period. There is no exit fee and no minimum term.</li>
+    <li>We may cancel the Care Plan by giving you at least <strong>30 days'</strong> written notice.</li>
+    <li>Within 14 days of the Care Plan ending for any reason, we will provide you with a complete copy of the Site files at no charge, so that you or anyone you choose can host it elsewhere.</li>
+    <li>Hosting the Site does not give us any ownership of it. Clause 13 governs ownership.</li>
+    <li>We do not guarantee uninterrupted availability of hosting. Clause 17 applies.</li>
+  </ol>
+
+  <h2 id="c13"><span class="num">13</span> Intellectual property</h2>
+  <ol class="clauses">
+    <li>You retain all intellectual property rights in the Customer Materials. You grant us a non-exclusive licence to use, reproduce and adapt the Customer Materials for the purpose of providing the services and for the purpose described in clause 15.</li>
+    <li>We retain all intellectual property rights in the Larkwell Tools. Nothing in this Agreement assigns the Larkwell Tools to you.</li>
+    <li><strong>Assignment.</strong> On receipt of the final build payment for your Order in cleared funds, we assign to you all of our right, title and interest, including copyright, in the Deliverables, throughout the world, for the full term of copyright. This clause operates as an assignment in writing for the purposes of section 196(3) of the <em>Copyright Act 1968</em> (Cth), executed by Larkwell as set out at the foot of this document.</li>
+    <li>To the extent that the Deliverables incorporate any Larkwell Tools, we grant you a perpetual, irrevocable, worldwide, royalty-free, non-exclusive licence to use, reproduce, modify and sublicense those Larkwell Tools as part of the Site, including after this Agreement ends.</li>
+    <li>The Deliverables may include third-party components, such as fonts, plugins or libraries, licensed under their own terms. Those components are not assigned to you and remain subject to their own licences. We will tell you on request which components these are.</li>
+    <li>We will do all things reasonably necessary to give effect to the assignment in clause 13.3, at your cost, if you ask us to.</li>
+    <li>Until the final build payment is received in cleared funds, we retain ownership of the Deliverables and you have no licence to use them.</li>
+  </ol>
+
+  <h2 id="c14"><span class="num">14</span> Moral rights</h2>
+  <ol class="clauses">
+    <li>Moral rights cannot be assigned under Australian law. We remain the author of the Deliverables for the purposes of Part IX of the <em>Copyright Act 1968</em> (Cth).</li>
+    <li>We consent to you, and anyone you authorise, doing anything that would otherwise infringe our moral rights in the Deliverables, including altering, adding to, removing, relocating or replacing any part of the Site, and using the Site without identifying us as the author.</li>
+    <li>This consent is given genuinely and without duress, and continues after this Agreement ends.</li>
+  </ol>
+
+  <h2 id="c15"><span class="num">15</span> Portfolio use</h2>
+  <ol class="clauses">
+    <li>You grant us a non-exclusive, royalty-free licence to reproduce screenshots of, and to link to, the completed Site, and to use your business name and logo, for the purpose of showing our work in our portfolio, case studies and marketing.</li>
+    <li>You may withdraw this licence at any time by writing to us. We will remove the material within 30 days of your request and will not use it again. We are not required to recall printed material already distributed.</li>
+    <li>We will not disclose your confidential information or your commercial figures in any portfolio use without your separate written consent.</li>
+  </ol>
+
+  <h2 id="c16"><span class="num">16</span> Third-party services</h2>
+  <ol class="clauses">
+    <li>The Site depends on third-party services, which may include a domain registrar, a hosting or deployment provider, a payment processor, a form handler, font and analytics providers, and email services.</li>
+    <li>Those services are supplied by their providers on their own terms, not by us. We are not responsible for their acts, omissions, outages, price changes, policy changes, or discontinuation of service.</li>
+    <li>If a third-party service we have used becomes unavailable, we will tell you and, where you hold the Care Plan, work with you in good faith to find a reasonable replacement.</li>
+  </ol>
+
+  <h2 id="c17"><span class="num">17</span> What we do not promise</h2>
+  <p class="clause-intro">This clause is subject to clause 18. It does not limit any right you have under the ACL.</p>
+  <ol class="clauses">
+    <li>We do not promise any particular commercial outcome, including sales, enquiries, bookings, revenue, search engine rankings, traffic volumes, or placement in any AI or search result.</li>
+    <li>We do not promise that the Site will be free from all faults, or that it will be available without interruption. Software of this kind is not error-free.</li>
+    <li>We do not promise that the Site will display identically in every browser, on every device, or at every screen size. We build for current versions of mainstream browsers.</li>
+    <li>Unless your Order expressly says so, we do not promise that the Site meets any particular accessibility standard, such as WCAG. If accessibility conformance matters to you, tell us before you order and we will quote for it. Nothing in this clause affects your own obligations under the <em>Disability Discrimination Act 1992</em> (Cth).</li>
+    <li>We do not provide legal, financial, tax, medical or regulatory advice, and we do not check whether the content of your Site complies with laws applying to your industry. That remains your responsibility under clause 8.3.</li>
+  </ol>
+
+  <h2 id="c18"><span class="num">18</span> Australian Consumer Law</h2>
+  <div class="statutory">
+    <p>Our services come with guarantees that cannot be excluded under the Australian Consumer Law. Nothing in this Agreement excludes, restricts or modifies any guarantee, condition, warranty, right or remedy that the ACL confers on you and that cannot lawfully be excluded, restricted or modified.</p>
+    <p>If any term of this Agreement would otherwise have that effect, it is to be read down to the extent necessary, and if it cannot be read down, it is severed.</p>
   </div>
-
-  <h2 id="s2"><span class="num">2.</span> What Larkwell does</h2>
   <ol class="clauses">
-    <li>Larkwell designs and builds the Site for the Customer, and may optionally host and maintain it under the Care Plan.</li>
-    <li>The specific package, price, and any add-ons that form part of the Services are whatever the Customer selected and paid for, or was invoiced for, at the time of ordering.</li>
+    <li>You may be a "consumer" under the ACL even though you are acquiring the services for your business, because the ACL treats a person who acquires services costing $100,000 or less as a consumer.</li>
+    <li>If we fail to meet a consumer guarantee, you have rights under the ACL. Depending on whether the failure is major or minor, those rights may include having the services supplied again, a refund, or compensation for reasonably foreseeable loss.</li>
+    <li>We will not represent to you that you do not have a right or remedy that the ACL gives you.</li>
   </ol>
 
-  <h2 id="s3"><span class="num">3.</span> Free preview, then payment</h2>
+  <h2 id="c19"><span class="num">19</span> Liability</h2>
   <ol class="clauses">
-    <li>The Customer may request a Preview at no cost and with no obligation to proceed.</li>
-    <li>The Customer only pays if they decide to go ahead following the Preview.</li>
-    <li>Build payments are made securely through Stripe, a third-party payment processor. Larkwell never sees or stores the Customer's card details.</li>
+    <li>This clause is subject to clause 18 and operates only to the extent the law permits.</li>
+    <li><strong>Limitation under section 64A of the ACL.</strong> The services we supply are not of a kind ordinarily acquired for personal, domestic or household use or consumption. Accordingly, and to the extent permitted by section 64A of the ACL, our liability for failure to comply with a consumer guarantee in relation to those services is limited, at our option, to:
+      <ul>
+        <li>supplying the services again; or</li>
+        <li>paying the cost of having the services supplied again.</li>
+      </ul>
+      This limitation does not apply where it would not be fair or reasonable for us to rely on it.</li>
+    <li>Subject to clauses 18, 19.2 and 19.5, our total aggregate liability to you arising out of or in connection with this Agreement, whether in contract, tort (including negligence), under statute or otherwise, is limited to the greater of:
+      <ul>
+        <li>the total fees you have paid to us under the affected Order in the 12 months before the event giving rise to the liability; and</li>
+        <li>$1,000.</li>
+      </ul>
+    </li>
+    <li>Subject to clauses 18 and 19.5, neither party is liable to the other for any loss of profit, loss of revenue, loss of anticipated savings, loss of business opportunity, loss of goodwill, or loss or corruption of data, in each case to the extent that loss is indirect or consequential.</li>
+    <li>Nothing in this clause limits either party's liability for:
+      <ul>
+        <li>fraud, or fraudulent misrepresentation;</li>
+        <li>wilful misconduct;</li>
+        <li>death or personal injury caused by that party's negligence;</li>
+        <li>a breach of clause 24 (Confidentiality); or</li>
+        <li>any liability that cannot be limited at law.</li>
+      </ul>
+    </li>
+    <li>Each party's liability is reduced to the extent that the other party's own act, omission or breach caused or contributed to the loss.</li>
+    <li>Each party must take reasonable steps to mitigate its loss.</li>
   </ol>
 
-  <h2 id="s4"><span class="num">4.</span> Domain names</h2>
-  <p class="clause-intro">Where the Customer asks Larkwell to arrange the Domain, the following applies to every Customer equally, whether or not they hold the Care Plan:</p>
+  <h2 id="c20"><span class="num">20</span> Your indemnity</h2>
   <ol class="clauses">
-    <li><span class="term">Not paid at checkout.</span> The Domain is never part of the Customer's Stripe checkout total. It is handled by a separate invoice.</li>
-    <li><span class="term">Year One.</span> Once the Customer approves the exact Domain name, Larkwell registers it and pays for the first year, then emails the Customer an invoice for the Year One Fee.</li>
-    <li><span class="term">Availability.</span> If the requested name is unavailable, Larkwell will email the Customer to agree an alternative before registering anything.</li>
-    <li><span class="term">Eligibility for .au domains.</span> Australian <code>.au</code> domains (including <code>.com.au</code>) legally require an eligible ABN or ACN. Where the Customer chooses a <code>.au</code> Domain, they must provide a valid ABN/ACN, used solely to verify eligibility and register the Domain, and never disclosed publicly or passed to the payment system.</li>
-    <li><span class="term">Handover.</span> Once the Year One Fee is paid, Larkwell hands over the Customer's own registrar account login for the Domain.</li>
-    <li><span class="term">After Year One.</span> From the second year onward, the Domain is entirely the Customer's responsibility to manage and renew through their own account. Larkwell does not invoice for, manage, or renew the Domain after Year One, regardless of Care Plan status.</li>
-    <li><span class="term">Non-payment.</span> If the Year One Fee is not paid, the account login is not handed over and Larkwell will not renew the Domain; it will lapse at the end of the year Larkwell already paid for.</li>
-    <li><span class="term">Third-party registrars.</span> Domains are registered through an independent third-party registrar. Larkwell is not responsible for that registrar's own price changes, policies, or outages.</li>
+    <li>You indemnify us against loss, damage, and reasonable legal costs we actually incur arising from a third-party claim that the Customer Materials infringe that third party's intellectual property rights or are defamatory.</li>
+    <li>This indemnity does not apply to the extent the claim arises from our own breach, negligence or wilful misconduct, or from material we created ourselves.</li>
+    <li>The indemnity is capped at the amount specified in clause 19.3.</li>
+    <li>We must notify you promptly of any claim, must not admit liability without your consent, and must allow you a reasonable opportunity to conduct or settle the claim, provided you act reasonably in doing so.</li>
   </ol>
 
-  <h2 id="s5"><span class="num">5.</span> Content you provide</h2>
+  <h2 id="c21"><span class="num">21</span> Refunds and cancellation</h2>
   <ol class="clauses">
-    <li>The Customer is responsible for ensuring any text, photos, logos, or other material they supply is theirs to use, or that they have permission to use it.</li>
-    <li>Larkwell is not responsible for copyright or trademark issues arising from content supplied by the Customer.</li>
+    <li>You may walk away at any time before you pay, at no cost, and owe us nothing.</li>
+    <li>Because each Site is built specifically for you, build fees are not generally refundable once we have started work, except as set out in this clause or as required by the ACL.</li>
+    <li>If you cancel after work has started but before delivery, we will refund amounts you have paid less a fair and reasonable amount for work actually performed, calculated by reference to the proportion of the Order completed. We will provide a written breakdown on request.</li>
+    <li>Care Plan fees already charged for a billing period are not refunded for a partial month, but no further amounts will be charged after cancellation takes effect.</li>
+    <li>Domain invoices are not refundable once the Domain has been registered, because they reflect a third-party cost we have already incurred on your behalf.</li>
+    <li>Nothing in this clause limits your right to a remedy under the ACL where a consumer guarantee has not been met.</li>
   </ol>
 
-  <h2 id="s6"><span class="num">6.</span> Ownership</h2>
+  <h2 id="c22"><span class="num">22</span> Chargebacks</h2>
   <ol class="clauses">
-    <li>Once the Customer's final build payment clears, the design and content created for the Site become the Customer's to keep and use.</li>
-    <li>The Domain becomes fully the Customer's to control once the Year One Fee is paid and the account login is handed over (clause 4).</li>
-    <li>Where the Customer holds the Care Plan, Larkwell hosts the Site to enable fast updates. Hosting does not transfer ownership; the Site remains the Customer's at all times. If the Customer leaves or cancels, Larkwell provides a full copy of the Site files and hosting login within a reasonable time.</li>
-    <li>General-purpose code, templates, or components Larkwell reuses across multiple client projects remain Larkwell's own tools and are not assigned to the Customer, without affecting the Customer's ownership of their finished Site.</li>
+    <li>If you believe a charge is incorrect, contact us first at <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a>. We will investigate and respond within 5 Business Days.</li>
+    <li>Raising a chargeback with your bank or card issuer does not affect your rights under the ACL, and nothing in this clause prevents you from doing so.</li>
+    <li>If a chargeback is initiated and later resolved in our favour, you must pay any fee charged to us by the payment processor in connection with it, up to a maximum of $50.</li>
+    <li>Where a chargeback is made in respect of a Site that is live, we may suspend hosting of that Site under clause 23.4 until the matter is resolved.</li>
   </ol>
 
-  <h2 id="s7"><span class="num">7.</span> Account credentials</h2>
-  <p>Once any account login (registrar, hosting, or otherwise) is handed over to the Customer, keeping those credentials secure is the Customer's sole responsibility. Larkwell is not liable for loss or damage arising from credentials being shared, lost, or left unsecured after handover.</p>
-
-  <h2 id="s8"><span class="num">8.</span> Timeframes</h2>
-  <p>Builds are completed within 3 days of Larkwell receiving the Customer's business details and content, unless a different timeline was agreed. In the rare event of illness or an unforeseen circumstance on Larkwell's side, the Customer will be told promptly and offered a revised timeframe or a full refund of any amount already paid.</p>
-
-  <h2 id="s9"><span class="num">9.</span> The Care Plan</h2>
+  <h2 id="c23"><span class="num">23</span> Termination</h2>
   <ol class="clauses">
-    <li>The Care Plan is billed monthly at the price shown on Larkwell's pricing page.</li>
-    <li>It may be cancelled at any time, with no exit fee, effective at the end of the current billing period.</li>
-    <li>It covers hosting and small updates (such as prices, hours, or photos) at Larkwell's discretion; larger requests may be quoted separately.</li>
-    <li>The Care Plan does <strong>not</strong> include managing or renewing the Domain, which after Year One is always the Customer's own responsibility (clause 4).</li>
+    <li>Either party may terminate this Agreement immediately by written notice if the other party breaches a material term and fails to remedy that breach within <strong>14 days</strong> of being asked in writing to do so.</li>
+    <li>Either party may terminate immediately if the other becomes insolvent, has an administrator or liquidator appointed, or becomes bankrupt.</li>
+    <li>You may cancel an Order before delivery under clause 21.3, and may cancel the Care Plan under clause 12.4.</li>
+    <li>We may suspend hosting of a live Site only where: fees are more than 30 days overdue and we have given you 14 days' written notice; the Site breaches clause 26; or we are required to do so by law or by a third-party provider. We will restore the Site promptly once the cause is resolved.</li>
+    <li>On termination, you must pay for services performed up to the date of termination, and we must refund amounts paid for services not yet performed.</li>
+    <li>If you have paid your final build payment, termination does not affect the assignment in clause 13.3.</li>
+    <li>Within 14 days of termination we will provide you with a copy of the Site files and any account credentials that are yours.</li>
+    <li>Clauses 13, 14, 15, 18, 19, 20, 24, 25, 28 and 30 survive termination.</li>
   </ol>
 
-  <h2 id="s10"><span class="num">10.</span> Refunds</h2>
-  <p>Because each Site is built specifically for the Customer's business, one-off build payments are generally non-refundable once work has started, except where required by the ACL. If the Customer is not satisfied with their Preview, they are free to walk away before paying, at no cost. Care Plan payments already processed for a billing period are not refunded for partial months. Domain invoices, once the Domain has been registered on the Customer's behalf, reflect a real third-party cost already incurred and are not refundable.</p>
-
-  <h2 id="s11"><span class="num">11.</span> GST</h2>
-  <p>Larkwell is not currently registered for GST. Prices and invoices issued under this Agreement do not include a GST component. Should this change, tax treatment will be handled and disclosed as required by law at that time.</p>
-
-  <h2 id="s12"><span class="num">12.</span> Liability</h2>
+  <h2 id="c24"><span class="num">24</span> Confidentiality</h2>
   <ol class="clauses">
-    <li>Larkwell provides the Services with due care and skill.</li>
-    <li>To the extent permitted by law, Larkwell is not liable for indirect or consequential loss, or for loss arising from the acts, omissions, or outages of third parties (including a domain registrar, hosting provider, or payment processor such as Stripe), or from content or information supplied by the Customer.</li>
-    <li><strong>Nothing in this Agreement excludes, restricts, or modifies any consumer guarantee, right, or remedy available to the Customer under the ACL that cannot lawfully be excluded.</strong> Where Larkwell is permitted by law to limit its liability, that liability is limited, at Larkwell's option, to re-supplying the Services or paying the cost of having the Services re-supplied.</li>
+    <li>Each party must keep the other's confidential information confidential, and must use it only for the purposes of this Agreement.</li>
+    <li>Confidential information does not include information that is public through no fault of the receiving party, was already lawfully known, or is independently developed.</li>
+    <li>Either party may disclose confidential information where required by law, or to its professional advisers on a confidential basis.</li>
+    <li>This clause continues for 3 years after this Agreement ends.</li>
   </ol>
 
-  <h2 id="s13"><span class="num">13.</span> General provisions</h2>
+  <h2 id="c25"><span class="num">25</span> Privacy</h2>
   <ol class="clauses">
-    <li><span class="term">Severability.</span> If any part of this Agreement is found unenforceable, the remainder continues in full force.</li>
-    <li><span class="term">Entire agreement.</span> This Agreement, together with any specific order, quote, or invoice, is the entire agreement between the parties regarding the Services, and supersedes prior discussions on the same subject.</li>
-    <li><span class="term">Changes.</span> Larkwell may update this Agreement from time to time. The version in effect at the time the Customer agreed to it applies to their engagement; material changes affecting an active engagement will be communicated to the Customer.</li>
-    <li><span class="term">Notices.</span> Notices under this Agreement may be given by email to the address either party has on record for the other.</li>
-    <li><span class="term">Governing law.</span> This Agreement is governed by the law of Western Australia, Australia, and the parties submit to the non-exclusive jurisdiction of its courts.</li>
+    <li>We collect personal information you give us, such as your name, business name, email address, phone number and, where relevant, your ABN or ACN.</li>
+    <li>We use that information only to prepare your Preview, build and support your Site, invoice you, and respond to you.</li>
+    <li>We disclose personal information only to service providers we use to deliver the services, such as our payment processor, hosting provider and form handler, and only to the extent needed.</li>
+    <li>We do not sell your personal information, and we do not disclose it to third parties for their own marketing.</li>
+    <li>We take reasonable steps to protect personal information from misuse, loss and unauthorised access, and we destroy or de-identify it when it is no longer needed.</li>
+    <li>You may ask us for a copy of the personal information we hold about you, or ask us to correct it, by writing to <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a>. We will respond within 30 days.</li>
+    <li>If you send us personal information about other people, such as your own customers, you are responsible for having the right to do so.</li>
+    <li>If we become aware of a data breach that is likely to cause you serious harm, we will notify you promptly.</li>
   </ol>
 
-  <div class="accept">
-    <h2 id="s14"><span class="num">14.</span> Acceptance</h2>
-    <p>The Customer accepts this Agreement by ticking the "I've read and accept the Terms &amp; Conditions" checkbox at the point of submitting a Preview request or making a payment through the Larkwell website. No separate signed copy is required for that acceptance to take effect.</p>
-  </div>
+  <h2 id="c26"><span class="num">26</span> Acceptable use</h2>
+  <ol class="clauses">
+    <li>You must not use the Site, or ask us to build or host content, that is unlawful, defamatory, infringing, misleading or deceptive, that harasses or vilifies any person, or that relates to material we are not lawfully permitted to host.</li>
+    <li>We may decline to build or host content that we reasonably consider falls within clause 26.1. If we decline before starting work, you owe us nothing.</li>
+    <li>If we decline after starting work, clause 21.3 applies.</li>
+  </ol>
 
-  <h2 id="s15"><span class="num">15.</span> Contact</h2>
-  <p>Questions about this Agreement can be sent to <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a>.</p>
+  <h2 id="c27"><span class="num">27</span> Events outside our control</h2>
+  <ol class="clauses">
+    <li>Neither party is liable for failing to perform an obligation, other than an obligation to pay money, to the extent that failure is caused by an event beyond its reasonable control, including natural disaster, fire, flood, pandemic, industrial action, war, act of terrorism, failure of telecommunications or power infrastructure, or the failure of a third-party service described in clause 16.</li>
+    <li>Serious illness or injury affecting Larkwell is such an event. We will tell you promptly and offer you either a revised timeframe or a full refund of amounts paid for work not yet performed.</li>
+    <li>If the event continues for more than 30 days, either party may terminate this Agreement by written notice, and clause 23.5 applies.</li>
+  </ol>
+
+  <h2 id="c28"><span class="num">28</span> Resolving disputes</h2>
+  <ol class="clauses">
+    <li>If a dispute arises, the party raising it must notify the other in writing, setting out what the dispute is about and what outcome they want.</li>
+    <li>The parties must then genuinely try to resolve the dispute by discussion within 14 days of that notice.</li>
+    <li>If the dispute is not resolved, either party may refer it to mediation through a recognised mediation service in Perth, with the parties sharing the mediator's costs equally.</li>
+    <li>This clause does not prevent either party from seeking urgent interlocutory relief, from complaining to a regulator, or from applying to a court or tribunal. In particular, nothing in this clause prevents you from applying to the Magistrates Court of Western Australia or from contacting Consumer Protection WA or the ACCC.</li>
+  </ol>
+
+  <h2 id="c29"><span class="num">29</span> Changes to this Agreement</h2>
+  <ol class="clauses">
+    <li>We may update this Agreement from time to time. Updates apply only to Orders placed after the update takes effect, and never retrospectively to an Order you have already placed.</li>
+    <li>For an ongoing Care Plan, we will give you at least <strong>30 days'</strong> written notice of any change to this Agreement or to the Care Plan price.</li>
+    <li>If you do not accept a change notified under clause 29.2, you may cancel the Care Plan before the change takes effect, at no cost, and the change will not apply to you.</li>
+    <li>Every version of this Agreement is recorded in the version history at the foot of this document.</li>
+  </ol>
+
+  <h2 id="c30"><span class="num">30</span> General</h2>
+  <ol class="clauses">
+    <li><strong>Governing law.</strong> This Agreement is governed by the law of Western Australia. The parties submit to the non-exclusive jurisdiction of the courts of Western Australia and of courts able to hear appeals from them.</li>
+    <li><strong>Entire agreement.</strong> This Agreement and the Order are the entire agreement between the parties about their subject matter. This clause does not exclude liability for any statement made fraudulently, or any liability under the ACL.</li>
+    <li><strong>Severability.</strong> If a provision is unenforceable, it is severed and the rest of the Agreement continues.</li>
+    <li><strong>Waiver.</strong> A failure to enforce a right is not a waiver of it.</li>
+    <li><strong>Assignment.</strong> Neither party may assign this Agreement without the other's written consent, which must not be unreasonably withheld. We may assign it as part of a sale of our business, on written notice to you.</li>
+    <li><strong>Relationship.</strong> The parties are independent contractors. Nothing creates a partnership, employment or agency relationship.</li>
+    <li><strong>Notices.</strong> Notices may be given by email to the address each party has on record for the other, and are taken to be received on the next Business Day after sending, unless the sender receives a delivery failure notification.</li>
+    <li><strong>Counterparts and electronic acceptance.</strong> This Agreement may be accepted electronically, and that acceptance has the same effect as a signature.</li>
+  </ol>
+
+  <section class="accept">
+    <h2 id="c31"><span class="num">31</span> Acceptance</h2>
+    <ol class="clauses">
+      <li>You accept this Agreement by ticking the box marked "I've read and accept the Terms &amp; Conditions" when you submit a Preview request or make a payment on our website.</li>
+      <li>The box is not pre-ticked. You must tick it yourself.</li>
+      <li>We record the version of this Agreement you accepted, and the date and time you accepted it.</li>
+      <li>If you would prefer a countersigned paper copy, email us and we will provide one.</li>
+    </ol>
+  </section>
+
+  <section class="execution">
+    <h3>Execution by Larkwell</h3>
+    <p>Larkwell executes this document for the purposes of clause 13.3, so that the assignment of copyright in the Deliverables is an assignment in writing signed by or on behalf of the assignor within the meaning of section 196(3) of the <em>Copyright Act 1968</em> (Cth), and for the purposes of the moral rights consent in clause 14.</p>
+    <div class="sig">
+      <b>Signed for and on behalf of Larkwell</b>
+      Capacity: Sole trader<br>
+      Date: 18 July 2026
+    </div>
+  </section>
 
   <div class="doc-foot">
-    <p>This document is a draft prepared for Larkwell and does not constitute legal advice. It has not been reviewed by a qualified Australian legal practitioner.</p>
+    <h3 style="font-family:var(--serif);font-size:1rem;margin-bottom:10px;color:var(--ink)">Version history</h3>
+    <div class="history">
+      <div class="row"><span><b>2.0</b></span><span>18 July 2026</span><span>Full rewrite. Domain registered in customer's name from the outset; express copyright assignment and moral rights consent; ACL section 64A limitation; mutual termination and variation rights; delay, chargeback, confidentiality, privacy, force majeure and dispute clauses added.</span></div>
+      <div class="row"><span><b>1.1</b></span><span>July 2026</span><span>Formal restructure of the July 2026 terms.</span></div>
+      <div class="row"><span><b>1.0</b></span><span>7 July 2026</span><span>First published terms.</span></div>
+    </div>
+
     <div class="lawyer-list">
-      <h3>Before this goes live, a lawyer should specifically confirm:</h3>
+      <h3>Before you rely on this, ask a lawyer to confirm</h3>
       <ul>
-        <li>The 20% Year One Fee disclosure and refund wording (clauses 4 &amp; 10) meets ACL disclosure standards for the Customer's jurisdiction.</li>
-        <li>The Domain non-payment / lapse clause (clause 4.7) is enforceable as drafted.</li>
-        <li>The liability limitation (clause 12) is appropriate for Larkwell's actual business structure and insurance position.</li>
-        <li>Whether handling ABN/ACN data (clause 4.4) triggers any additional privacy obligations.</li>
+        <li>Whether website design and build services for a business are "not of a kind ordinarily acquired for personal, domestic or household use" so that the section 64A limitation in clause 19.2 is available, and whether it would be fair and reasonable for you to rely on it.</li>
+        <li>Whether the liability cap in clause 19.3 is proportionate enough to survive the unfair contract terms regime, and whether it matches your insurance position. You should confirm whether you hold professional indemnity insurance and at what limit.</li>
+        <li>Whether the execution block is sufficient to make clause 13.3 an effective assignment under section 196(3) of the <em>Copyright Act 1968</em> (Cth), or whether a separate signed assignment should be issued on final payment.</li>
+        <li>Whether the "3 Business Days from the Start Date" commitment in clause 7.1 is supported by reasonable grounds for the purposes of section 4 of the ACL, and what records you should keep to evidence that.</li>
+        <li>Whether any "was / now" pricing on the website reflects a price genuinely charged for a reasonable period, following <em>ACCC v Coles Supermarkets Australia Pty Ltd</em>.</li>
+        <li>Whether your handling of ABN, ACN and customer personal information triggers obligations despite the small business exemption, given the statutory tort for serious invasions of privacy in force since 10 June 2025.</li>
+        <li>Whether you should register a business name and display your ABN on the website and on invoices.</li>
       </ul>
     </div>
-    <a class="back-top" href="#top">&#8593; Back to top</a>
+
+    <p style="margin-top:18px">Questions about this Agreement: <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a></p>
+    <a class="back-top" href="#top">↑ Back to top</a>
   </div>
+
 </main>
-<script>
-  document.getElementById('tdate').textContent = new Date().toLocaleDateString('en-AU', { year:'numeric', month:'long', day:'numeric' });
-</script>
 </body>
 </html>
