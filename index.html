@@ -1309,7 +1309,7 @@ body.locked{overflow:hidden}
 #s-tier-ultimate .s-menu .s-item .pr{font-family:var(--s-body);font-weight:700;color:var(--s-accent);font-size:.98rem}
 /* shop cards: product art on a latte plinth, cart buttons on one baseline */
 #s-tier-ultimate .cl-product{display:flex;flex-direction:column}
-#s-tier-ultimate .cl-art{display:flex;align-items:flex-end;justify-content:center;background:#EAD9BD;border-radius:8px;padding:18px 0 0;margin-bottom:16px;min-height:104px}
+#s-tier-ultimate .cl-art{background-color:#EAD9BD;background-size:cover;background-position:center;background-repeat:no-repeat;border-radius:10px;margin-bottom:16px;height:172px}
 #s-tier-ultimate .cl-product .s-price{margin-bottom:16px}
 #s-tier-ultimate .cl-cart{margin-top:auto;align-self:flex-start;display:inline-block}
 /* blog cards: dated like a real journal */
@@ -3387,27 +3387,21 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <h2 class="s-h2">Take Crema Lane home</h2>
     <div class="s-grid3">
       <div class="s-card cl-product">
-        <div class="cl-art" aria-hidden="true">
-          <svg viewBox="0 0 72 84" width="62" height="72"><path d="M14 20 Q14 10 24 9 L48 9 Q58 10 58 20 L58 70 Q58 78 50 78 L22 78 Q14 78 14 70 Z" fill="#43301E"/><path d="M24 9 L48 9 L46 3 Q45 0 41 0 L31 0 Q27 0 26 3 Z" fill="#2B1D10"/><rect x="20" y="30" width="32" height="26" rx="3" fill="#F3E7D3"/><text x="36" y="41" text-anchor="middle" style="font:700 7px 'Bricolage Grotesque',sans-serif" fill="#43301E">CREMA LANE</text><text x="36" y="51" text-anchor="middle" style="font:600 6px Karla,sans-serif" fill="#C25E33">HOUSE BLEND</text><circle cx="36" cy="66" r="5" fill="#D39B5E"/><path d="M36 62 Q38 66 36 70 Q34 66 36 62" fill="#43301E"/></svg>
-        </div>
+        <div class="cl-art" aria-hidden="true" style="background-image:url('assets/img/crema-house.jpg')"></div>
         <h3>House Blend, 250g</h3>
         <p>Our everyday roast, balanced and smooth.</p>
         <div class="s-price" style="margin-top:12px">$16</div>
         <a href="#" class="s-cta cl-cart" data-demo="add the item to a real shopping cart and take a secure payment at checkout.">Add to cart</a>
       </div>
       <div class="s-card cl-product">
-        <div class="cl-art" aria-hidden="true">
-          <svg viewBox="0 0 72 84" width="62" height="72"><path d="M14 20 Q14 10 24 9 L48 9 Q58 10 58 20 L58 70 Q58 78 50 78 L22 78 Q14 78 14 70 Z" fill="#6F6B3A"/><path d="M24 9 L48 9 L46 3 Q45 0 41 0 L31 0 Q27 0 26 3 Z" fill="#4C491F"/><rect x="20" y="30" width="32" height="26" rx="3" fill="#F3E7D3"/><text x="36" y="41" text-anchor="middle" style="font:700 7px 'Bricolage Grotesque',sans-serif" fill="#43301E">CREMA LANE</text><text x="36" y="51" text-anchor="middle" style="font:600 6px Karla,sans-serif" fill="#6F6B3A">SINGLE ORIGIN</text><circle cx="36" cy="66" r="5" fill="#D39B5E"/><path d="M36 62 Q38 66 36 70 Q34 66 36 62" fill="#43301E"/></svg>
-        </div>
+        <div class="cl-art" aria-hidden="true" style="background-image:url('assets/img/crema-single.jpg')"></div>
         <h3>Single Origin, 250g</h3>
         <p>Rotating small-batch lot, a new one every month.</p>
         <div class="s-price" style="margin-top:12px">$21</div>
         <a href="#" class="s-cta cl-cart" data-demo="add the item to a real shopping cart and take a secure payment at checkout.">Add to cart</a>
       </div>
       <div class="s-card cl-product">
-        <div class="cl-art" aria-hidden="true">
-          <svg viewBox="0 0 72 84" width="62" height="72"><path d="M16 26 L56 26 L52 74 Q51 80 45 80 L27 80 Q21 80 20 74 Z" fill="#F3E7D3" stroke="#43301E" stroke-width="2.5"/><path d="M56 34 L60 34 Q68 34 68 44 Q68 54 60 54 L53 54" fill="none" stroke="#43301E" stroke-width="2.5" stroke-linecap="round"/><path d="M24 40 Q30 36 36 40 T48 40" stroke="#C25E33" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="36" cy="58" r="7" fill="#D39B5E"/><path d="M36 52 Q38.5 58 36 64 Q33.5 58 36 52" fill="#43301E"/></svg>
-        </div>
+        <div class="cl-art" aria-hidden="true" style="background-image:url('assets/img/crema-mug.jpg')"></div>
         <h3>Crema Lane Mug</h3>
         <p>Stoneware, holds a proper flat white.</p>
         <div class="s-price" style="margin-top:12px">$28</div>
@@ -3820,7 +3814,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
      promo period changes, e.g. new Date('2026-09-01T23:59:59+08:00'). Once it
      passes, the banner hides itself; remove the launch pricing on the tier
      cards by hand at that point (swap tprice-was/tprice back to full price). */
-  var LAUNCH_OFFER_END = new Date('2026-08-15T23:59:59+08:00');
+  var LAUNCH_OFFER_END = new Date('2026-08-25T23:59:59+08:00');
   var launchOffer = document.getElementById('launchOffer');
   if(launchOffer){
     var lcD = document.getElementById('lcD');
