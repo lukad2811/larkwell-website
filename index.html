@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
 <script>document.documentElement.classList.add('js');</script>
 <title>Larkwell · Websites for Local Businesses in Perth, WA</title>
-<meta name="description" content="Larkwell builds clean, modern websites for local businesses in Perth and across Australia. Live within 3 days, looks great on phones, and the site is yours to keep. From $489.">
+<meta name="description" content="Larkwell builds clean, modern websites for local businesses in Perth and across Australia. Live within a week, looks great on phones, and the site is yours to keep. From $489.">
 <link rel="canonical" href="https://www.larkwell.com.au/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Larkwell">
@@ -16,7 +17,7 @@
 <meta property="og:site_name" content="Larkwell">
 <meta property="og:locale" content="en_AU">
 <meta property="og:title" content="Larkwell · Websites for Local Businesses in Perth, WA">
-<meta property="og:description" content="Clean, modern websites for local businesses. Live within 3 days, looks great on phones, and the site is yours to keep. From $489.">
+<meta property="og:description" content="Clean, modern websites for local businesses. Live within a week, looks great on phones, and the site is yours to keep. From $489.">
 <meta property="og:url" content="https://www.larkwell.com.au/">
 <!-- Social preview card. Design source is /assets/og-image.svg, exported to
      /og-image.png (1200x630, verified) since social platforms need a PNG/JPG,
@@ -29,7 +30,7 @@
 <meta name="twitter:image" content="https://www.larkwell.com.au/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Larkwell · Websites for Local Businesses in Perth, WA">
-<meta name="twitter:description" content="Clean, modern websites for local businesses. Live within 3 days, looks great on phones, and yours to keep. From $489.">
+<meta name="twitter:description" content="Clean, modern websites for local businesses. Live within a week, looks great on phones, and yours to keep. From $489.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <!-- apple-touch-icon: iOS home-screen icons want a 180x180 PNG (iOS ignores SVG
      here). Kept on the SVG so there's no broken link; generate
@@ -54,7 +55,7 @@
       "@type": "ProfessionalService",
       "@id": "https://www.larkwell.com.au/#business",
       "name": "Larkwell",
-      "description": "Larkwell builds clean, modern websites for local businesses in Perth and across Australia. Live within 3 days, mobile-friendly, and the site is yours to keep.",
+      "description": "Larkwell builds clean, modern websites for local businesses in Perth and across Australia. Live within a week, mobile-friendly, and the site is yours to keep.",
       "url": "https://www.larkwell.com.au/",
       "logo": "https://www.larkwell.com.au/assets/larkwell-logo.svg",
       "image": "https://www.larkwell.com.au/og-image.png",
@@ -73,7 +74,7 @@
       },
       "serviceType": "Website design and development for small businesses",
       "makesOffer": [
-        { "@type": "Offer", "name": "Launch", "price": "489", "priceCurrency": "AUD", "description": "A clean one-page website, live within 3 days." },
+        { "@type": "Offer", "name": "Launch", "price": "489", "priceCurrency": "AUD", "description": "A clean one-page website, live within a week." },
         { "@type": "Offer", "name": "Grow", "price": "839", "priceCurrency": "AUD", "description": "A multi-section website with the pages a growing local business needs." },
         { "@type": "Offer", "name": "Thrive", "price": "1259", "priceCurrency": "AUD", "description": "A larger site with booking, gallery, reviews and custom sections." },
         { "@type": "Offer", "name": "Everything", "price": "2099", "priceCurrency": "AUD", "description": "The full build: online shop, blog, multiple locations and more." }
@@ -92,7 +93,7 @@
       "@id": "https://www.larkwell.com.au/#faq",
       "mainEntity": [
         { "@type": "Question", "name": "How and when do I get my free preview?", "acceptedAnswer": { "@type": "Answer", "text": "Fill in the form with no package selected. I'll build your preview and email you a working link, usually within 1 business day." } },
-        { "@type": "Question", "name": "How long does it take?", "acceptedAnswer": { "@type": "Answer", "text": "Within 3 days, guaranteed, unless you choose no rush. The main thing that slows a build down is waiting on content from your side." } },
+        { "@type": "Question", "name": "How long does it take?", "acceptedAnswer": { "@type": "Answer", "text": "Within a week, guaranteed, unless you choose no rush. The main thing that slows a build down is waiting on content from your side." } },
         { "@type": "Question", "name": "Do I have to pay monthly?", "acceptedAnswer": { "@type": "Answer", "text": "No. The build is a one-off cost and the care plan is optional. Without it, you get the website file and putting it online is up to you." } },
         { "@type": "Question", "name": "Do I actually own the website?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Your domain is registered in your name from day one, and your design and content become yours once final payment clears." } },
         { "@type": "Question", "name": "Are there any ongoing costs?", "acceptedAnswer": { "@type": "Answer", "text": "The build is a one-off. After that, your domain renews yearly (usually under $30), and hosting is included in the optional $49/month care plan." } }
@@ -152,7 +153,7 @@
 /* clip, not hidden: hidden would make html a scroll container and can break
    the sticky header; clip only cuts the sideways spill from .rv reveal
    transforms (.care/.founder translateX) that phones showed as a 24px wiggle */
-html{scroll-behavior:smooth;background:var(--bone);overflow-x:clip}
+html{scroll-behavior:smooth;background:var(--bone);overflow-x:clip;color-scheme:only light}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
   font-family:var(--body);
@@ -772,6 +773,8 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
    they were the same weight and near the same size as the label, so the longer
    hint text won the eye. Same restraint the payment panel already used. */
 .pf-hint{color:rgba(255,255,255,.7);font-size:.78rem;font-weight:500;line-height:1.5;margin:-4px 0 0}
+.pf-bookemail{margin:12px 0 2px;display:flex;flex-direction:column;gap:8px}
+.pf-bookemail[hidden]{display:none}
 /* oversized-file notice: a warm red distinct from the gold/coral already doing
    pricing and emphasis duty in this form, so it reads unambiguously as a problem */
 .pf-filewarn{color:#FFB4A0;font-size:.78rem;font-weight:700;line-height:1.5;margin:-4px 0 0}
@@ -1565,13 +1568,13 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
       <span class="eyebrow">Websites for local businesses</span>
       <h1>A website worth <span class="hl">showing off.</span></h1>
       <p class="slogan">Small business websites, done properly.</p>
-      <p class="lead">Think cafes, bakeries, tradies, salons, medical centres and shops. Tell me about your business and I'll build the site, live within 3 days, guaranteed.</p>
+      <p class="lead">Think cafes, bakeries, tradies, salons, medical centres and shops. Tell me about your business and I'll build the site, live within a week, guaranteed.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#contact">Get a free preview</a>
         <a class="btn btn-ghost" href="#work">See sample sites</a>
       </div>
       <div class="chips">
-        <span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#D9B36A" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="8" r="3" fill="#F2E2B3"/></svg> Live within 3 days</span>
+        <span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#D9B36A" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="8" r="3" fill="#F2E2B3"/></svg> Live within a week</span>
         <span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="4" y="1.5" width="8" height="13" rx="2" stroke="#D9B36A" stroke-width="1.6"/><circle cx="8" cy="11.5" r="1" fill="#F2E2B3"/></svg> Looks sharp on phones</span>
           <!-- PERSUASION: reciprocity + risk reversal, folded into the scannable chip row instead of its own paragraph -->
           <span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7" stroke="#D9B36A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Free preview, pay only if you love it</span>
@@ -1671,7 +1674,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
         <span class="num">STEP 05</span>
         <svg aria-hidden="true" class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 3v10M8 9l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <h3>I publish it, live for the world</h3>
-        <p>I connect your site to hosting and point your domain at it, so anyone who types it in can find you, day or night, anywhere in the world. You don't touch anything technical, I handle all of it, and it happens within 3 days of me having what I need from you, guaranteed.</p>
+        <p>I connect your site to hosting and point your domain at it, so anyone who types it in can find you, day or night, anywhere in the world. You don't touch anything technical, I handle all of it, and it happens within a week of me having what I need from you, guaranteed.</p>
       </div>
     </div>
   </div>
@@ -2156,7 +2159,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
         </div>
         <div class="addon-card">
           <h4>Rush delivery</h4>
-          <p>Every package is already live within 3 days. Need it in hours instead? I clear space and prioritise your build above everything else in the queue.</p>
+          <p>Every package is already live within a week. Need it in 3 days instead? I clear space and prioritise your build above everything else in the queue.</p>
           <span class="addon-price">+$199</span>
         </div>
       </div>
@@ -2187,8 +2190,8 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
       </div>
       <div class="tcard rv">
         <svg aria-hidden="true" class="ti" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 9-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <h3>Live within 3 days</h3>
-        <p>Every site is live within 3 days of getting your content, guaranteed. The slow part is you sending photos, not me building.</p>
+        <h3>Live within a week</h3>
+        <p>Every site is live within a week of getting your content, guaranteed. The slow part is you sending photos, not me building.</p>
       </div>
       <div class="tcard rv">
         <svg aria-hidden="true" class="ti" viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -2239,7 +2242,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     </div>
     <div class="faq">
       <div class="q rv"><button aria-expanded="false">How and when do I get my free preview?<span class="pm"></span></button><div class="a"><p>Fill in the form below with no package selected, that's it. I'll build your preview and email you a working link, usually within 1 business day.</p></div></div>
-      <div class="q rv"><button aria-expanded="false">How long does it take?<span class="pm"></span></button><div class="a"><p>Within 3 days, guaranteed, unless you choose no rush. Once you send me your details and photos, the build itself is quick. The main thing that slows it down is waiting on content from your side, so the more you have ready, the faster it goes.</p></div></div>
+      <div class="q rv"><button aria-expanded="false">How long does it take?<span class="pm"></span></button><div class="a"><p>Within a week, guaranteed, unless you choose no rush. Once you send me your details and photos, the build itself is quick. The main thing that slows it down is waiting on content from your side, so the more you have ready, the faster it goes.</p></div></div>
       <div class="q rv"><button aria-expanded="false">Do I have to pay monthly?<span class="pm"></span></button><div class="a"><p>No. The build is a one-off cost, and the care plan is completely optional. Without it, I don't host your site: you get the website file, the same one you saw in your preview, and putting it online is up to you. I can still point you to a simple, often free, way to do that.</p></div></div>
       <div class="q rv"><button aria-expanded="false">What do I need to give you?<span class="pm"></span></button><div class="a"><p>Your business name, what you offer, your prices if you list them, your contact details, and any photos you have. If you are missing something, I will help you sort it. No photos yet? I can use clean, tasteful placeholders until you have your own.</p></div></div>
       <div class="q rv"><button aria-expanded="false">Do I actually own the website?<span class="pm"></span></button><div class="a"><p><strong>Yes.</strong> Your domain is registered in your name from day one. Your design and content become yours once final payment clears. On the care plan, I host the site for quick updates, but hosting isn't ownership, if you ever leave, you get a full copy of the site plus your domain, no lock-in. Full detail in the <a href="#" data-open-terms>terms and conditions</a>.</p></div></div>
@@ -2377,6 +2380,11 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
         </div>
         <p class="pf-hint" id="featuresHint">Pick what you want and I'll match you to a package.</p>
         <p class="pf-hint" id="bookingSetupNote" hidden>Here's how online booking works: your site gets a booking form where customers pick a day, a rough time and what they're after. <strong>Every request lands straight in your email inbox</strong> with their contact details, and you reply to confirm the time, so you stay in full control of your calendar. No outside booking service, no extra accounts, no monthly fees. <strong>With the care plan, I set the whole thing up for you.</strong> Without it, you host the site yourself, so I'll send you simple step-by-step instructions for putting it live on Netlify (free) and switching on the booking emails, and I'm an email away if you get stuck.</p>
+        <div class="pf-bookemail" id="bookingEmailWrap" hidden>
+          <label class="pf-label" for="bookingEmailField">Which email should booking requests be sent to?</label>
+          <input type="email" name="booking_email" id="bookingEmailField" placeholder="you@yourbusiness.com.au" autocomplete="email" aria-describedby="bookingEmailHint">
+          <p class="pf-hint" id="bookingEmailHint">Every booking a customer submits will land in this inbox, so make sure it's one you check. You can change it any time.</p>
+        </div>
 
         <div id="shopPaymentPanel" hidden style="background:var(--bone-2);border-radius:14px;padding:20px 20px 22px;margin:4px 0 18px">
           <strong>Selling online needs a few extra things from you.</strong>
@@ -2416,11 +2424,11 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
         <p class="pf-hint">Prices above already include the 30% launch offer, no code needed.</p>
         <span class="pf-label">How soon do you need it live?</span>
         <div class="pf-pillgroup" role="radiogroup" aria-label="How soon do you need it live?" id="timelineGroup">
-          <label class="pf-pill" id="timelineAsapPill"><input type="radio" name="timeline" value="asap">ASAP, within a few hours <span class="pf-price" id="timelineAsapBadge">· +$199</span><span class="pf-tierhint" id="timelineAsapHint"></span></label>
-          <label class="pf-pill"><input type="radio" name="timeline" value="standard">Standard, live within 3 days</label>
-          <label class="pf-pill" id="timelineWeekPill"><input type="radio" name="timeline" value="week">No rush, within a week <span class="pf-tierhint" id="timelineWeekHint"></span></label>
+          <label class="pf-pill" id="timelineAsapPill"><input type="radio" name="timeline" value="asap">ASAP, within 3 days <span class="pf-price" id="timelineAsapBadge">· +$199</span><span class="pf-tierhint" id="timelineAsapHint"></span></label>
+          <label class="pf-pill"><input type="radio" name="timeline" value="standard">Standard, live within a week</label>
+          <label class="pf-pill" id="timelineWeekPill"><input type="radio" name="timeline" value="week">No rush, within 2 weeks <span class="pf-tierhint" id="timelineWeekHint"></span></label>
         </div>
-        <p class="pf-hint">Standard is the same 3-day guarantee every package gets. ASAP means I clear space and turn it around in hours, that's what the rush fee covers. No rush gives me breathing room to schedule around everything else. Both need a package picked first, they don't apply to a free preview.</p>
+        <p class="pf-hint">Standard is the same one-week guarantee every package gets. ASAP means I clear space and turn it around in 3 days, that's what the rush fee covers. No rush gives me breathing room to schedule around everything else. Both need a package picked first, they don't apply to a free preview.</p>
         <label class="care-check disabled" id="careCheckWrap">
           <input type="checkbox" name="care_plan" id="careCheck" value="yes" disabled>
           <span id="careCheckText"><strong>Add the care plan</strong> for $49/month. I'll host the site and handle small updates for you. Cancel anytime. <span class="hint">Pick a package above to add it.</span></span>
@@ -2470,7 +2478,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <div class="sec-head rv" style="margin-bottom:52px;text-align:center;max-width:none">
       <span class="eyebrow">Already seen your preview?</span>
       <h2>Ready to go ahead?</h2>
-      <p class="lead" style="margin-inline:auto">Pick the package we agreed on and pay securely through Stripe. Not sure which one? Check the email I sent you, or get in touch first. Every build is live within 3 days, guaranteed.</p>
+      <p class="lead" style="margin-inline:auto">Pick the package we agreed on and pay securely through Stripe. Not sure which one? Check the email I sent you, or get in touch first. Every build is live within a week, guaranteed.</p>
     </div>
     <!-- Stripe returns here via success_url/cancel_url in the checkout function
          (?checkout=success or ?checkout=cancelled, both #pay), but nothing read
@@ -3584,8 +3592,8 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     <p><strong>6.2</strong> If we become registered for GST, prices for Orders placed after the date of registration will be stated inclusive or exclusive of GST as required by law. Registration will not increase the price of an Order you have already placed.</p>
 
     <h2>7. Timeframes</h2>
-    <p><strong>7.1</strong> We will deliver your Site within <strong>3 Business Days of the Start Date</strong>, unless your Order specifies a different timeframe or you have chosen a no-rush option.</p>
-    <p><strong>7.2</strong> The Start Date does not occur until we have received everything listed in clause 8.1. Time we spend waiting for material from you does not count towards the 3 Business Days.</p>
+    <p><strong>7.1</strong> We will deliver your Site within <strong>5 Business Days of the Start Date</strong>, unless your Order specifies a different timeframe or you have chosen a no-rush option.</p>
+    <p><strong>7.2</strong> The Start Date does not occur until we have received everything listed in clause 8.1. Time we spend waiting for material from you does not count towards the 5 Business Days.</p>
     <p><strong>7.3</strong> If we fail to deliver within that period for a reason within our control, you may choose either a revised delivery date agreed with us, or a full refund of amounts you have paid for the affected work. This is in addition to, and does not limit, any rights you have under the ACL.</p>
     <p><strong>7.4</strong> Clause 27 applies where delivery is delayed by an event outside our control.</p>
 
@@ -4619,6 +4627,8 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
      themselves, so they get step-by-step instructions for putting it on
      Netlify and switching the booking emails on */
   var bookingSetupNote = document.getElementById('bookingSetupNote');
+  var bookingEmailWrap = document.getElementById('bookingEmailWrap');
+  var bookingEmailInput = document.getElementById('bookingEmailField');
   var BOOKING_NOTE_BASE = 'Here\'s how online booking works: your site gets a booking form where customers pick a day, a rough time and what they\'re after. <strong>Every request lands straight in your email inbox</strong> with their contact details, and you reply to confirm the time, so you stay in full control of your calendar. No outside booking service, no extra accounts, no monthly fees. ';
   var BOOKING_NOTE_CARE = '<strong>You\'ve added the care plan, so I\'ll set the whole thing up for you.</strong> Booking requests will arrive in your inbox from day one, nothing for you to do.';
   var BOOKING_NOTE_NO_CARE = '<strong>With the care plan, I set the whole thing up for you.</strong> Without it, you host the site yourself, so I\'ll send you simple step-by-step instructions for putting it live on Netlify (free) and switching on the booking emails, and I\'m an email away if you get stuck.';
@@ -4629,6 +4639,9 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
       if(box.checked && box.value === 'booking') ticked = true;
     });
     bookingSetupNote.hidden = !ticked;
+    // when booking is wanted, make them tell me where the requests should land
+    if(bookingEmailWrap) bookingEmailWrap.hidden = !ticked;
+    if(bookingEmailInput){ bookingEmailInput.required = ticked; if(!ticked) bookingEmailInput.value = ''; }
     if(!ticked) return;
     var wantsCare = !!(careCheck && !careCheck.disabled && careCheck.checked);
     bookingSetupNote.innerHTML = BOOKING_NOTE_BASE + (wantsCare ? BOOKING_NOTE_CARE : BOOKING_NOTE_NO_CARE);
@@ -4638,6 +4651,7 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
     featureBoxes.forEach(function(box){
       box.addEventListener('change', syncPackageFromFeatures);
       box.addEventListener('change', syncPaymentInfoPanel);
+      box.addEventListener('change', syncBookingNote);
     });
     syncPackageFromFeatures();
     syncPaymentInfoPanel();
