@@ -568,6 +568,21 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .ptable td.yes{color:var(--coral-deep);font-weight:700}
 .ptable td.no{color:var(--ink-soft);opacity:.45}
 .ptable .addon-note{text-align:left;color:var(--ink-soft);font-style:italic;font-size:.86rem}
+/* Phones: the 4-package table is too wide to scroll comfortably (it read as
+   "cut off"), so compress it to fit the screen — every package visible at
+   once, no sideways scroll. */
+@media (max-width:600px){
+  .ptable-swipe{display:none}
+  .ptable-wrap{background:#fff}
+  .ptable{min-width:0;width:100%;table-layout:fixed;font-size:.68rem}
+  .ptable th,.ptable td{padding:11px 3px;overflow-wrap:break-word}
+  .ptable thead th{font-size:.48rem;letter-spacing:0;line-height:1.2}
+  .ptable thead th:first-child,.ptable tbody th{width:30%}
+  .ptable tbody th{font-size:.72rem;line-height:1.25;padding-left:12px;padding-right:5px}
+  .ptable thead th:not(:first-child),.ptable tbody td{width:17.5%}
+  .ptable td{line-height:1.3}
+  .ptable .addon-note{font-size:.72rem}
+}
 .addons{margin-top:44px;padding-top:36px;border-top:1px solid var(--line)}
 .addon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
 .addon-card{background:var(--bone-2);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:10px}
@@ -1311,7 +1326,7 @@ body.locked{overflow:hidden}
 #s-tier-ultimate .cl-product{display:flex;flex-direction:column}
 #s-tier-ultimate .cl-art{background-color:#EAD9BD;background-size:cover;background-position:center;background-repeat:no-repeat;border-radius:10px;margin-bottom:16px;height:172px}
 #s-tier-ultimate .cl-product .s-price{margin-bottom:16px}
-#s-tier-ultimate .cl-cart{margin-top:auto;align-self:flex-start;display:inline-block}
+#s-tier-ultimate .cl-cart{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;text-align:center}
 /* blog cards: dated like a real journal */
 #s-tier-ultimate .cl-meta{display:block;font-family:var(--s-body);font-weight:700;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--s-accent-2);margin-bottom:8px}
 #s-tier-ultimate #ultimate-visit .s-eyebrow{color:#D39B5E}
@@ -1410,6 +1425,12 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   .founder{grid-template-columns:1fr}
   .founder .pic{max-width:200px}
   .s-tiers{grid-template-columns:1fr 1fr}
+}
+@media (max-width:600px){
+  /* founder: shrink the oversized, mostly-empty logo tile and tighten padding */
+  .founder{padding:30px 24px}
+  .founder .pic{max-width:128px;border-radius:16px}
+  .founder .pic .mk{width:56%}
 }
 @media (max-width:760px){
   .nav{display:none}
