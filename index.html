@@ -1517,8 +1517,12 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   /* and a hard 46px floor on all of them, centred so the type stays put.
      42px still measured under the 44px touch minimum. */
   .vp-toggle-btn,.tile .meta .open,.swbtn,.tprev-open,.cookie-banner .btn{min-height:46px;display:inline-flex;align-items:center;justify-content:center}
-  /* footer links become full-width rows with breathing room, not 16px text */
-  .fcol a{display:inline-block;padding:.7em 0}
+  /* footer links become full-width rows with breathing room, not 16px text.
+     Must stay display:block (the base rule) so each link sits on its own line —
+     inline-block let them butt together into a run of text ("How it works
+     Sample sites Pricing FAQ"). width stays fit-content so the hover underline
+     hugs the label, not the whole column. */
+  .fcol a{display:block;padding:.55em 0;font-size:1rem}
   /* the sample sites' own buttons measured 30-42px on a phone. They are the
      work being judged, so they get the same touch floor as Larkwell's own. */
   .s-cta,.s-ghost{min-height:46px;display:inline-flex;align-items:center;justify-content:center}
