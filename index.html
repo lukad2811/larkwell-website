@@ -568,20 +568,33 @@ h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:800;letter-spacing:-.032em}
 .ptable td.yes{color:var(--coral-deep);font-weight:700}
 .ptable td.no{color:var(--ink-soft);opacity:.45}
 .ptable .addon-note{text-align:left;color:var(--ink-soft);font-style:italic;font-size:.86rem}
-/* Phones: the 4-package table is too wide to scroll comfortably (it read as
-   "cut off"), so compress it to fit the screen — every package visible at
-   once, no sideways scroll. */
+/* Phones: a 4-package table squishes if forced to fit and reads as "cut off"
+   if it scrolls. So each feature becomes its own block — feature name on top,
+   then the four packages labelled and laid out in a clean 4-up row. */
 @media (max-width:600px){
   .ptable-swipe{display:none}
-  .ptable-wrap{background:#fff}
-  .ptable{min-width:0;width:100%;table-layout:fixed;font-size:.68rem}
-  .ptable th,.ptable td{padding:11px 3px;overflow-wrap:break-word}
-  .ptable thead th{font-size:.48rem;letter-spacing:0;line-height:1.2}
-  .ptable thead th:first-child,.ptable tbody th{width:30%}
-  .ptable tbody th{font-size:.72rem;line-height:1.25;padding-left:12px;padding-right:5px}
-  .ptable thead th:not(:first-child),.ptable tbody td{width:17.5%}
-  .ptable td{line-height:1.3}
-  .ptable .addon-note{font-size:.72rem}
+  .ptable-wrap{background:#fff;overflow:visible}
+  .ptable{display:block;min-width:0;width:100%}
+  .ptable thead{display:none}
+  .ptable tbody{display:block}
+  .ptable tbody tr{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 6px;padding:16px 6px;border-bottom:1px solid var(--line)}
+  .ptable tbody tr:last-child{border-bottom:0}
+  .ptable tbody th{grid-column:1/-1;text-align:left;font-size:.98rem;font-weight:700;color:var(--ink);border:0;padding:0 4px 2px}
+  .ptable tbody td{border:0;padding:0;text-align:center;color:var(--ink);font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:5px;line-height:1.25}
+  .ptable tbody td::before{content:"";font-size:.56rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft)}
+  .ptable tbody td:nth-of-type(1)::before{content:"Launch"}
+  .ptable tbody td:nth-of-type(2)::before{content:"Grow"}
+  .ptable tbody td:nth-of-type(3)::before{content:"Thrive"}
+  .ptable tbody td:nth-of-type(4)::before{content:"Everything"}
+  .ptable td.yes,.ptable td.no{font-size:1.05rem;line-height:1}
+  .ptable td.yes{color:var(--coral-deep)}
+  .ptable td.no{color:var(--ink-soft);opacity:.5}
+  .ptable .addon-note{grid-column:1/-1;text-align:center;font-size:.8rem;color:var(--ink-soft);padding-top:6px}
+  .ptable td.addon-note::before{content:none}
+  /* care plan: centre its content on phones */
+  .care{text-align:center;justify-content:center}
+  .care > div{flex:1 1 100%}
+  .care p{max-width:none;margin-inline:auto}
 }
 .addons{margin-top:44px;padding-top:36px;border-top:1px solid var(--line)}
 .addon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
@@ -1427,9 +1440,9 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   .s-tiers{grid-template-columns:1fr 1fr}
 }
 @media (max-width:600px){
-  /* founder: shrink the oversized, mostly-empty logo tile and tighten padding */
-  .founder{padding:30px 24px}
-  .founder .pic{max-width:128px;border-radius:16px}
+  /* founder: centre the content and shrink the oversized logo tile on phones */
+  .founder{padding:30px 24px;text-align:center}
+  .founder .pic{max-width:128px;border-radius:16px;margin-inline:auto}
   .founder .pic .mk{width:56%}
 }
 @media (max-width:760px){
@@ -1470,6 +1483,8 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
      work being judged, so they get the same touch floor as Larkwell's own. */
   .s-cta,.s-ghost{min-height:46px;display:inline-flex;align-items:center;justify-content:center}
   .s-topbar .sclose{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+  /* Crema shop "Add to cart" pills: full-width so the label sits dead-centre */
+  #s-tier-ultimate .cl-cart{display:flex;width:100%;align-self:stretch;text-align:center}
 }
 
 /* fallback for browsers without backdrop-filter support: every glass
