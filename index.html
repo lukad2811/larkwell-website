@@ -1549,6 +1549,15 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   /* and a hard 46px floor on all of them, centred so the type stays put.
      42px still measured under the 44px touch minimum. */
   .vp-toggle-btn,.tile .meta .open,.swbtn,.tprev-open,.cookie-banner .btn{min-height:46px;display:inline-flex;align-items:center;justify-content:center}
+  /* .pf-pill measured 42px too, and it's the busiest touch surface on the
+     whole page (every business-type/goal/domain/logo/colour/photo/feature/
+     package/timeline choice in the get-started form is one) - missed by the
+     original audit above since it only covered non-form controls. The
+     .brand logo link (header + footer) measured 38px, the site's own home
+     link on every single page. Same fix: floor the height, centre the
+     content so nothing shifts. */
+  .pf-pill{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+  .brand{min-height:44px}
   /* footer links become full-width rows with breathing room, not 16px text.
      Must stay display:block (the base rule) so each link sits on its own line —
      inline-block let them butt together into a run of text ("How it works
