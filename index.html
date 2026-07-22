@@ -267,12 +267,15 @@ h2{font-size:clamp(1.75rem,1.2rem + 2.4vw,3.2rem);font-weight:800;letter-spacing
 .hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   /* wide, gently-eased stops (a mid-point before transparent, rather than
      jumping straight from full colour to nothing) so multiple soft-edged
-     layers blend into one smooth field instead of visibly overlapping */
+     layers blend into one smooth field instead of visibly overlapping.
+     Same treatment as body::before's fix: lower peak alpha + a wider
+     45%/75%-ish falloff instead of 38%/68%, since a shorter, harder-edged
+     fade is what banded on real (non-lossless) screens. */
   background:
-    radial-gradient(120% 95% at 78% -12%, rgba(226,194,122,.26) 0%, rgba(226,194,122,.1) 38%, transparent 68%),
-    radial-gradient(90% 80% at 8% 6%, rgba(88,150,113,.24) 0%, rgba(88,150,113,.08) 40%, transparent 70%),
-    radial-gradient(150% 135% at 50% -8%, transparent 50%, rgba(6,17,11,.16) 76%, rgba(5,14,9,.30) 100%),
-    linear-gradient(160deg,#0B2819 0%,#103524 48%,#17452F 100%)}
+    radial-gradient(120% 95% at 78% -12%, rgba(226,194,122,.18) 0%, rgba(226,194,122,.06) 45%, transparent 74%),
+    radial-gradient(90% 80% at 8% 6%, rgba(88,150,113,.16) 0%, rgba(88,150,113,.05) 46%, transparent 76%),
+    radial-gradient(150% 135% at 50% -8%, transparent 55%, rgba(5,14,9,.20) 100%),
+    linear-gradient(160deg,#0E2C1E 0%,#123321 50%,#164029 100%)}
 .dawn{position:absolute;top:-260px;left:54%;transform:translateX(-34%);width:860px;height:860px;border-radius:50%;
   background:radial-gradient(circle at 50% 50%, rgba(240,215,150,.34), rgba(226,194,122,.14) 42%, transparent 66%);
   filter:blur(18px);z-index:0;pointer-events:none;will-change:transform;
@@ -740,7 +743,7 @@ h2{font-size:clamp(1.75rem,1.2rem + 2.4vw,3.2rem);font-weight:800;letter-spacing
 .q .a p strong{color:var(--ink)}
 
 /* cta band */
-.cta-band{background:radial-gradient(120% 150% at 82% -25%, rgba(226,194,122,.24) 0%, rgba(226,194,122,.08) 38%, transparent 68%), radial-gradient(90% 120% at 6% 112%, rgba(180,83,9,.16) 0%, rgba(180,83,9,.05) 40%, transparent 68%), linear-gradient(155deg,var(--night) 0%,#123421 50%,var(--night-2) 100%);color:#fff;border-radius:32px;padding:66px 48px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(226,194,122,.28);box-shadow:var(--shadow)}
+.cta-band{background:radial-gradient(120% 150% at 82% -25%, rgba(226,194,122,.16) 0%, rgba(226,194,122,.05) 45%, transparent 75%), radial-gradient(90% 120% at 6% 112%, rgba(180,83,9,.10) 0%, rgba(180,83,9,.03) 46%, transparent 76%), linear-gradient(155deg,var(--night) 0%,#123421 50%,var(--night-2) 100%);color:#fff;border-radius:32px;padding:66px 48px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(226,194,122,.28);box-shadow:var(--shadow)}
 .cta-band h2{color:#FBF7ED;max-width:18ch;margin:0 auto .4em}
 .cta-band .eyebrow{color:var(--gold)}
 .cta-band p{color:rgba(250,246,238,.85);max-width:46ch;margin:0 auto 28px;font-size:1.05rem;line-height:1.7}
@@ -815,8 +818,8 @@ h2{font-size:clamp(1.75rem,1.2rem + 2.4vw,3.2rem);font-weight:800;letter-spacing
    they were the same weight and near the same size as the label, so the longer
    hint text won the eye. Same restraint the payment panel already used. */
 .pf-hint{color:rgba(255,255,255,.7);font-size:.78rem;font-weight:500;line-height:1.5;margin:-4px 0 0}
-.pf-bookemail{margin:12px 0 2px;display:flex;flex-direction:column;gap:8px}
-.pf-bookemail[hidden]{display:none}
+.pf-bookemail,.pf-callnumber{margin:12px 0 2px;display:flex;flex-direction:column;gap:8px}
+.pf-bookemail[hidden],.pf-callnumber[hidden]{display:none}
 /* oversized-file notice: a warm red distinct from the gold/coral already doing
    pricing and emphasis duty in this form, so it reads unambiguously as a problem */
 .pf-filewarn{color:#FFB4A0;font-size:.78rem;font-weight:700;line-height:1.5;margin:-4px 0 0}
@@ -2387,6 +2390,11 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
           <label class="pf-pill"><input type="radio" name="main_goal" value="sales">Sell online</label>
           <label class="pf-pill"><input type="radio" name="main_goal" value="enquiries">Get more enquiries</label>
           <label class="pf-pill"><input type="radio" name="main_goal" value="credibility">Just look legit online</label>
+        </div>
+        <div class="pf-callnumber" id="callNumberWrap" hidden>
+          <label class="pf-label" for="callNumberField">What number should the "Call now" button dial?</label>
+          <input type="tel" name="call_number" id="callNumberField" placeholder="04XX XXX XXX" autocomplete="tel" aria-describedby="callNumberHint">
+          <p class="pf-hint" id="callNumberHint">This goes straight on the site as a tap-to-call button, so use the number you actually want ringing.</p>
         </div>
         <div class="pf-row">
           <input type="text" name="current_site" placeholder="Current website or socials (optional)" aria-label="Current website or socials (optional)" style="grid-column:1 / -1">
@@ -4762,6 +4770,22 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
     });
   });
 
+  /* main goal: "Get the phone ringing" means the site needs a real number
+     on the Call button, so ask for it instead of guessing */
+  var callNumberWrap = document.getElementById('callNumberWrap');
+  var callNumberField = document.getElementById('callNumberField');
+  document.querySelectorAll('input[name="main_goal"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      var wantsCalls = r.value === 'calls' && r.checked;
+      if(callNumberWrap) callNumberWrap.hidden = !wantsCalls;
+      if(callNumberField){
+        callNumberField.required = wantsCalls;
+        if(wantsCalls){ callNumberField.focus(); }
+        else { callNumberField.value = ''; }
+      }
+    });
+  });
+
   /* Pulls the visible label text straight off the pill a radio/checkbox
      sits inside (rather than a hand-kept lookup table that could drift
      out of sync with the actual wording on the page). */
@@ -4795,7 +4819,14 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
       lines.push('Business type: ' + pillLabel(btInput) + (btOther ? ' (' + btOther + ')' : ''));
     }
     var goalInput = previewForm.querySelector('input[name="main_goal"]:checked');
-    if(goalInput) lines.push('Main goal: ' + pillLabel(goalInput));
+    if(goalInput){
+      var goalLine = 'Main goal: ' + pillLabel(goalInput);
+      if(goalInput.value === 'calls'){
+        var callField = previewForm.querySelector('[name="call_number"]');
+        goalLine += ' (Call button number: ' + ((callField && callField.value.trim()) || 'not given') + ')';
+      }
+      lines.push(goalLine);
+    }
     var domainInput = previewForm.querySelector('input[name="domain_help"]:checked');
     if(domainInput){
       var abnLine = 'Domain help: ' + pillLabel(domainInput);
