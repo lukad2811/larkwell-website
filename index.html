@@ -27,7 +27,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:alt" content="Larkwell — websites for local businesses in Perth, WA">
+<meta property="og:image:alt" content="Larkwell, websites for local businesses in Perth, WA">
 <meta name="twitter:image" content="https://www.larkwell.com.au/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Larkwell · Websites for Local Businesses in Perth, WA">
@@ -778,7 +778,7 @@ h2{font-size:clamp(1.75rem,1.2rem + 2.4vw,3.2rem);font-weight:800;letter-spacing
    at a later stop, in absolute px rather than %, so the transition still
    happens over a short bounded distance (can't band) but it's ALL one
    continuous paint - nothing to seam against, at any height. */
-.cta-band{background:radial-gradient(120% 150% at 82% -25%, rgba(226,194,122,.16) 0%, rgba(226,194,122,.05) 45%, transparent 75%) top right/100% 1000px no-repeat, radial-gradient(90% 120% at 6% 112%, rgba(180,83,9,.10) 0%, rgba(180,83,9,.03) 46%, transparent 76%) bottom left/100% 1000px no-repeat, linear-gradient(155deg,var(--night) 0px,#123421 500px,var(--night-2) 1000px,var(--night-2) 100%);color:#fff;border-radius:32px;padding:66px 48px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(226,194,122,.28);box-shadow:var(--shadow)}
+.cta-band{background:radial-gradient(120% 150% at 82% -25%, rgba(226,194,122,.14), transparent 70%) top right/100% 1000px no-repeat, radial-gradient(95% 120% at 4% 112%, rgba(180,83,9,.09), transparent 72%) bottom left/100% 1000px no-repeat, var(--night);color:#fff;border-radius:32px;padding:66px 48px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(226,194,122,.28);box-shadow:var(--shadow)}
 .cta-band h2{color:#FBF7ED;max-width:18ch;margin:0 auto .4em}
 .cta-band .eyebrow{color:var(--gold)}
 .cta-band p{color:rgba(250,246,238,.85);max-width:46ch;margin:0 auto 28px;font-size:1.05rem;line-height:1.7}
@@ -1231,15 +1231,12 @@ body.locked{overflow:hidden}
 #s-auto{--s-display:'Oswald';--s-body:'Barlow'}
 #s-auto .s-nav{border-top:3px solid var(--s-accent)}
 #s-auto .s-nav .in{height:70px}
-#s-auto .s-logo{display:inline-flex;align-items:baseline;gap:.5em;font-weight:700;font-size:1.34rem;letter-spacing:.04em;text-transform:uppercase;color:#fff}
-/* wide mark (140x56), so it's sized on width and centred out of the baseline
-   the two text spans share */
-#s-auto .s-logo svg{width:52px;height:21px;align-self:center}
-/* the redline: one red diagonal stripe cutting the wordmark at the baseline */
-/* the continuous-redline car mark now carries the "redline" idea; the old
-   diagonal stripe through the wordmark doubled it, so the wordmark runs clean */
-#s-auto .s-logo .rl-m{line-height:1}
-#s-auto .s-logo .rl-s{font-family:var(--s-body);font-size:.6rem;font-weight:600;letter-spacing:.34em;color:var(--s-accent-2);transform:translateY(-2px)}
+/* Redline "bold wordmark" logo: the name set over a literal red rule, which is
+   the brand's signature, with the spaced sub-label beneath. Matches the
+   supplied Redline Auto Care concept (direction 01). */
+#s-auto .s-logo{display:inline-flex;flex-direction:column;align-items:flex-start;gap:4px;line-height:1;color:#fff}
+#s-auto .s-logo .rl-word{font-family:var(--s-display);font-weight:700;font-size:1.4rem;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding-bottom:5px;border-bottom:3px solid var(--s-accent)}
+#s-auto .s-logo .rl-s{font-family:var(--s-body);font-size:.58rem;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--s-accent-2)}
 #s-auto .s-links a{text-transform:uppercase;font-size:.78rem;font-weight:600;letter-spacing:.09em}
 #s-auto .s-cta{text-transform:uppercase;font-weight:700;letter-spacing:.08em;font-size:.8rem;box-shadow:none}
 #s-auto .s-ghost{text-transform:uppercase;font-weight:600;letter-spacing:.08em;font-size:.8rem}
@@ -2353,7 +2350,7 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
         <blockquote>&ldquo;Most small businesses know their website lets them down. They just do not have the time to fix it. So I take the whole job off their hands and give them something they are proud to share.&rdquo;</blockquote>
         <p class="sig">Larkwell · a small Perth-based studio building websites for local businesses</p>
         <!-- PERSUASION: unity/similarity + statistical social proof, merged into one line -->
-        <p style="color:var(--ink-soft);margin-top:16px;max-width:52ch">I'm not a big agency, I work with small business owners directly, one build at a time. Worth knowing: Stanford's Web Credibility Research found that <strong style="color:var(--coral-deep)">a site's design is one of the biggest factors people use to judge a business's credibility</strong> — it shapes trust from the very first impression.</p>
+        <p style="color:var(--ink-soft);margin-top:16px;max-width:52ch">I'm not a big agency, I work with small business owners directly, one build at a time. Worth knowing: Stanford's Web Credibility Research found that <strong style="color:var(--coral-deep)">a site's design is one of the biggest factors people use to judge a business's credibility</strong>. It shapes trust from the very first impression.</p>
       </div>
     </div>
   </div>
@@ -2885,7 +2882,7 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
 <div class="sample" data-nosnippet id="s-auto" role="dialog" aria-modal="true" aria-label="Redline Auto Care sample site"
   style="--s-bg:#16181D;--s-text:#C7CCD1;--s-accent:#E4032E;--s-accent-2:#C7CCD1;--s-on-accent:#fff;--s-on-accent-2:#16181D;--s-head:#fff;--s-card:#1C1F25;--s-nav:rgba(22,24,29,.94);--s-line:rgba(107,112,121,.35);--s-radius:2px;--s-radius-lg:4px">
   <nav class="s-nav"><div class="s-wrap in">
-    <a class="s-logo" href="#" data-jump="home"><svg viewBox="0 0 140 56" fill="none" aria-hidden="true"><path d="M6 40 H22 Q29 40 31 34 L40 33 L53 25 H68 L82 31.5 L98 33.5 Q104 34.2 107 40 H134" stroke="#E4032E" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="40" cy="40" r="5.6" fill="#C7CCD1"/><circle cx="40" cy="40" r="1.9" fill="#16181D"/><circle cx="97" cy="40" r="5.6" fill="#C7CCD1"/><circle cx="97" cy="40" r="1.9" fill="#16181D"/></svg><span class="rl-m">Redline</span><span class="rl-s">Auto Care</span></a>
+    <a class="s-logo" href="#" data-jump="home"><span class="rl-word">Redline</span><span class="rl-s">Auto Care</span></a>
     <div class="s-links" style="color:#F0EFEA"><a href="#" data-jump="auto-services">Services</a><a href="#" data-jump="auto-pricing">Pricing</a><a href="#" data-jump="auto-area">Service area</a><a href="#" data-jump="auto-quote">Book online</a></div>
     <a href="#" class="s-cta" data-demo="open the booking calendar to pick a time and drop-off slot.">Book a service</a>
   </div></nav>
@@ -3033,12 +3030,12 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
     <span class="s-eyebrow">Classes</span>
     <h2 class="s-h2">Something on most days</h2>
     <div class="s-grid3">
-      <div class="s-card"><h3>Strength</h3><p>Barbell fundamentals, coached technique, progressive loading.</p><span class="ff-times">Mon · Wed · Fri — 6am &amp; 5.30pm</span></div>
-      <div class="s-card"><h3>Conditioning</h3><p>High-output intervals, scaled to your level, every time.</p><span class="ff-times">Tue · Thu — 6am &amp; 6pm</span></div>
-      <div class="s-card"><h3>Beginners</h3><p>A slower on-ramp for anyone new to the gym floor.</p><span class="ff-times">Mon &amp; Sat — 9am</span></div>
-      <div class="s-card"><h3>Open Gym</h3><p>Coached but self-paced, for when you know your own program.</p><span class="ff-times">Every day — staffed hours</span></div>
-      <div class="s-card"><h3>Mobility</h3><p>Low-impact, high-value, the session your body will thank you for.</p><span class="ff-times">Wed — 7pm · Sun — 9am</span></div>
-      <div class="s-card"><h3>Small Group PT</h3><p>3 to 4 people, a program built specifically around your goals.</p><span class="ff-times">By booking — see the desk</span></div>
+      <div class="s-card"><h3>Strength</h3><p>Barbell fundamentals, coached technique, progressive loading.</p><span class="ff-times">Mon · Wed · Fri · 6am &amp; 5.30pm</span></div>
+      <div class="s-card"><h3>Conditioning</h3><p>High-output intervals, scaled to your level, every time.</p><span class="ff-times">Tue · Thu · 6am &amp; 6pm</span></div>
+      <div class="s-card"><h3>Beginners</h3><p>A slower on-ramp for anyone new to the gym floor.</p><span class="ff-times">Mon &amp; Sat · 9am</span></div>
+      <div class="s-card"><h3>Open Gym</h3><p>Coached but self-paced, for when you know your own program.</p><span class="ff-times">Every day · staffed hours</span></div>
+      <div class="s-card"><h3>Mobility</h3><p>Low-impact, high-value, the session your body will thank you for.</p><span class="ff-times">Wed · 7pm · Sun · 9am</span></div>
+      <div class="s-card"><h3>Small Group PT</h3><p>3 to 4 people, a program built specifically around your goals.</p><span class="ff-times">By booking · see the desk</span></div>
     </div>
   </div></section>
   <section class="s-sec s-page" id="fitness-membership" hidden style="background:#14161B"><div class="s-wrap">
@@ -3663,18 +3660,18 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
     <h2>1. Definitions and interpretation</h2>
     <p>In this Agreement, capitalised terms have the meanings given below.</p>
     <ul>
-      <li><strong>ACL</strong> — The Australian Consumer Law, being Schedule 2 to the <em>Competition and Consumer Act 2010</em> (Cth).</li>
-      <li><strong>Agreement</strong> — This document, together with the Order and any written variation agreed under clause 10.</li>
-      <li><strong>Care Plan</strong> — Our optional monthly subscription covering hosting and Minor Updates, described in clause 12.</li>
-      <li><strong>Customer Materials</strong> — Any text, images, logos, video, data, trade marks or other material you supply to us, or direct us to use, for the Site.</li>
-      <li><strong>Deliverables</strong> — The Site and any other material we create for you under the Order, excluding Larkwell Tools.</li>
-      <li><strong>Domain</strong> — A domain name registered for your use in connection with the Site.</li>
-      <li><strong>Larkwell Tools</strong> — Code, components, layouts, scripts, libraries, techniques and know-how that we owned before this Agreement or develop independently of it, and which we reuse across client projects.</li>
-      <li><strong>Minor Update</strong> — A change to existing content or settings on a live Site that we assess as taking 30 minutes or less, such as changing prices, trading hours, contact details, or swapping a photograph.</li>
-      <li><strong>Order</strong> — The package, price, add-ons and any agreed scope you select at checkout or that we confirm to you in writing.</li>
-      <li><strong>Preview</strong> — A working draft of the Site provided at no cost before any payment is due.</li>
-      <li><strong>Site</strong> — The website we build for you under the Order.</li>
-      <li><strong>Start Date</strong> — The date we confirm to you in writing that we have received everything listed in clause 8.1 and have begun work.</li>
+      <li><strong>ACL</strong>: The Australian Consumer Law, being Schedule 2 to the <em>Competition and Consumer Act 2010</em> (Cth).</li>
+      <li><strong>Agreement</strong>: This document, together with the Order and any written variation agreed under clause 10.</li>
+      <li><strong>Care Plan</strong>: Our optional monthly subscription covering hosting and Minor Updates, described in clause 12.</li>
+      <li><strong>Customer Materials</strong>: Any text, images, logos, video, data, trade marks or other material you supply to us, or direct us to use, for the Site.</li>
+      <li><strong>Deliverables</strong>: The Site and any other material we create for you under the Order, excluding Larkwell Tools.</li>
+      <li><strong>Domain</strong>: A domain name registered for your use in connection with the Site.</li>
+      <li><strong>Larkwell Tools</strong>: Code, components, layouts, scripts, libraries, techniques and know-how that we owned before this Agreement or develop independently of it, and which we reuse across client projects.</li>
+      <li><strong>Minor Update</strong>: A change to existing content or settings on a live Site that we assess as taking 30 minutes or less, such as changing prices, trading hours, contact details, or swapping a photograph.</li>
+      <li><strong>Order</strong>: The package, price, add-ons and any agreed scope you select at checkout or that we confirm to you in writing.</li>
+      <li><strong>Preview</strong>: A working draft of the Site provided at no cost before any payment is due.</li>
+      <li><strong>Site</strong>: The website we build for you under the Order.</li>
+      <li><strong>Start Date</strong>: The date we confirm to you in writing that we have received everything listed in clause 8.1 and have begun work.</li>
     </ul>
     <p><strong>1.1</strong> Headings are for convenience and do not affect interpretation.</p>
     <p><strong>1.2</strong> "Including" and similar words are not words of limitation.</p>
@@ -3919,9 +3916,9 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
 
     <h2>Version history</h2>
     <ul>
-      <li><strong>2.0</strong> — 18 July 2026 — Full rewrite. Domain registered in customer's name from the outset; express copyright assignment and moral rights consent; ACL section 64A limitation; mutual termination and variation rights; delay, chargeback, confidentiality, privacy, force majeure and dispute clauses added.</li>
-      <li><strong>1.1</strong> — July 2026 — Formal restructure of the July 2026 terms.</li>
-      <li><strong>1.0</strong> — 7 July 2026 — First published terms.</li>
+      <li><strong>2.0</strong> · 18 July 2026 · Full rewrite. Domain registered in customer's name from the outset; express copyright assignment and moral rights consent; ACL section 64A limitation; mutual termination and variation rights; delay, chargeback, confidentiality, privacy, force majeure and dispute clauses added.</li>
+      <li><strong>1.1</strong> · July 2026 · Formal restructure of the July 2026 terms.</li>
+      <li><strong>1.0</strong> · 7 July 2026 · First published terms.</li>
     </ul>
 
     <p>Questions about this Agreement: <a href="mailto:hello@larkwell.com.au">hello@larkwell.com.au</a></p>
@@ -5184,7 +5181,12 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
       entries.forEach(function(en){
         if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
       });
-    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    /* threshold:0 (fire as soon as any part enters), NOT a fraction of the
+       element. A fractional threshold is height-relative, so a very tall
+       section like the get-started form (~6000-7500px on a phone) could never
+       expose 12% of itself in one viewport, the callback never ran, and the
+       whole .cta-band stayed at opacity:0, invisible on small screens. */
+    }, {threshold:0, rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
   } else {
     document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); });
