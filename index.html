@@ -282,11 +282,16 @@ h2{font-size:clamp(1.75rem,1.2rem + 2.4vw,3.2rem);font-weight:800;letter-spacing
      left simply by repeating the same colour at a later stop, in absolute
      px rather than %, so the transition itself still happens over a short,
      bounded distance (can't band) but it's ALL one continuous paint (nothing
-     to seam against, at any height). */
+     to seam against, at any height).
+     3) The three radial layers are still capped to a 900px box (no-repeat) to
+        avoid the same stretch-banding, so each one MUST reach full transparency
+        before that 900px edge, or it leaves a horizontal line where it cuts
+        off. The centre vignette still carried its dark ring at 900px; its stops
+        are now pulled in so it fades out by ~840px, safely inside the cap. */
   background:
     radial-gradient(120% 95% at 78% -12%, rgba(226,194,122,.18) 0%, rgba(226,194,122,.06) 45%, transparent 74%) top right/100% 900px no-repeat,
     radial-gradient(90% 80% at 8% 6%, rgba(88,150,113,.16) 0%, rgba(88,150,113,.05) 46%, transparent 76%) top left/100% 900px no-repeat,
-    radial-gradient(150% 135% at 50% -8%, transparent 55%, rgba(5,14,9,.20) 82%, transparent 100%) top/100% 900px no-repeat,
+    radial-gradient(140% 120% at 50% -12%, transparent 46%, rgba(5,14,9,.20) 66%, transparent 86%) top/100% 900px no-repeat,
     linear-gradient(160deg,#0E2C1E 0px,#123321 450px,#164029 900px,#164029 100%)}
 .dawn{position:absolute;top:-260px;left:54%;transform:translateX(-34%);width:860px;height:860px;border-radius:50%;
   background:radial-gradient(circle at 50% 50%, rgba(240,215,150,.34), rgba(226,194,122,.14) 42%, transparent 66%);
@@ -1519,6 +1524,13 @@ html.scroll-up .scroll-progress{height:1.5px;opacity:.55}
   .founder .pic .mk{width:100%}
   .founder blockquote{font-size:1.5rem;line-height:1.3;letter-spacing:-.015em;margin-top:4px}
   .founder .sig{margin-top:14px}
+  /* Timeline options on phones: stack them as full-width rows so the long
+     "Rush, live in 3 days · +$199" label plus its "Pick a package first" hint
+     lay out cleanly, instead of cramming into one mangled, mis-aligned pill. */
+  #timelineGroup{flex-direction:column;align-items:stretch}
+  #timelineGroup .pf-pill{flex-wrap:wrap;justify-content:flex-start;align-items:baseline;text-align:left;border-radius:16px;padding:.72em 1.05em}
+  #timelineGroup .pf-price{margin-left:2px}
+  #timelineGroup .pf-tierhint{flex-basis:100%}
 }
 @media (max-width:760px){
   .nav{display:none}
