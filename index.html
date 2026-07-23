@@ -644,7 +644,7 @@ h2{font-size:clamp(1.75rem,1.2rem + 2.4vw,3.2rem);font-weight:800;letter-spacing
   .care .tag{width:100%;text-align:left;margin-top:6px;padding-top:16px;border-top:1px solid var(--line)}
 }
 .addons{margin-top:44px;padding-top:36px;border-top:1px solid var(--line)}
-.addon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
+.addon-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:20px}
 .addon-card{background:var(--bone-2);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:10px}
 /* two lines reserved so the body copy starts on one baseline across the row,
    whether the title wraps or not */
@@ -2260,7 +2260,7 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
           <tr><th scope="row">Multiple locations</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
           <tr><th scope="row">Rounds of changes</th><td>2</td><td>3</td><td>Unlimited</td><td>Unlimited</td></tr>
           <tr><th scope="row">Care plan (hosting + updates)</th><td>Optional</td><td>Optional</td><td>Optional</td><td>3 months free</td></tr>
-          <tr><th scope="row">Domain, logo &amp; rush delivery</th><td colspan="4" class="addon-note">Available on every package as paid add-ons, see below</td></tr>
+          <tr><th scope="row">Domain &amp; logo</th><td colspan="4" class="addon-note">Available on every package as paid add-ons, see below</td></tr>
         </tbody>
       </table>
     </div>
@@ -2286,11 +2286,6 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
           <h4>Simple logo design</h4>
           <p>No logo yet? I design a clean, simple logo to match your new site, ready to use on signage, socials and everywhere else too.</p>
           <span class="addon-price">+$149</span>
-        </div>
-        <div class="addon-card">
-          <h4>Rush delivery</h4>
-          <p>Every package is already live within a week. Need it in 3 days instead? I clear space and prioritise your build above everything else in the queue.</p>
-          <span class="addon-price">+$199</span>
         </div>
       </div>
     </div>
@@ -2469,6 +2464,9 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
         <input type="file" name="logo" id="logoUpload" accept="image/*" aria-label="Attach your logo" aria-describedby="logoUploadHint logoUploadWarn">
         <p class="pf-hint" id="logoUploadHint">Got one already? Attach it here, up to 2MB. PNG with a see-through background works best if you have it.</p>
         <p class="pf-filewarn" id="logoUploadWarn" role="alert" hidden></p>
+        <input type="file" name="brand_kit" id="brandKitUpload" accept=".pdf,.zip,.ai,.eps,image/*" aria-label="Attach your brand kit" aria-describedby="brandKitUploadHint brandKitUploadWarn">
+        <p class="pf-hint" id="brandKitUploadHint">Already have a brand kit (style guide, extra logo files, fonts, brand colours)? Attach it here, up to 1MB, PDF, ZIP or image. Entirely optional, only if one already exists.</p>
+        <p class="pf-filewarn" id="brandKitUploadWarn" role="alert" hidden></p>
         <span class="pf-label">Got a colour scheme in mind?</span>
         <div class="pf-pillgroup" role="radiogroup" aria-label="Got a colour scheme in mind?" id="colourGroup">
           <label class="pf-pill"><input type="radio" name="colour_scheme" value="warm">Warm &amp; earthy</label>
@@ -2559,11 +2557,10 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
         <p class="pf-hint">Prices above already include the 30% launch offer, no code needed.</p>
         <span class="pf-label">How soon do you need it live?</span>
         <div class="pf-pillgroup" role="radiogroup" aria-label="How soon do you need it live?" id="timelineGroup">
-          <label class="pf-pill" id="timelineAsapPill"><input type="radio" name="timeline" value="asap">ASAP, within 3 days <span class="pf-price" id="timelineAsapBadge">· +$199</span><span class="pf-tierhint" id="timelineAsapHint"></span></label>
           <label class="pf-pill"><input type="radio" name="timeline" value="standard">Standard, live within a week</label>
           <label class="pf-pill" id="timelineWeekPill"><input type="radio" name="timeline" value="week">No rush, within 2 weeks <span class="pf-tierhint" id="timelineWeekHint"></span></label>
         </div>
-        <p class="pf-hint">Standard is the same one-week guarantee every package gets. ASAP means I clear space and turn it around in 3 days, that's what the rush fee covers. No rush gives me breathing room to schedule around everything else. Both need a package picked first, they don't apply to a free preview.</p>
+        <p class="pf-hint">Standard is the same one-week guarantee every package gets. No rush gives me breathing room to schedule around everything else. It needs a package picked first, it doesn't apply to a free preview.</p>
         <label class="care-check disabled" id="careCheckWrap">
           <input type="checkbox" name="care_plan" id="careCheck" value="yes" disabled>
           <span id="careCheckText"><strong>Add the care plan</strong> for $49/month. I'll host the site and handle small updates for you. Cancel anytime. <span class="hint">Pick a package above to add it.</span></span>
@@ -2652,9 +2649,9 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
         <span id="payCareCheckText"><strong>Add the care plan for $49/month, cancel anytime.</strong></span>
       </label>
       <p class="pay-note care-hosting-note">Without the care plan, I don't host your site. You'll get the finished website as an HTML file, and putting it online is up to you (I can point you to a simple way to do that).</p>
-      <!-- Logo/rush are selected here directly, so the Stripe checkout arrives
-           with these already added and totalled. Domain is NOT charged here, it
-           is registered and invoiced separately by email (see note below). -->
+      <!-- Logo is selected here directly, so the Stripe checkout arrives with
+           it already added and totalled. Domain is NOT charged here, it is
+           registered and invoiced separately by email (see note below). -->
       <div class="addon-callout" id="payDomainNote">
         <div class="addon-callout-head">
           <span class="addon-callout-badge"><svg class="addon-callout-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5h14v10H3zM3 6l7 5 7-5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -2669,10 +2666,6 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
       <label class="care-check light" id="payLogoCheckWrap">
         <input type="checkbox" id="payLogoCheck" value="yes">
         <span><strong>Add a logo design</strong> for $149, one-off.</span>
-      </label>
-      <label class="care-check light" id="payRushCheckWrap">
-        <input type="checkbox" id="payRushCheck" value="yes">
-        <span><strong>Add rush delivery</strong> for $199, one-off.</span>
       </label>
       <label class="care-check light" id="payTermsCheckWrap" style="margin-top:6px">
         <input type="checkbox" id="payTermsCheck" required>
@@ -4268,11 +4261,15 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
      the subscription in one go. EVERYTHING + CARE carries a 3 month
      free trial on the $49/month price (set on the price in the
      Stripe Dashboard), matching the page copy.
-     Domain, Logo and Rush are attached to every link in both sets as
-     line items with adjustable quantity (0 to 1) in the Stripe
-     Dashboard, so a customer sees them right on the checkout screen
-     and can add any of them to the same payment, with or without
-     the care plan. No separate checkout is needed for those three.
+     Domain and Logo are attached to every link in both sets as line
+     items with adjustable quantity (0 to 1) in the Stripe Dashboard,
+     so a customer sees them right on the checkout screen and can add
+     either to the same payment, with or without the care plan. No
+     separate checkout is needed for those two.
+     Rush delivery was removed as a site-facing option (no longer
+     offered in the get-started form or on the payment screen).
+     ADDON_LINKS.rush is kept only in case a rush link ever needs to be
+     sent manually to an existing client outside the main pay flow.
      ADDON_LINKS are standalone checkouts, one per add-on, used for
      sending a link directly to an existing client who wants a
      single add-on on its own, outside of the main pay flow.
@@ -4314,18 +4311,11 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
   };
   var PACKAGE_PRICES = { starter: 489, standard: 839, premium: 1259, ultimate: 2099 };
 
-  var TIMELINE_ASAP_FEE = 199;
-
   /* add-on prices shown in the form's breakdown note. Keep these matched
      to the ADDON_LINKS prices set in the Stripe Dashboard.
      DOMAIN_ADDON_FEE removed: domain is no longer a fixed checkout charge,
      it is invoiced separately by email. Old value was 39. */
   var LOGO_ADDON_FEE = 149;
-
-  function timelineAdjustment(pkg, timeline){
-    if(timeline === 'asap') return TIMELINE_ASAP_FEE;
-    return 0;
-  }
 
   function resolvePaymentLink(pkg, wantsCare){
     return wantsCare ? PAYMENT_LINKS_WITH_CARE[pkg] : PAYMENT_LINKS[pkg];
@@ -4371,7 +4361,6 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
       body: JSON.stringify({
         package: opts.pkg,
         wantsCare: !!opts.wantsCare,
-        rush: !!opts.rush,
         /* domain intentionally NOT sent, it is invoiced separately by email
            and must never become a Stripe charge */
         logo: !!opts.logo,
@@ -4411,20 +4400,16 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
     return checked ? checked.value : 'standard';
   }
 
-  /* rush and no-rush both assume a committed build timeline, neither makes
-     sense before a package is even chosen, so both are locked out while
+  /* no-rush assumes a committed build timeline, which doesn't make sense
+     before a package is even chosen, so it's locked out while
      "Not sure, free preview first" is selected */
   var timelineWeekPill = document.getElementById('timelineWeekPill');
   var timelineWeekInput = document.querySelector('input[name="timeline"][value="week"]');
   var timelineWeekHint = document.getElementById('timelineWeekHint');
-  var timelineAsapPill = document.getElementById('timelineAsapPill');
-  var timelineAsapInput = document.querySelector('input[name="timeline"][value="asap"]');
-  var timelineAsapHint = document.getElementById('timelineAsapHint');
   function syncTimelineAvailability(){
     var isPreview = getPkgValue() === 'unsure';
     [
-      { input: timelineWeekInput, pill: timelineWeekPill, hint: timelineWeekHint },
-      { input: timelineAsapInput, pill: timelineAsapPill, hint: timelineAsapHint }
+      { input: timelineWeekInput, pill: timelineWeekPill, hint: timelineWeekHint }
     ].forEach(function(row){
       if(!row.input || !row.pill) return;
       row.input.disabled = isPreview;
@@ -4483,9 +4468,9 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
      below with no clue why, and this get-started form is also step one of
      the checkout path (see goToCheckout below), so a silently-too-big photo
      was capable of quietly blocking someone from ever reaching payment.
-     Caps here (2MB logo + 4 * 1.2MB photos = 6.8MB) leave clear headroom
-     under that ceiling for the text fields, and catch the problem the moment
-     a file is chosen rather than after a failed submit. */
+     Caps here (2MB logo + 1MB brand kit + 4 * 1.2MB photos = 7.8MB) leave
+     headroom under that ceiling for the text fields, and catch the problem
+     the moment a file is chosen rather than after a failed submit. */
   function guardFileSize(input, warnEl, maxBytes, maxLabel){
     if(!input) return;
     input.addEventListener('change', function(){
@@ -4502,17 +4487,18 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
     });
   }
   guardFileSize(document.getElementById('logoUpload'), document.getElementById('logoUploadWarn'), 2 * 1048576, '2MB');
+  guardFileSize(document.getElementById('brandKitUpload'), document.getElementById('brandKitUploadWarn'), 1 * 1048576, '1MB');
   var photosUploadWarn = document.getElementById('photosUploadWarn');
   photosUploadInputs.forEach(function(f){
     guardFileSize(f, photosUploadWarn, 1.2 * 1048576, '1.2MB');
   });
 
   /* The button shows the full total of everything selected: package, care
-     plan, and any of rush/domain/logo ticked here. Rush/domain/logo aren't
-     on the Payment Link as a fixed price though, they're optional items
-     the customer still has to select again on the Stripe checkout screen
-     itself, so the note under the button spells that out, otherwise the
-     button total and the actual Stripe charge could quietly disagree. */
+     plan, and logo if ticked here. Logo isn't on the Payment Link as a
+     fixed price though, it's an optional item the customer still has to
+     select again on the Stripe checkout screen itself, so the note under
+     the button spells that out, otherwise the button total and the actual
+     Stripe charge could quietly disagree. */
   var pfPayBreakdown = document.getElementById('pfPayBreakdown');
   function joinWithAnd(items){
     if(items.length <= 1) return items.join('');
@@ -4553,10 +4539,6 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
       lastPriceTotal = null;
     } else {
       var price = PACKAGE_PRICES[pkg];
-      if(timelineAdjustment(pkg, getTimelineValue()) !== 0){
-        extraBits.push('rush delivery ($' + TIMELINE_ASAP_FEE + ')');
-        extraTotal += TIMELINE_ASAP_FEE;
-      }
       /* Domain is no longer charged at checkout, it is invoiced separately by
          email (actual cost + 20% first-year fee), so it never adds to the total. */
       var logoPick = document.querySelector('input[name="logo_status"]:checked');
@@ -4918,7 +4900,6 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
       var submitBtn = pfSubmit || previewForm.querySelector('button[type="submit"]');
       var originalHTML = submitBtn.innerHTML;
       var chosenPackage = getPkgValue();
-      var chosenTimeline = getTimelineValue();
       var wantsCare = !!(careCheck && !careCheck.disabled && careCheck.checked);
       var businessName = previewForm.querySelector('[name="business"]').value;
       var email = previewForm.querySelector('[name="email"]').value;
@@ -4939,23 +4920,20 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
         if(chosenPackage !== 'unsure'){
           var payUrl = resolvePaymentLink(chosenPackage, wantsCare);
           if(payUrl && payUrl.indexOf('REPLACE_WITH') !== 0){
-            /* Rush and logo travel through to the dynamic checkout function as
-               real paid selections. The domain is deliberately NOT sent as a
-               paid item, it is captured in the form and invoiced separately by
-               email, so it must never reach Stripe as a charge. noteBits is kept
-               only for the static-link fallback path, where they just tag the
-               reference name. */
-            var wantsRush = timelineAdjustment(chosenPackage, chosenTimeline) !== 0;
+            /* Logo travels through to the dynamic checkout function as a real
+               paid selection. The domain is deliberately NOT sent as a paid
+               item, it is captured in the form and invoiced separately by
+               email, so it must never reach Stripe as a charge. noteBits is
+               kept only for the static-link fallback path, where it just tags
+               the reference name. */
             var logoPick = previewForm.querySelector('input[name="logo_status"]:checked');
             var wantsLogo = !!(logoPick && logoPick.value === 'need');
             var noteBits = [];
-            if(wantsRush) noteBits.push('rush');
             if(wantsLogo) noteBits.push('logo');
 
             goToCheckout({
               pkg: chosenPackage,
               wantsCare: wantsCare,
-              rush: wantsRush,
               logo: wantsLogo,
               businessName: businessName,
               email: email,
@@ -4992,7 +4970,6 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
   var payCareCheck = document.getElementById('payCareCheck');
   /* payDomainCheck removed: domain is no longer a paid checkout item, it is invoiced by email */
   var payLogoCheck = document.getElementById('payLogoCheck');
-  var payRushCheck = document.getElementById('payRushCheck');
   var payTermsCheck = document.getElementById('payTermsCheck');
   var payCareCheckText = document.getElementById('payCareCheckText');
   var payNote = document.getElementById('payNote');
@@ -5119,16 +5096,13 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
         return;
       }
       var wantsLogo = !!(payLogoCheck && payLogoCheck.checked);
-      var wantsRush = !!(payRushCheck && payRushCheck.checked);
       var noteBits = [];
-      if(wantsRush) noteBits.push('rush');
       if(wantsLogo) noteBits.push('logo');
       /* Domain is not charged here, it is invoiced separately by email. */
 
       goToCheckout({
         pkg: key,
         wantsCare: wantsCare,
-        rush: wantsRush,
         logo: wantsLogo,
         businessName: businessName,
         email: email,
@@ -5248,9 +5222,9 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
   }
 
   /* dynamic state feedback: flash the price breakdown note when add-on
-     toggles (domain, logo, rush, care) change what it says. The submit
-     button's own total now animates via the count-up tween in
-     updateSubmitLabel(), so it is deliberately left out of this observer. */
+     toggles (logo, care) change what it says. The submit button's own
+     total now animates via the count-up tween in updateSubmitLabel(), so
+     it is deliberately left out of this observer. */
   function flashOnChange(el){
     if(!el) return;
     var mo = new MutationObserver(function(){
