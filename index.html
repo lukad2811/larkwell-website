@@ -265,30 +265,28 @@ h2{font-size:clamp(1.75rem,1.2rem + 2.4vw,3.2rem);font-weight:800;letter-spacing
 .hero{position:relative;margin-top:-76px;padding:calc(76px + 70px) 0 84px;overflow:hidden;background:var(--night);isolation:isolate}
 /* layered dusk backdrop (self-contained, no external image) */
 .hero::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-  /* The real cause of the visible stepping: with no background-size, every
-     layer below stretches across .hero's FULL height (900-1600px+ depending
-     on viewport) to paint a shift of only a few 8-bit levels, so each level
-     ends up as a wide, sharp-edged flat band. Softening the falloff curve
-     (previous pass) didn't fix that, because the problem was the transition's
-     length, not its shape. Capping background-size to a fixed, viewport-scale
-     900px and backfilling the rest with a flat background-color (matching the
-     gradient's own last stop) means the actual colour change happens over a
-     short, bounded distance - and a flat fill beyond it is pixel-uniform, so
-     it can't band no matter how tall the hero grows.
-     Second bug this exposed: the linear-gradient runs at an angle (160deg),
-     so its "100%" stop is a diagonal line, not a horizontal one - at the exact
-     box edge one side of the row had already reached the end colour while the
-     other side hadn't, so the box boundary itself showed as a faint seam
-     against the flat fill. Holding the colour flat from 85% to 100% resolves
-     the angle before the edge, so every point on that row is identical. Same
-     fix on the vignette radial, which used to end on a translucent overlay
-     rather than true transparent - it now fades back to transparent by its
-     own edge so there's nothing to mismatch against. */
+  /* History of this bug, for whoever touches it next:
+     1) No background-size meant every layer stretched across .hero's FULL
+        height (900-1600px+) to paint a shift of a few 8-bit levels, so each
+        level became a wide, sharp-edged band - fixed by capping the linear-
+        gradient layer to a bounded 900px box.
+     2) That introduced a second bug: a separate flat background-color layer
+        was used to fill the rest, but the gradient ran at an angle (160deg),
+        so its "100%" stop was a diagonal line, not horizontal - the two
+        layers met at a hard box edge that didn't line up perfectly on every
+        row, and on real devices (fractional pixel ratios, GPU tile
+        boundaries) that showed as a faint seam even with matching colours.
+     The robust fix is to never have two separate layers meet at all: a
+     single linear-gradient can hold a flat colour for however much space is
+     left simply by repeating the same colour at a later stop, in absolute
+     px rather than %, so the transition itself still happens over a short,
+     bounded distance (can't band) but it's ALL one continuous paint (nothing
+     to seam against, at any height). */
   background:
     radial-gradient(120% 95% at 78% -12%, rgba(226,194,122,.18) 0%, rgba(226,194,122,.06) 45%, transparent 74%) top right/100% 900px no-repeat,
     radial-gradient(90% 80% at 8% 6%, rgba(88,150,113,.16) 0%, rgba(88,150,113,.05) 46%, transparent 76%) top left/100% 900px no-repeat,
     radial-gradient(150% 135% at 50% -8%, transparent 55%, rgba(5,14,9,.20) 82%, transparent 100%) top/100% 900px no-repeat,
-    linear-gradient(160deg,#0E2C1E 0%,#123321 50%,#164029 85%,#164029 100%) top/100% 900px no-repeat #164029}
+    linear-gradient(160deg,#0E2C1E 0px,#123321 450px,#164029 900px,#164029 100%)}
 .dawn{position:absolute;top:-260px;left:54%;transform:translateX(-34%);width:860px;height:860px;border-radius:50%;
   background:radial-gradient(circle at 50% 50%, rgba(240,215,150,.34), rgba(226,194,122,.14) 42%, transparent 66%);
   filter:blur(18px);z-index:0;pointer-events:none;will-change:transform;
@@ -607,6 +605,13 @@ h2{font-size:clamp(1.75rem,1.2rem + 2.4vw,3.2rem);font-weight:800;letter-spacing
 .ptable tbody tr:last-child th,.ptable tbody tr:last-child td{border-bottom:0}
 .ptable td.yes{color:var(--coral-deep);font-weight:700}
 .ptable td.no{color:var(--ink-soft);opacity:.45}
+/* Plain "✓"/"✕" text relied on whatever symbol glyph the device's fallback
+   font drew for that Unicode character - clean on this desktop browser, but
+   a completely different (rougher, hand-drawn-looking) glyph on some phones,
+   since there's no site font covering those codepoints. Real SVG paths
+   render identically everywhere; stroke="currentColor" still picks up the
+   colours above, so this is a drop-in swap, not a redesign. */
+.pt-check,.pt-cross{vertical-align:middle}
 .ptable .addon-note{text-align:left;color:var(--ink-soft);font-style:italic;font-size:.86rem}
 /* Phones: a 4-package table squishes if forced to fit and reads as "cut off"
    if it scrolls. So each feature becomes its own block — feature name on top,
@@ -757,22 +762,22 @@ h2{font-size:clamp(1.75rem,1.2rem + 2.4vw,3.2rem);font-weight:800;letter-spacing
 
 /* cta band */
 /* This card wraps the entire get-started form, so it's 4700-6800px tall
-   depending on viewport - far past any single screen. With no background-size
-   the gradients below used to stretch across that whole height to paint a
-   shift of only a few 8-bit levels, so each level became a wide, sharp-edged
-   band (the actual cause of the visible stepping - not the falloff shape).
-   Capping each layer's background-size to a fixed 1000px near the relevant
-   edge, then backfilling the rest with a flat background-color that matches
-   the linear-gradient's own last stop, means the colour change happens over a
-   short bounded distance and the vast remainder is a flat, pixel-uniform fill
-   that can't band at any height.
-   Second bug this exposed: the linear-gradient runs at an angle (155deg), so
-   its "100%" stop is a diagonal line, not a horizontal one - one side of the
-   row at the box edge had reached the end colour while the other hadn't, so
-   the box boundary itself showed as a faint seam against the flat fill.
-   Holding the colour flat from 85% to 100% resolves the angle before the
-   edge, so every point on that row is identical to the flat fill next to it. */
-.cta-band{background:radial-gradient(120% 150% at 82% -25%, rgba(226,194,122,.16) 0%, rgba(226,194,122,.05) 45%, transparent 75%) top right/100% 1000px no-repeat, radial-gradient(90% 120% at 6% 112%, rgba(180,83,9,.10) 0%, rgba(180,83,9,.03) 46%, transparent 76%) bottom left/100% 1000px no-repeat, linear-gradient(155deg,var(--night) 0%,#123421 50%,var(--night-2) 85%,var(--night-2) 100%) top/100% 1000px no-repeat var(--night-2);color:#fff;border-radius:32px;padding:66px 48px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(226,194,122,.28);box-shadow:var(--shadow)}
+   depending on viewport - far past any single screen. History of this bug:
+   1) No background-size meant the linear-gradient stretched across that
+      whole height to paint a shift of a few 8-bit levels, so each level
+      became a wide, sharp-edged band - fixed by capping it to a bounded
+      1000px box near the top.
+   2) That introduced a second bug: a separate flat background-color layer
+      filled the rest, but the gradient ran at an angle (155deg), so its
+      "100%" stop was a diagonal line, not horizontal - the two layers met
+      at a hard box edge that didn't line up on every row, and on real
+      devices that showed as a faint seam even with matching colours.
+   The robust fix is to never have two separate layers meet at all: hold the
+   gradient flat for however much space is left by repeating its last colour
+   at a later stop, in absolute px rather than %, so the transition still
+   happens over a short bounded distance (can't band) but it's ALL one
+   continuous paint - nothing to seam against, at any height. */
+.cta-band{background:radial-gradient(120% 150% at 82% -25%, rgba(226,194,122,.16) 0%, rgba(226,194,122,.05) 45%, transparent 75%) top right/100% 1000px no-repeat, radial-gradient(90% 120% at 6% 112%, rgba(180,83,9,.10) 0%, rgba(180,83,9,.03) 46%, transparent 76%) bottom left/100% 1000px no-repeat, linear-gradient(155deg,var(--night) 0px,#123421 500px,var(--night-2) 1000px,var(--night-2) 100%);color:#fff;border-radius:32px;padding:66px 48px;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(226,194,122,.28);box-shadow:var(--shadow)}
 .cta-band h2{color:#FBF7ED;max-width:18ch;margin:0 auto .4em}
 .cta-band .eyebrow{color:var(--gold)}
 .cta-band p{color:rgba(250,246,238,.85);max-width:46ch;margin:0 auto 28px;font-size:1.05rem;line-height:1.7}
@@ -2243,16 +2248,16 @@ a,button,label,summary,.btn,.s-cta,.s-ghost,.pf-pill,.swbtn,.vp-toggle-btn,.tpre
         </thead>
         <tbody>
           <tr><th scope="row">Pages</th><td>1</td><td>Up to 5</td><td>Up to 5 + custom</td><td>Unlimited</td></tr>
-          <tr><th scope="row">Mobile-friendly on every screen</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><th scope="row">Photo gallery</th><td class="no">✕</td><td class="yes">✓</td><td class="yes">Expanded</td><td class="yes">Expanded</td></tr>
-          <tr><th scope="row">Contact or quote form</th><td class="no">✕</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><th scope="row">Basic SEO setup</th><td class="no">✕</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><th scope="row">Online booking or ordering</th><td class="no">✕</td><td class="no">✕</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><th scope="row">Customer reviews section</th><td class="no">✕</td><td class="no">✕</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><th scope="row">Custom sections built for you</th><td class="no">✕</td><td class="no">✕</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><th scope="row">Online shop</th><td class="no">✕</td><td class="no">✕</td><td class="no">✕</td><td class="yes">✓</td></tr>
-          <tr><th scope="row">Blog or news section</th><td class="no">✕</td><td class="no">✕</td><td class="no">✕</td><td class="yes">✓</td></tr>
-          <tr><th scope="row">Multiple locations</th><td class="no">✕</td><td class="no">✕</td><td class="no">✕</td><td class="yes">✓</td></tr>
+          <tr><th scope="row">Mobile-friendly on every screen</th><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
+          <tr><th scope="row">Photo gallery</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes">Expanded</td><td class="yes">Expanded</td></tr>
+          <tr><th scope="row">Contact or quote form</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
+          <tr><th scope="row">Basic SEO setup</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
+          <tr><th scope="row">Online booking or ordering</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
+          <tr><th scope="row">Customer reviews section</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
+          <tr><th scope="row">Custom sections built for you</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
+          <tr><th scope="row">Online shop</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
+          <tr><th scope="row">Blog or news section</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
+          <tr><th scope="row">Multiple locations</th><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="no" aria-label="Not included"><svg class="pt-cross" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></td><td class="yes" aria-label="Included"><svg class="pt-check" width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></td></tr>
           <tr><th scope="row">Rounds of changes</th><td>2</td><td>3</td><td>Unlimited</td><td>Unlimited</td></tr>
           <tr><th scope="row">Care plan (hosting + updates)</th><td>Optional</td><td>Optional</td><td>Optional</td><td>3 months free</td></tr>
           <tr><th scope="row">Domain, logo &amp; rush delivery</th><td colspan="4" class="addon-note">Available on every package as paid add-ons, see below</td></tr>
