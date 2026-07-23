@@ -4,3 +4,22 @@
 
 [functions]
   node_bundler = "esbuild"
+
+# Phase 5 (perf): the brand SVGs, sample photos and social image are stable, so
+# cache them for a week. Returning visitors then skip the per-load revalidation
+# Netlify does by default. HTML is deliberately left uncached here, so copy and
+# price changes still go live the instant a new deploy finishes.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/og-image.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/favicon.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
